@@ -12,9 +12,9 @@
 	if(id)
 		. = id.assignment
 	else
-		var/obj/item/pda/pda = wear_id
+		var/obj/item/modular_computer/pda = wear_id
 		if(istype(pda))
-			. = pda.ownjob
+			. = pda.saved_job
 		else
 			return if_no_id
 	if(!.)
@@ -26,9 +26,9 @@
 	var/obj/item/card/id/id = get_idcard(FALSE)
 	if(id)
 		return id.registered_name
-	var/obj/item/pda/pda = wear_id
+	var/obj/item/modular_computer/pda = wear_id
 	if(istype(pda))
-		return pda.owner
+		return pda.saved_identification
 	return if_no_id
 
 //repurposed proc. Now it combines get_id_name() and get_face_name() to determine a mob's name variable. Made into a separate proc as it'll be useful elsewhere
@@ -60,17 +60,14 @@
 //Useful when player is being seen by other mobs
 /mob/living/carbon/human/proc/get_id_name(if_no_id = "Unknown")
 	var/obj/item/storage/wallet/wallet = wear_id
-	var/obj/item/pda/pda = wear_id
+	var/obj/item/modular_computer/tablet/pda/pda = wear_id
 	var/obj/item/card/id/id = wear_id
-	var/obj/item/modular_computer/tablet/tablet = wear_id
 	if(istype(wallet))
 		id = wallet.front_id
 	if(istype(id))
 		. = id.registered_name
 	else if(istype(pda))
-		. = pda.owner
-	else if(istype(tablet))
-		var/obj/item/computer_hardware/card_slot/card_slot = tablet.all_components[MC_CARD]
+		var/obj/item/computer_hardware/card_slot/card_slot = pda.all_components[MC_CARD]
 		if(card_slot?.stored_card)
 			. = card_slot.stored_card.registered_name
 	if(!.)
@@ -88,15 +85,6 @@
 	return dna.species.handle_chemicals(R, src, delta_time, times_fired)
 	// if it returns 0, it will run the usual on_mob_life for that reagent. otherwise, it will stop after running handle_chemicals for the species.
 
-
-/mob/living/carbon/human/can_track(mob/living/user)
-	if(istype(head, /obj/item/clothing/head))
-		var/obj/item/clothing/head/hat = head
-		if(hat.blockTracking)
-			return 0
-
-	return ..()
-
 /mob/living/carbon/human/can_use_guns(obj/item/G)
 	. = ..()
 	if(G.trigger_guard == TRIGGER_GUARD_NORMAL)
@@ -111,21 +99,10 @@
 	. = ..()
 	. += "[dna.species.type]"
 
-/mob/living/carbon/human/can_see_reagents()
-	. = ..()
-	if(.) //No need to run through all of this if it's already true.
-		return
-	if(isclothing(glasses) && (glasses.clothing_flags & SCAN_REAGENTS))
-		return TRUE
-	if(isclothing(head) && (head.clothing_flags & SCAN_REAGENTS))
-		return TRUE
-	if(isclothing(wear_mask) && (wear_mask.clothing_flags & SCAN_REAGENTS))
-		return TRUE
-
 /// When we're joining the game in [/mob/dead/new_player/proc/create_character], we increment our scar slot then store the slot in our mind datum.
 /mob/living/carbon/human/proc/increment_scar_slot()
 	var/check_ckey = ckey || client?.ckey
-	if(!check_ckey || !mind || !client?.prefs.persistent_scars)
+	if(!check_ckey || !mind || !client?.prefs.read_preference(/datum/preference/toggle/persistent_scars))
 		return
 
 	var/path = "data/player_saves/[check_ckey[1]]/[check_ckey]/scars.sav"
@@ -170,7 +147,7 @@
 
 /// Read all the scars we have for the designated character/scar slots, verify they're good/dump them if they're old/wrong format, create them on the user, and write the scars that passed muster back to the file
 /mob/living/carbon/human/proc/load_persistent_scars()
-	if(!ckey || !mind?.original_character_slot_index || !client?.prefs.persistent_scars)
+	if(!ckey || !mind?.original_character_slot_index || !client?.prefs.read_preference(/datum/preference/toggle/persistent_scars))
 		return
 
 	var/path = "data/player_saves/[ckey[1]]/[ckey]/scars.sav"
@@ -195,8 +172,8 @@
 	WRITE_FILE(F["scar[char_index]-[scar_index]"], sanitize_text(valid_scars))
 
 /// Save any scars we have to our designated slot, then write our current slot so that the next time we call [/mob/living/carbon/human/proc/increment_scar_slot] (the next round we join), we'll be there
-/mob/living/carbon/human/proc/save_persistent_scars(nuke=FALSE)
-	if(!ckey || !mind?.original_character_slot_index || !client?.prefs.persistent_scars)
+/mob/living/carbon/human/proc/save_persistent_scars(nuke = FALSE)
+	if(!ckey || !mind?.original_character_slot_index || !client?.prefs.read_preference(/datum/preference/toggle/persistent_scars))
 		return
 
 	var/path = "data/player_saves/[ckey[1]]/[ckey]/scars.sav"
@@ -226,7 +203,7 @@
 	var/t_his = p_their()
 	var/t_is = p_are()
 	//This checks to see if the body is revivable
-	if(key || !getorgan(/obj/item/organ/brain) || ghost?.can_reenter_corpse)
+	if(key || !getorgan(/obj/item/organ/internal/brain) || ghost?.can_reenter_corpse)
 		return span_deadsay("[t_He] [t_is] limp and unresponsive; there are no signs of life...")
 	else
 		return span_deadsay("[t_He] [t_is] limp and unresponsive; there are no signs of life and [t_his] soul has departed...")
@@ -241,50 +218,12 @@
 
 
 /// Fully randomizes everything according to the given flags.
-/mob/living/carbon/human/proc/randomize_human_appearance(randomise_flags = ALL)
-	if(randomise_flags & RANDOMIZE_GENDER)
-		gender = pick(MALE, FEMALE, PLURAL)
-		switch(gender)
-			if(MALE, FEMALE)
-				body_type = gender
-			else
-				body_type = pick(MALE, FEMALE)
-	if(randomise_flags & RANDOMIZE_SPECIES)
-		set_species(GLOB.species_list[pick(GLOB.roundstart_races)], FALSE)
-	if(randomise_flags & RANDOMIZE_NAME)
-		var/new_name = dna.species.random_name(gender, TRUE)
-		name = new_name
-		real_name = new_name
-	if(randomise_flags & RANDOMIZE_AGE)
-		age = rand(AGE_MIN, AGE_MAX)
-	if(randomise_flags & RANDOMIZE_UNDERWEAR)
-		underwear = random_underwear(gender)
-	if(randomise_flags & RANDOMIZE_UNDERWEAR_COLOR)
-		underwear_color = random_short_color()
-	if(randomise_flags & RANDOMIZE_UNDERSHIRT)
-		undershirt = random_undershirt(gender)
-	if(randomise_flags & RANDOMIZE_SOCKS)
-		socks = random_socks()
-	if(randomise_flags & RANDOMIZE_BACKPACK)
-		backpack = random_backpack()
-	if(randomise_flags & RANDOMIZE_JUMPSUIT_STYLE)
-		jumpsuit_style = pick(GLOB.jumpsuitlist)
-	if(randomise_flags & RANDOMIZE_HAIRSTYLE)
-		hairstyle = random_hairstyle(gender)
-	if(randomise_flags & RANDOMIZE_FACIAL_HAIRSTYLE)
-		facial_hairstyle = random_facial_hairstyle(gender)
-	if(randomise_flags & RANDOMIZE_HAIR_COLOR)
-		hair_color = random_short_color()
-	if(randomise_flags & RANDOMIZE_FACIAL_HAIR_COLOR)
-		facial_hair_color = random_short_color()
-	if(randomise_flags & RANDOMIZE_SKIN_TONE)
-		skin_tone = random_skin_tone()
-	if(randomise_flags & RANDOMIZE_EYE_COLOR)
-		eye_color = random_eye_color()
-		var/obj/item/organ/eyes/organ_eyes = getorgan(/obj/item/organ/eyes)
-		if(organ_eyes)
-			if(!initial(organ_eyes.eye_color))
-				organ_eyes.eye_color = eye_color
-			organ_eyes.old_eye_color = eye_color
-	if(randomise_flags & RANDOMIZE_FEATURES)
-		dna.features = random_features()
+/mob/living/carbon/human/proc/randomize_human_appearance(randomize_flags = ALL)
+	var/datum/preferences/preferences = new
+
+	for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
+		if (!preference.included_in_randomization_flags(randomize_flags))
+			continue
+
+		if (preference.is_randomizable())
+			preference.apply_to_human(src, preference.create_random_value(preferences))

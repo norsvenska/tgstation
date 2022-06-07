@@ -28,7 +28,7 @@
 			if (tgui_alert(usr, "Are you sure you want to do this? It will laaag.", "Confirmation", list("Yes", "No")) == "No")
 				return
 
-		explosion(O, devastation, heavy, light, flames, flash)
+		explosion(O, devastation, heavy, light, flames, flash, explosion_cause = mob)
 		log_admin("[key_name(usr)] created an explosion ([devastation],[heavy],[light],[flames]) at [AREACOORD(O)]")
 		message_admins("[key_name_admin(usr)] created an explosion ([devastation],[heavy],[light],[flames]) at [AREACOORD(O)]")
 		SSblackbox.record_feedback("tally", "admin_verb", 1, "Explosion") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -143,7 +143,7 @@
 
 	for(var/i in GLOB.human_list)
 		var/mob/living/carbon/human/H = i
-		new /obj/item/organ/zombie_infection/nodamage(H)
+		new /obj/item/organ/internal/zombie_infection/nodamage(H)
 
 	message_admins("[key_name_admin(usr)] added a latent zombie infection to all humans.")
 	log_admin("[key_name(usr)] added a latent zombie infection to all humans.")
@@ -160,7 +160,7 @@
 	if(confirm != "Yes")
 		return
 
-	for(var/obj/item/organ/zombie_infection/nodamage/I in GLOB.zombie_infection_list)
+	for(var/obj/item/organ/internal/zombie_infection/nodamage/I in GLOB.zombie_infection_list)
 		qdel(I)
 
 	message_admins("[key_name_admin(usr)] cured all zombies.")

@@ -4,11 +4,11 @@
 	icon_screen = "tram"
 	icon_keyboard = "atmos_key"
 	circuit = /obj/item/circuitboard/computer/tram_controls
-	flags_1 = NODECONSTRUCT_1
+	flags_1 = NODECONSTRUCT_1 | SUPERMATTER_IGNORES_1
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
-
 	light_color = LIGHT_COLOR_GREEN
-
+	///The ID of the tram we control
+	var/tram_id = "tram_station"
 	///Weakref to the tram piece we control
 	var/datum/weakref/tram_ref
 
@@ -28,7 +28,11 @@
  * Locates tram parts in the lift global list after everything is done.
  */
 /obj/machinery/computer/tram_controls/proc/find_tram()
-	tram_ref = WEAKREF(GLOB.central_tram)
+	for(var/obj/structure/industrial_lift/tram/central/tram as anything in GLOB.central_trams)
+		if(tram.tram_id != tram_id)
+			continue
+		tram_ref = WEAKREF(tram)
+		break
 
 /obj/machinery/computer/tram_controls/ui_state(mob/user)
 	return GLOB.not_incapacitated_state
@@ -43,6 +47,7 @@
 	return ..()
 
 /obj/machinery/computer/tram_controls/ui_interact(mob/user, datum/tgui/ui)
+	. = ..()
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "TramControl", name)
@@ -73,6 +78,8 @@
 /obj/machinery/computer/tram_controls/proc/get_destinations()
 	. = list()
 	for(var/obj/effect/landmark/tram/destination as anything in GLOB.tram_landmarks)
+		if(destination.tram_id != tram_id)
+			continue
 		var/list/this_destination = list()
 		this_destination["name"] = destination.name
 		this_destination["dest_icons"] = destination.tgui_icons
@@ -88,6 +95,8 @@
 		if ("send")
 			var/obj/effect/landmark/tram/to_where
 			for (var/obj/effect/landmark/tram/destination as anything in GLOB.tram_landmarks)
+				if(destination.tram_id != tram_id)
+					continue
 				if(destination.destination_id == params["destination"])
 					to_where = destination
 					break
@@ -127,33 +136,28 @@
 	/// The tram controls computer (/obj/machinery/computer/tram_controls)
 	var/obj/machinery/computer/tram_controls/computer
 
-/obj/item/circuit_component/tram_controls/Initialize()
-	. = ..()
-	new_destination = add_input_port("Destination", PORT_TYPE_STRING, FALSE)
+/obj/item/circuit_component/tram_controls/populate_ports()
+	new_destination = add_input_port("Destination", PORT_TYPE_STRING, trigger = null)
 	trigger_move = add_input_port("Send Tram", PORT_TYPE_SIGNAL)
 
 	location = add_output_port("Location", PORT_TYPE_STRING)
 	travelling_output = add_output_port("Travelling", PORT_TYPE_NUMBER)
 
-/obj/item/circuit_component/tram_controls/register_usb_parent(atom/movable/parent)
+/obj/item/circuit_component/tram_controls/register_usb_parent(atom/movable/shell)
 	. = ..()
-	if (istype(parent, /obj/machinery/computer/tram_controls))
-		computer = parent
+	if (istype(shell, /obj/machinery/computer/tram_controls))
+		computer = shell
 		var/obj/structure/industrial_lift/tram/central/tram_part = computer.tram_ref?.resolve()
 		RegisterSignal(tram_part, COMSIG_TRAM_SET_TRAVELLING, .proc/on_tram_set_travelling)
 		RegisterSignal(tram_part, COMSIG_TRAM_TRAVEL, .proc/on_tram_travel)
 
-/obj/item/circuit_component/tram_controls/unregister_usb_parent(atom/movable/parent)
+/obj/item/circuit_component/tram_controls/unregister_usb_parent(atom/movable/shell)
 	var/obj/structure/industrial_lift/tram/central/tram_part = computer.tram_ref?.resolve()
 	computer = null
 	UnregisterSignal(tram_part, list(COMSIG_TRAM_SET_TRAVELLING, COMSIG_TRAM_TRAVEL))
 	return ..()
 
 /obj/item/circuit_component/tram_controls/input_received(datum/port/input/port)
-	. = ..()
-	if (.)
-		return
-
 	if (!COMPONENT_TRIGGERED_BY(trigger_move, port))
 		return
 
@@ -164,8 +168,9 @@
 		return
 
 	var/destination
-
 	for(var/obj/effect/landmark/tram/possible_destination as anything in GLOB.tram_landmarks)
+		if(possible_destination.tram_id != computer.tram_id)
+			continue
 		if(possible_destination.name == new_destination.value)
 			destination = possible_destination
 			break

@@ -14,10 +14,6 @@
 	if (lighting_object)
 		qdel(lighting_object, force=TRUE) //Shitty fix for lighting objects persisting after death
 
-	var/area/our_area = loc
-	if (!our_area.static_lighting && !light_sources)
-		return
-
 	new/datum/lighting_object(src)
 
 // Used to get a scaled lumcount.
@@ -95,7 +91,8 @@
 		reconsider_lights() //The lighting system only cares whether the tile is fully concealed from all directions or not.
 
 
-/turf/proc/change_area(area/old_area, area/new_area)
+///Transfer the lighting of one area to another
+/turf/proc/transfer_area_lighting(area/old_area, area/new_area)
 	if(SSlighting.initialized)
 		if (new_area.static_lighting != old_area.static_lighting)
 			if (new_area.static_lighting)

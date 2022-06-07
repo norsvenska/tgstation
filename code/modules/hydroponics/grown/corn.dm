@@ -25,9 +25,13 @@
 	trash_type = /obj/item/grown/corncob
 	bite_consumption_mod = 2
 	foodtypes = VEGETABLES
+	grind_results = list(/datum/reagent/consumable/cornmeal = 0)
 	juice_results = list(/datum/reagent/consumable/corn_starch = 0)
 	tastes = list("corn" = 1)
 	distill_reagent = /datum/reagent/consumable/ethanol/whiskey
+
+/obj/item/food/grown/corn/MakeBakeable()
+	AddComponent(/datum/component/bakeable, /obj/item/food/oven_baked_corn, rand(15 SECONDS, 25 SECONDS), TRUE, TRUE)
 
 /obj/item/grown/corncob
 	name = "corn cob"
@@ -56,7 +60,7 @@
 	species = "snapcorn"
 	plantname = "Snapcorn Stalks"
 	product = /obj/item/grown/snapcorn
-	mutatelist = list()
+	mutatelist = null
 	rarity = 10
 
 /obj/item/grown/snapcorn

@@ -14,7 +14,7 @@
 	light_system = MOVABLE_LIGHT_DIRECTIONAL
 	light_on = FALSE
 
-/obj/item/compact_remote/Initialize()
+/obj/item/compact_remote/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/shell, list(
 		new /obj/item/circuit_component/compact_remote()
@@ -29,8 +29,7 @@
 	/// The user who used the bot
 	var/datum/port/output/entity
 
-/obj/item/circuit_component/compact_remote/Initialize()
-	. = ..()
+/obj/item/circuit_component/compact_remote/populate_ports()
 	entity = add_output_port("User", PORT_TYPE_ATOM)
 	signal = add_output_port("Signal", PORT_TYPE_SIGNAL)
 
@@ -46,6 +45,6 @@
 /obj/item/circuit_component/compact_remote/proc/send_trigger(atom/source, mob/user)
 	SIGNAL_HANDLER
 	source.balloon_alert(user, "clicked primary button")
-	playsound(source, get_sfx("terminal_type"), 25, FALSE)
+	playsound(source, get_sfx(SFX_TERMINAL_TYPE), 25, FALSE)
 	entity.set_output(user)
 	signal.set_output(COMPONENT_SIGNAL)

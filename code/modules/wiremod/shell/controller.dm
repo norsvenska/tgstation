@@ -15,7 +15,7 @@
 	light_system = MOVABLE_LIGHT_DIRECTIONAL
 	light_on = FALSE
 
-/obj/item/controller/Initialize()
+/obj/item/controller/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/shell, list(
 		new /obj/item/circuit_component/controller()
@@ -33,8 +33,7 @@
 	/// The entity output
 	var/datum/port/output/entity
 
-/obj/item/circuit_component/controller/Initialize()
-	. = ..()
+/obj/item/circuit_component/controller/populate_ports()
 	entity = add_output_port("User", PORT_TYPE_ATOM)
 	signal = add_output_port("Signal", PORT_TYPE_SIGNAL)
 	alt = add_output_port("Alternate Signal", PORT_TYPE_SIGNAL)
@@ -60,7 +59,7 @@
 	if(!user.Adjacent(source))
 		return
 	source.balloon_alert(user, "clicked primary button")
-	playsound(source, get_sfx("terminal_type"), 25, FALSE)
+	playsound(source, get_sfx(SFX_TERMINAL_TYPE), 25, FALSE)
 	entity.set_output(user)
 	signal.set_output(COMPONENT_SIGNAL)
 
@@ -72,7 +71,7 @@
 	if(!user.Adjacent(source))
 		return
 	source.balloon_alert(user, "clicked alternate button")
-	playsound(source, get_sfx("terminal_type"), 25, FALSE)
+	playsound(source, get_sfx(SFX_TERMINAL_TYPE), 25, FALSE)
 	entity.set_output(user)
 	alt.set_output(COMPONENT_SIGNAL)
 
@@ -84,6 +83,6 @@
 	if(!user.Adjacent(source))
 		return
 	source.balloon_alert(user, "clicked extra button")
-	playsound(source, get_sfx("terminal_type"), 25, FALSE)
+	playsound(source, get_sfx(SFX_TERMINAL_TYPE), 25, FALSE)
 	entity.set_output(user)
 	right.set_output(COMPONENT_SIGNAL)

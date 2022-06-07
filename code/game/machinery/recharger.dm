@@ -4,9 +4,6 @@
 	icon_state = "recharger"
 	base_icon_state = "recharger"
 	desc = "A charging dock for energy based weaponry."
-	use_power = IDLE_POWER_USE
-	idle_power_usage = 4
-	active_power_usage = 250
 	circuit = /obj/item/circuitboard/machine/recharger
 	pass_flags = PASSTABLE
 	var/obj/item/charging = null
@@ -17,11 +14,13 @@
 
 	var/static/list/allowed_devices = typecacheof(list(
 		/obj/item/gun/energy,
-		/obj/item/melee/baton,
+		/obj/item/melee/baton/security,
 		/obj/item/ammo_box/magazine/recharge,
-		/obj/item/modular_computer))
+		/obj/item/modular_computer,
+	))
 
 /obj/machinery/recharger/RefreshParts()
+	. = ..()
 	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		recharge_coeff = C.rating
 
@@ -47,12 +46,12 @@
 	charging = new_charging
 	if (new_charging)
 		START_PROCESSING(SSmachines, src)
+		update_use_power(ACTIVE_POWER_USE)
 		finished_recharging = FALSE
-		use_power = ACTIVE_POWER_USE
 		using_power = TRUE
 		update_appearance()
 	else
-		use_power = IDLE_POWER_USE
+		update_use_power(IDLE_POWER_USE)
 		using_power = FALSE
 		update_appearance()
 
@@ -137,7 +136,7 @@
 		if(C)
 			if(C.charge < C.maxcharge)
 				C.give(C.chargerate * recharge_coeff * delta_time / 2)
-				use_power(125 * recharge_coeff * delta_time)
+				use_power(active_power_usage * recharge_coeff * delta_time)
 				using_power = TRUE
 			update_appearance()
 
@@ -145,7 +144,7 @@
 			var/obj/item/ammo_box/magazine/recharge/R = charging
 			if(R.stored_ammo.len < R.max_ammo)
 				R.stored_ammo += new R.ammo_type(R)
-				use_power(100 * recharge_coeff * delta_time)
+				use_power(active_power_usage * recharge_coeff * delta_time)
 				using_power = TRUE
 			update_appearance()
 			return
@@ -167,10 +166,10 @@
 			if(E.cell)
 				E.cell.emp_act(severity)
 
-		else if(istype(charging, /obj/item/melee/baton))
-			var/obj/item/melee/baton/B = charging
-			if(B.cell)
-				B.cell.charge = 0
+		else if(istype(charging, /obj/item/melee/baton/security))
+			var/obj/item/melee/baton/security/batong = charging
+			if(batong.cell)
+				batong.cell.charge = 0
 
 /obj/machinery/recharger/update_appearance(updates)
 	. = ..()

@@ -19,7 +19,7 @@
 	var/charge_size = 15
 	var/fire_sound = 'sound/weapons/gun/general/cannon.ogg'
 
-/obj/structure/cannon/Initialize()
+/obj/structure/cannon/Initialize(mapload)
 	. = ..()
 	create_reagents(charge_size)
 
@@ -45,6 +45,13 @@
 		fired_projectile.fire(dir2angle(dir))
 	reagents.remove_all()
 	charge_ignited = FALSE
+
+/obj/structure/cannon/wrench_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(!anchorable_cannon)
+		return FALSE
+	default_unfasten_wrench(user, tool)
+	return TOOL_ACT_TOOLTYPE_SUCCESS
 
 /obj/structure/cannon/attackby(obj/item/used_item, mob/user, params)
 	if(charge_ignited)
@@ -99,9 +106,6 @@
 		if(has_enough_alt_fuel)
 			powder_keg.reagents.trans_id_to(src, /datum/reagent/fuel, amount = charge_size)
 			balloon_alert(user, "[src] loaded with welding fuel")
-			return
-	if(anchorable_cannon && used_item.tool_behaviour == TOOL_WRENCH)
-		if(default_unfasten_wrench(user, used_item, time = 2 SECONDS))
 			return
 	..()
 

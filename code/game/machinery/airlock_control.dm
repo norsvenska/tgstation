@@ -17,10 +17,10 @@
 
 	switch(signal.data["command"])
 		if("open")
-			open(1)
+			open(TRUE)
 
 		if("close")
-			close(1)
+			close(TRUE)
 
 		if("unlock")
 			locked = FALSE
@@ -35,14 +35,14 @@
 			update_appearance()
 
 			sleep(2)
-			open(1)
+			open(TRUE)
 
 			locked = TRUE
 			update_appearance()
 
 		if("secure_close")
 			locked = FALSE
-			close(1)
+			close(TRUE)
 
 			locked = TRUE
 			sleep(2)
@@ -157,7 +157,7 @@
 	frequency = new_frequency
 	radio_connection = SSradio.add_object(src, frequency, RADIO_AIRLOCK)
 
-/obj/machinery/airlock_sensor/Initialize()
+/obj/machinery/airlock_sensor/Initialize(mapload)
 	. = ..()
 	set_frequency(frequency)
 

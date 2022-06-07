@@ -39,9 +39,9 @@
 	light_range = 6
 	light_on = FALSE
 	var/mode = MINEDRONE_COLLECT
-	var/obj/item/gun/energy/kinetic_accelerator/minebot/stored_gun
+	var/obj/item/gun/energy/recharge/kinetic_accelerator/minebot/stored_gun
 
-/mob/living/simple_animal/hostile/mining_drone/Initialize()
+/mob/living/simple_animal/hostile/mining_drone/Initialize(mapload)
 	. = ..()
 
 	AddElement(/datum/element/footstep, FOOTSTEP_OBJ_ROBOT, 1, -6, sound_vary = TRUE)
@@ -319,7 +319,7 @@
 	minebot.melee_damage_lower = initial(minebot.melee_damage_lower) + base_damage_add
 	minebot.melee_damage_upper = initial(minebot.melee_damage_upper) + base_damage_add
 	minebot.move_to_delay = initial(minebot.move_to_delay) + base_speed_add
-	minebot.stored_gun?.overheat_time += base_cooldown_add
+	minebot.stored_gun?.recharge_time += base_cooldown_add
 
 #undef MINEDRONE_COLLECT
 #undef MINEDRONE_ATTACK

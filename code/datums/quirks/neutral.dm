@@ -4,6 +4,7 @@
 /datum/quirk/extrovert
 	name = "Extrovert"
 	desc = "You are energized by talking to others, and enjoy spending your free time in the bar."
+	icon = "users"
 	value = 0
 	mob_trait = TRAIT_EXTROVERT
 	gain_text = "<span class='notice'>You feel like hanging out with other people.</span>"
@@ -13,6 +14,7 @@
 /datum/quirk/introvert
 	name = "Introvert"
 	desc = "You are energized by having time to yourself, and enjoy spending your free time in the library."
+	icon = "book-reader"
 	value = 0
 	mob_trait = TRAIT_INTROVERT
 	gain_text = "<span class='notice'>You feel like reading a good book quietly.</span>"
@@ -22,6 +24,7 @@
 /datum/quirk/no_taste
 	name = "Ageusia"
 	desc = "You can't taste anything! Toxic food will still poison you."
+	icon = "meh-blank"
 	value = 0
 	mob_trait = TRAIT_AGEUSIA
 	gain_text = "<span class='notice'>You can't taste anything!</span>"
@@ -31,6 +34,7 @@
 /datum/quirk/foreigner
 	name = "Foreigner"
 	desc = "You're not from around here. You don't know Galactic Common!"
+	icon = "language"
 	value = 0
 	gain_text = "<span class='notice'>The words being spoken around you don't make any sense."
 	lose_text = "<span class='notice'>You've developed fluency in Galactic Common."
@@ -51,6 +55,7 @@
 /datum/quirk/vegetarian
 	name = "Vegetarian"
 	desc = "You find the idea of eating meat morally and physically repulsive."
+	icon = "carrot"
 	value = 0
 	gain_text = "<span class='notice'>You feel repulsion at the idea of eating meat.</span>"
 	lose_text = "<span class='notice'>You feel like eating meat isn't that bad.</span>"
@@ -64,6 +69,7 @@
 	RegisterSignal(human_holder, COMSIG_SPECIES_GAIN, .proc/on_species_gain)
 
 /datum/quirk/vegetarian/proc/on_species_gain(datum/source, datum/species/new_species, datum/species/old_species)
+	SIGNAL_HANDLER
 	new_species.liked_food &= ~MEAT
 	new_species.disliked_food |= MEAT
 
@@ -80,6 +86,7 @@
 /datum/quirk/snob
 	name = "Snob"
 	desc = "You care about the finer things, if a room doesn't look nice its just not really worth it, is it?"
+	icon = "user-tie"
 	value = 0
 	gain_text = "<span class='notice'>You feel like you understand what things should look like.</span>"
 	lose_text = "<span class='notice'>Well who cares about deco anyways?</span>"
@@ -89,6 +96,7 @@
 /datum/quirk/pineapple_liker
 	name = "Ananas Affinity"
 	desc = "You find yourself greatly enjoying fruits of the ananas genus. You can't seem to ever get enough of their sweet goodness!"
+	icon = "thumbs-up"
 	value = 0
 	gain_text = "<span class='notice'>You feel an intense craving for pineapple.</span>"
 	lose_text = "<span class='notice'>Your feelings towards pineapples seem to return to a lukewarm state.</span>"
@@ -101,6 +109,7 @@
 	RegisterSignal(human_holder, COMSIG_SPECIES_GAIN, .proc/on_species_gain)
 
 /datum/quirk/pineapple_liker/proc/on_species_gain(datum/source, datum/species/new_species, datum/species/old_species)
+	SIGNAL_HANDLER
 	new_species.liked_food |= PINEAPPLE
 
 /datum/quirk/pineapple_liker/remove()
@@ -112,6 +121,7 @@
 /datum/quirk/pineapple_hater
 	name = "Ananas Aversion"
 	desc = "You find yourself greatly detesting fruits of the ananas genus. Serious, how the hell can anyone say these things are good? And what kind of madman would even dare putting it on a pizza!?"
+	icon = "thumbs-down"
 	value = 0
 	gain_text = "<span class='notice'>You find yourself pondering what kind of idiot actually enjoys pineapples...</span>"
 	lose_text = "<span class='notice'>Your feelings towards pineapples seem to return to a lukewarm state.</span>"
@@ -124,6 +134,7 @@
 	RegisterSignal(human_holder, COMSIG_SPECIES_GAIN, .proc/on_species_gain)
 
 /datum/quirk/pineapple_hater/proc/on_species_gain(datum/source, datum/species/new_species, datum/species/old_species)
+	SIGNAL_HANDLER
 	new_species.disliked_food |= PINEAPPLE
 
 /datum/quirk/pineapple_hater/remove()
@@ -135,6 +146,7 @@
 /datum/quirk/deviant_tastes
 	name = "Deviant Tastes"
 	desc = "You dislike food that most people enjoy, and find delicious what they don't."
+	icon = "grin-tongue-squint"
 	value = 0
 	gain_text = "<span class='notice'>You start craving something that tastes strange.</span>"
 	lose_text = "<span class='notice'>You feel like eating normal food again.</span>"
@@ -149,6 +161,7 @@
 	RegisterSignal(human_holder, COMSIG_SPECIES_GAIN, .proc/on_species_gain)
 
 /datum/quirk/deviant_tastes/proc/on_species_gain(datum/source, datum/species/new_species, datum/species/old_species)
+	SIGNAL_HANDLER
 	var/liked = new_species.liked_food
 	new_species.liked_food = new_species.disliked_food
 	new_species.disliked_food = liked
@@ -160,9 +173,64 @@
 	species.disliked_food = initial(species.disliked_food)
 	UnregisterSignal(human_holder, COMSIG_SPECIES_GAIN)
 
+/datum/quirk/heterochromatic
+	name = "Heterochromatic"
+	desc = "One of your eyes is a different color than the other!"
+	icon = "eye-low-vision" // Ignore the icon name, its actually a fairly good representation of different color eyes
+	value = 0
+	var/color
+
+/datum/quirk/heterochromatic/add()
+	color = color || quirk_holder.client?.prefs?.read_preference(/datum/preference/color/heterochromatic)
+	if(!color)
+		return
+
+	link_to_holder()
+
+/datum/quirk/heterochromatic/post_add()
+	if(color)
+		return
+
+	color = quirk_holder.client?.prefs?.read_preference(/datum/preference/color/heterochromatic)
+	if(!color)
+		return
+
+	link_to_holder()
+
+/datum/quirk/heterochromatic/remove()
+	UnregisterSignal(quirk_holder, COMSIG_CARBON_LOSE_ORGAN)
+
+/datum/quirk/heterochromatic/proc/link_to_holder()
+	var/mob/living/carbon/human/human_holder = quirk_holder
+	human_holder.eye_color_heterochromatic = TRUE
+	human_holder.eye_color_right = color
+	// We set override to TRUE as link to holder will be called whenever the preference is applied, given this quirk exists on the mob
+	RegisterSignal(human_holder, COMSIG_CARBON_LOSE_ORGAN, .proc/check_eye_removal, override=TRUE)
+
+	var/obj/item/organ/internal/eyes/eyes_of_the_holder = quirk_holder.getorgan(/obj/item/organ/internal/eyes)
+	if(!eyes_of_the_holder)
+		return
+
+	eyes_of_the_holder.eye_color_right = color
+	eyes_of_the_holder.old_eye_color_right = color
+	eyes_of_the_holder.refresh()
+
+/datum/quirk/heterochromatic/proc/check_eye_removal(datum/source, obj/item/organ/internal/eyes/removed)
+	SIGNAL_HANDLER
+
+	if(!istype(removed))
+		return
+
+	// Eyes were removed, remove heterochromia from the human holder and bid them adieu
+	var/mob/living/carbon/human/human_holder = quirk_holder
+	human_holder.eye_color_heterochromatic = FALSE
+	human_holder.eye_color_right = initial(human_holder.eye_color_right)
+	UnregisterSignal(human_holder, COMSIG_CARBON_LOSE_ORGAN)
+
 /datum/quirk/monochromatic
 	name = "Monochromacy"
 	desc = "You suffer from full colorblindness, and perceive nearly the entire world in blacks and whites."
+	icon = "adjust"
 	value = 0
 	medical_record_text = "Patient is afflicted with almost complete color blindness."
 
@@ -180,13 +248,13 @@
 /datum/quirk/phobia
 	name = "Phobia"
 	desc = "You are irrationally afraid of something."
+	icon = "spider"
 	value = 0
 	medical_record_text = "Patient has an irrational fear of something."
 	var/phobia
 
 /datum/quirk/phobia/add()
-	if(!phobia && quirk_holder.client?.prefs.phobia)
-		phobia = quirk_holder.client?.prefs.phobia
+	phobia = phobia || quirk_holder.client?.prefs?.read_preference(/datum/preference/choiced/phobia)
 
 	if(phobia)
 		var/mob/living/carbon/human/human_holder = quirk_holder
@@ -195,34 +263,25 @@
 /datum/quirk/phobia/post_add()
 	if(!phobia)
 		var/mob/living/carbon/human/human_holder = quirk_holder
-		phobia = human_holder.client.prefs.phobia
+		phobia = human_holder.client.prefs.read_preference(/datum/preference/choiced/phobia)
 		human_holder.gain_trauma(new /datum/brain_trauma/mild/phobia(phobia), TRAUMA_RESILIENCE_ABSOLUTE)
 
 /datum/quirk/phobia/remove()
 	var/mob/living/carbon/human/human_holder = quirk_holder
 	human_holder.cure_trauma_type(/datum/brain_trauma/mild/phobia, TRAUMA_RESILIENCE_ABSOLUTE)
 
-/datum/quirk/item_quirk/needswayfinder
-	name = "Navigationally Challenged"
-	desc = "Lacking familiarity with certain stations, you start with a wayfinding pinpointer where available."
+/datum/quirk/shifty_eyes
+	name = "Shifty Eyes"
+	desc = "Your eyes tend to wander all over the place, whether you mean to or not, causing people to sometimes think you're looking directly at them when you aren't."
+	icon = "far fa-eye"
 	value = 0
-	medical_record_text = "Patient demonstrates a keen ability to get lost."
-
-/datum/quirk/item_quirk/needswayfinder/add_unique()
-	if(!GLOB.wayfindingbeacons.len)
-		return
-
-	var/mob/living/carbon/human/human_holder = quirk_holder
-
-	var/obj/item/pinpointer/wayfinding/wayfinder = new(get_turf(quirk_holder))
-	wayfinder.owner = human_holder.real_name
-	wayfinder.from_quirk = TRUE
-
-	give_item_to_holder(wayfinder, list(LOCATION_LPOCKET = ITEM_SLOT_LPOCKET, LOCATION_RPOCKET = ITEM_SLOT_RPOCKET, LOCATION_BACKPACK = ITEM_SLOT_BACKPACK, LOCATION_HANDS = ITEM_SLOT_HANDS))
+	medical_record_text = "Fucking creep kept staring at me the whole damn checkup. I'm only diagnosing this because it's less awkward than thinking it was on purpose."
+	mob_trait = TRAIT_SHIFTY_EYES
 
 /datum/quirk/item_quirk/bald
 	name = "Smooth-Headed"
 	desc = "You have no hair and are quite insecure about it! Keep your wig on, or at least your head covered up."
+	icon = "egg"
 	value = 0
 	mob_trait = TRAIT_BALD
 	gain_text = "<span class='notice'>Your head is as smooth as can be, it's terrible.</span>"
@@ -277,19 +336,25 @@
 /datum/quirk/item_quirk/tongue_tied
 	name = "Tongue Tied"
 	desc = "Due to a past incident, your ability to communicate has been relegated to your hands."
+	icon = "sign-language"
 	value = 0
 	medical_record_text = "During physical examination, patient's tongue was found to be uniquely damaged."
 
 /datum/quirk/item_quirk/tongue_tied/add_unique()
 	var/mob/living/carbon/human/human_holder = quirk_holder
-	var/obj/item/organ/tongue/old_tongue = human_holder.getorganslot(ORGAN_SLOT_TONGUE)
+	var/obj/item/organ/internal/tongue/old_tongue = human_holder.getorganslot(ORGAN_SLOT_TONGUE)
 	old_tongue.Remove(human_holder)
 	qdel(old_tongue)
 
-	var/obj/item/organ/tongue/tied/new_tongue = new(get_turf(human_holder))
+	var/obj/item/organ/internal/tongue/tied/new_tongue = new(get_turf(human_holder))
 	new_tongue.Insert(human_holder)
+	// Only tongues of people with this quirk can't be removed. Manually spawned or found tongues can be.
+	new_tongue.organ_flags |= ORGAN_UNREMOVABLE
 
-	give_item_to_holder(/obj/item/clothing/gloves/radio, list(LOCATION_GLOVES = ITEM_SLOT_GLOVES, LOCATION_BACKPACK = ITEM_SLOT_BACKPACK, LOCATION_HANDS = ITEM_SLOT_HANDS))
+	var/obj/item/clothing/gloves/gloves_type = /obj/item/clothing/gloves/radio
+	if(isplasmaman(human_holder))
+		gloves_type = /obj/item/clothing/gloves/color/plasmaman/radio
+	give_item_to_holder(gloves_type, list(LOCATION_GLOVES = ITEM_SLOT_GLOVES, LOCATION_BACKPACK = ITEM_SLOT_BACKPACK, LOCATION_HANDS = ITEM_SLOT_HANDS))
 
 /datum/quirk/item_quirk/tongue_tied/post_add()
 	to_chat(quirk_holder, span_boldannounce("Because you speak with your hands, having them full hinders your ability to communicate!"))
@@ -297,6 +362,7 @@
 /datum/quirk/item_quirk/photographer
 	name = "Photographer"
 	desc = "You carry your camera and personal photo album everywhere you go, and your scrapbooks are legendary among your coworkers."
+	icon = "camera"
 	value = 0
 	mob_trait = TRAIT_PHOTOGRAPHER
 	gain_text = "<span class='notice'>You know everything about photography.</span>"
@@ -306,7 +372,7 @@
 /datum/quirk/item_quirk/photographer/add_unique()
 	var/mob/living/carbon/human/human_holder = quirk_holder
 	var/obj/item/storage/photo_album/personal/photo_album = new(get_turf(human_holder))
-	photo_album.persistence_id = "personal_[human_holder.mind.key]" // this is a persistent album, the ID is tied to the account's key to avoid tampering
+	photo_album.persistence_id = "personal_[human_holder.last_mind?.key]" // this is a persistent album, the ID is tied to the account's key to avoid tampering
 	photo_album.persistence_load()
 	photo_album.name = "[human_holder.real_name]'s photo album"
 
@@ -325,8 +391,105 @@
 /datum/quirk/item_quirk/colorist
 	name = "Colorist"
 	desc = "You like carrying around a hair dye spray to quickly apply color patterns to your hair."
+	icon = "fill-drip"
 	value = 0
 	medical_record_text = "Patient enjoys dyeing their hair with pretty colors."
 
 /datum/quirk/item_quirk/colorist/add_unique()
 	give_item_to_holder(/obj/item/dyespray, list(LOCATION_BACKPACK = ITEM_SLOT_BACKPACK, LOCATION_HANDS = ITEM_SLOT_HANDS))
+
+#define GAMING_WITHDRAWAL_TIME (15 MINUTES)
+/datum/quirk/gamer
+	name = "Gamer"
+	desc = "You are a hardcore gamer, and you have a need to game. You love winning and hate losing. You only like gamer food."
+	icon = "gamepad"
+	value = 0
+	gain_text = span_notice("You feel the sudden urge to game.")
+	lose_text = span_notice("You've lost all interest in gaming.")
+	medical_record_text = "Patient has a severe video game addiction."
+	mob_trait = TRAIT_GAMER
+	/// Timer for gaming withdrawal to kick in
+	var/gaming_withdrawal_timer = TIMER_ID_NULL
+
+/datum/quirk/gamer/add()
+	// Gamer diet
+	var/mob/living/carbon/human/human_holder = quirk_holder
+	var/datum/species/species = human_holder.dna.species
+	species.liked_food = JUNKFOOD
+	RegisterSignal(human_holder, COMSIG_SPECIES_GAIN, .proc/on_species_gain)
+	RegisterSignal(human_holder, COMSIG_MOB_WON_VIDEOGAME, .proc/won_game)
+	RegisterSignal(human_holder, COMSIG_MOB_LOST_VIDEOGAME, .proc/lost_game)
+	RegisterSignal(human_holder, COMSIG_MOB_PLAYED_VIDEOGAME, .proc/gamed)
+
+/datum/quirk/gamer/proc/on_species_gain(datum/source, datum/species/new_species, datum/species/old_species)
+	SIGNAL_HANDLER
+	new_species.liked_food = JUNKFOOD
+
+/datum/quirk/gamer/remove()
+	var/mob/living/carbon/human/human_holder = quirk_holder
+	var/datum/species/species = human_holder.dna.species
+	species.liked_food = initial(species.liked_food)
+	UnregisterSignal(human_holder, COMSIG_SPECIES_GAIN)
+	UnregisterSignal(human_holder, COMSIG_MOB_WON_VIDEOGAME)
+	UnregisterSignal(human_holder, COMSIG_MOB_LOST_VIDEOGAME)
+	UnregisterSignal(human_holder, COMSIG_MOB_PLAYED_VIDEOGAME)
+
+/datum/quirk/gamer/add_unique()
+	// The gamer starts off quelled
+	gaming_withdrawal_timer = addtimer(CALLBACK(src, .proc/enter_withdrawal), GAMING_WITHDRAWAL_TIME, TIMER_STOPPABLE)
+
+/**
+ * Gamer won a game
+ *
+ * Executed on the COMSIG_MOB_WON_VIDEOGAME signal
+ * This signal should be called whenever a player has won a video game.
+ * (E.g. Orion Trail)
+ */
+/datum/quirk/gamer/proc/won_game()
+	SIGNAL_HANDLER
+	// Epic gamer victory
+	var/mob/living/carbon/human/human_holder = quirk_holder
+	SEND_SIGNAL(human_holder, COMSIG_ADD_MOOD_EVENT, "gamer_won", /datum/mood_event/gamer_won)
+
+/**
+ * Gamer lost a game
+ *
+ * Executed on the COMSIG_MOB_LOST_VIDEOGAME signal
+ * This signal should be called whenever a player has lost a video game.
+ * (E.g. Orion Trail)
+ */
+/datum/quirk/gamer/proc/lost_game()
+	SIGNAL_HANDLER
+	// Executed when a gamer has lost
+	var/mob/living/carbon/human/human_holder = quirk_holder
+	SEND_SIGNAL(human_holder, COMSIG_ADD_MOOD_EVENT, "gamer_lost", /datum/mood_event/gamer_lost)
+	// Executed asynchronously due to say()
+	INVOKE_ASYNC(src, .proc/gamer_moment)
+/**
+ * Gamer is playing a game
+ *
+ * Executed on the COMSIG_MOB_PLAYED_VIDEOGAME signal
+ * This signal should be called whenever a player interacts with a video game.
+ */
+/datum/quirk/gamer/proc/gamed()
+	SIGNAL_HANDLER
+
+	var/mob/living/carbon/human/human_holder = quirk_holder
+	// Remove withdrawal malus
+	SEND_SIGNAL(human_holder, COMSIG_CLEAR_MOOD_EVENT, "gamer_withdrawal")
+	// Reset withdrawal timer
+	if (gaming_withdrawal_timer)
+		deltimer(gaming_withdrawal_timer)
+	gaming_withdrawal_timer = addtimer(CALLBACK(src, .proc/enter_withdrawal), GAMING_WITHDRAWAL_TIME, TIMER_STOPPABLE)
+
+
+/datum/quirk/gamer/proc/gamer_moment()
+	// It was a heated gamer moment...
+	var/mob/living/carbon/human/human_holder = quirk_holder
+	human_holder.say(";[pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER")]!!", forced = name)
+
+/datum/quirk/gamer/proc/enter_withdrawal()
+	var/mob/living/carbon/human/human_holder = quirk_holder
+	SEND_SIGNAL(human_holder, COMSIG_ADD_MOOD_EVENT, "gamer_withdrawal", /datum/mood_event/gamer_withdrawal)
+
+#undef GAMING_WITHDRAWAL_TIME
