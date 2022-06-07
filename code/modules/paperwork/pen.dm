@@ -77,6 +77,18 @@
 	icon_state = "pen-fountain"
 	font = FOUNTAIN_PEN_FONT
 
+/obj/item/pen/fountain/centcom
+	name = "centcom fountain pen"
+	desc = "A rare fountain pen, this one belonging to Central Command."
+	icon_state = "pen-fountain-centcom"
+	sharpness = SHARP_EDGED
+	font = FOUNTAIN_PEN_FONT
+	resistance_flags = FIRE_PROOF
+	force = 5
+	throwforce = 5
+	throw_speed = 4
+	colour = "darkgreen"
+
 /obj/item/pen/charcoal
 	name = "charcoal stylus"
 	desc = "It's just a wooden stick with some compressed ash on the end. At least it can write."

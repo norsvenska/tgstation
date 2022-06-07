@@ -551,3 +551,56 @@
 		xray = !xray
 		var/mob/living/carbon/human/H = user
 		H.update_sight()
+
+/obj/item/clothing/glasses/centcom
+	name = "centcom sunglasses"
+	desc = "The ultimate sunglasses. Provided by Central Command to inspectors."
+	icon_state = "sunhudcentcom"
+	inhand_icon_state = "sunhudcentcom"
+	flags_cover = GLASSESCOVERSEYES
+	darkness_view = 8
+	flash_protect = FLASH_PROTECTION_WELDER
+	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
+	glass_colour_type = FALSE
+	clothing_flags = SCAN_REAGENTS
+	var/list/hudlist = list(DATA_HUD_MEDICAL_ADVANCED, DATA_HUD_DIAGNOSTIC_ADVANCED, DATA_HUD_SECURITY_ADVANCED)
+	var/xray = FALSE
+
+/obj/item/clothing/glasses/centcom/equipped(mob/user, slot)
+	. = ..()
+	if(slot != ITEM_SLOT_EYES)
+		return
+	if(ishuman(user))
+		for(var/hud in hudlist)
+			var/datum/atom_hud/H = GLOB.huds[hud]
+			H.add_hud_to(user)
+		ADD_TRAIT(user, TRAIT_MEDICAL_HUD, GLASSES_TRAIT)
+		ADD_TRAIT(user, TRAIT_SECURITY_HUD, GLASSES_TRAIT)
+		ADD_TRAIT(user, TRAIT_NOBREATH, GLASSES_TRAIT)
+		ADD_TRAIT(user, TRAIT_RESISTCOLD, GLASSES_TRAIT)
+		ADD_TRAIT(user, TRAIT_RESISTLOWPRESSURE, GLASSES_TRAIT)
+		ADD_TRAIT(user, TRAIT_SUPERMATTER_MADNESS_IMMUNE, GLASSES_TRAIT)
+
+/obj/item/clothing/glasses/centcom/dropped(mob/user)
+	. = ..()
+	REMOVE_TRAIT(user, TRAIT_MEDICAL_HUD, GLASSES_TRAIT)
+	REMOVE_TRAIT(user, TRAIT_SECURITY_HUD, GLASSES_TRAIT)
+	REMOVE_TRAIT(user, TRAIT_NOBREATH, GLASSES_TRAIT)
+	REMOVE_TRAIT(user, TRAIT_RESISTCOLD, GLASSES_TRAIT)
+	REMOVE_TRAIT(user, TRAIT_RESISTLOWPRESSURE, GLASSES_TRAIT)
+	REMOVE_TRAIT(user, TRAIT_SUPERMATTER_MADNESS_IMMUNE, GLASSES_TRAIT)
+	if(ishuman(user))
+		for(var/hud in hudlist)
+			var/datum/atom_hud/H = GLOB.huds[hud]
+			H.remove_hud_from(user)
+
+/obj/item/clothing/glasses/centcom/AltClick(mob/user)
+	. = ..()
+	if(ishuman(user))
+		if(xray)
+			vision_flags -= SEE_MOBS|SEE_OBJS|SEE_TURFS
+		else
+			vision_flags += SEE_MOBS|SEE_OBJS|SEE_TURFS
+		xray = !xray
+		var/mob/living/carbon/human/H = user
+		H.update_sight()

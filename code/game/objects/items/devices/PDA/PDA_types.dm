@@ -148,6 +148,17 @@
 	greyscale_config = /datum/greyscale_config/pda/stripe_thick/head
 	greyscale_colors = "#e2e2e2#000099#9e00ea"
 
+/obj/item/pda/centcom
+	name = "CentCom PDA"
+	default_cartridge = /obj/item/cartridge/captain
+	inserted_item = /obj/item/pen/fountain/centcom
+	greyscale_config = /datum/greyscale_config/pda/stripe_split
+	greyscale_colors = "#118900#040404#b3901c"
+
+/obj/item/pda/centcom/Initialize()
+	. = ..()
+	RegisterSignal(src, COMSIG_PDA_CHECK_DETONATE, .proc/pda_no_detonate)
+
 /obj/item/pda/captain
 	name = "captain PDA"
 	default_cartridge = /obj/item/cartridge/captain

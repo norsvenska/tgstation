@@ -193,6 +193,10 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	name = "Cyborg"
 	icon_state = "Cyborg"
 
+/obj/effect/landmark/start/commander
+	name = "CentCom Commander"
+	icon_state = "Commander"
+
 /obj/effect/landmark/start/ai
 	name = "AI"
 	icon_state = "AI"

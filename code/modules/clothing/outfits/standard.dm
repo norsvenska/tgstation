@@ -274,25 +274,127 @@
 	id_trim = /datum/id_trim/centcom/commander
 	uniform = /obj/item/clothing/under/rank/centcom/commander
 	suit = /obj/item/clothing/suit/armor/bulletproof
+	suit_store = /obj/item/gun/ballistic/revolver/mateba
 	back = /obj/item/storage/backpack/satchel/leather
-	belt = /obj/item/gun/ballistic/revolver/mateba
+	backpack_contents = list(
+		/obj/item/stamp/centcom = 1,
+		/obj/item/pen/fountain/centcom = 1,
+		/obj/item/flashlight/seclite = 1,
+		/obj/item/book/granter/martial/cqc = 1,
+)
+	belt = /obj/item/pda/centcom
 	ears = /obj/item/radio/headset/headset_cent/commander
-	glasses = /obj/item/clothing/glasses/eyepatch
+	glasses = /obj/item/clothing/glasses/centcom
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
 	head = /obj/item/clothing/head/centhat
-	mask = /obj/item/clothing/mask/cigarette/cigar/cohiba
 	shoes = /obj/item/clothing/shoes/combat/swat
 	l_pocket = /obj/item/ammo_box/a357
-	r_pocket = /obj/item/lighter
+	r_pocket = /obj/item/kitchen/knife/combat/survival
+
+/datum/outfit/centcom/commander/armored
+	name = "CentCom Commander (Combat)"
+
+	head = /obj/item/clothing/head/beret/centcom_formal
+
+/datum/outfit/centcom/commander/winter
+	name = "CentCom Commander (Winter)"
+
+	suit = /obj/item/clothing/suit/hooded/wintercoat/centcom
+	neck = /obj/item/clothing/neck/scarf/green
+
+/datum/outfit/centcom/commander/formal
+	name = "CentCom Commander (Formal)"
+
+	head = /obj/item/clothing/head/centcom_cap
+	suit = /obj/item/clothing/suit/toggle/armor/vest/centcom_formal
+	neck = null
 
 /datum/outfit/centcom/commander/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	if(visualsOnly)
 		return
 
+	var/obj/item/pda/centcom/pda = H.belt
+	pda.owner = H.real_name
+	pda.ownjob = "CentCom Commander"
+	pda.update_label()
+	pda.update_icon()
+
 	var/obj/item/card/id/W = H.wear_id
 	W.registered_name = H.real_name
 	W.update_label()
 	W.update_icon()
+	W.registered_age = H.age
+	var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
+	if(B && B.account_id == H.account_id)
+		W.registered_account = B
+		B.bank_cards += W
+	H.sec_hud_set_ID()
+	..()
+
+/datum/outfit/centcom/commander/armored/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	if(visualsOnly)
+		return
+
+	var/obj/item/pda/centcom/pda = H.belt
+	pda.owner = H.real_name
+	pda.ownjob = "CentCom Commander"
+	pda.update_label()
+	pda.update_icon()
+
+	var/obj/item/card/id/W = H.wear_id
+	W.registered_name = H.real_name
+	W.update_label()
+	W.update_icon()
+	W.registered_age = H.age
+	var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
+	if(B && B.account_id == H.account_id)
+		W.registered_account = B
+		B.bank_cards += W
+	H.sec_hud_set_ID()
+	..()
+
+/datum/outfit/centcom/commander/winter/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	if(visualsOnly)
+		return
+
+	var/obj/item/pda/centcom/pda = H.belt
+	pda.owner = H.real_name
+	pda.ownjob = "CentCom Commander"
+	pda.update_label()
+	pda.update_icon()
+
+	var/obj/item/card/id/W = H.wear_id
+	W.registered_name = H.real_name
+	W.update_label()
+	W.update_icon()
+	W.registered_age = H.age
+	var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
+	if(B && B.account_id == H.account_id)
+		W.registered_account = B
+		B.bank_cards += W
+	H.sec_hud_set_ID()
+	..()
+
+/datum/outfit/centcom/commander/formal/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	if(visualsOnly)
+		return
+
+	var/obj/item/pda/centcom/pda = H.belt
+	pda.owner = H.real_name
+	pda.ownjob = "CentCom Commander"
+	pda.update_label()
+	pda.update_icon()
+
+	var/obj/item/card/id/W = H.wear_id
+	W.registered_name = H.real_name
+	W.update_label()
+	W.update_icon()
+	W.registered_age = H.age
+	var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
+	if(B && B.account_id == H.account_id)
+		W.registered_account = B
+		B.bank_cards += W
+	H.sec_hud_set_ID()
 	..()
 
 /datum/outfit/ghost_cultist

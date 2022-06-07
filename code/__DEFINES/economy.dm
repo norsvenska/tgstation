@@ -14,6 +14,7 @@
 #define PAYCHECK_MEDIUM 75
 #define PAYCHECK_HARD 100
 #define PAYCHECK_COMMAND 200
+#define PAYCHECK_CENTCOM 10000
 
 #define STATION_TARGET_BUFFER 40
 
@@ -36,6 +37,9 @@
 #define ACCOUNT_CAR_NAME "Cargo Budget"
 #define ACCOUNT_SEC "SEC"
 #define ACCOUNT_SEC_NAME "Defense Budget"
+#define ACCOUNT_COM "COM"
+#define ACCOUNT_COM_NAME "Command Budget"
+
 
 #define NO_FREEBIES "commies go home"
 
