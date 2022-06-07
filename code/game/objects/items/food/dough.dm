@@ -14,7 +14,7 @@
 
 // Dough + rolling pin = flat dough
 /obj/item/food/dough/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_ROLLINGPIN, /obj/item/food/flatdough, 1, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_ROLLINGPIN, /obj/item/food/flatdough, 1, 30)
 
 /obj/item/food/flatdough
 	name = "flat dough"
@@ -30,7 +30,7 @@
 
 // sliceable into 3xdoughslices
 /obj/item/food/flatdough/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/doughslice, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/doughslice, 3, 30)
 
 /obj/item/food/pizzabread
 	name = "pizza bread"
@@ -42,7 +42,7 @@
 	foodtypes = GRAIN
 	burns_in_oven = TRUE
 
-/obj/item/food/pizzabread/Initialize(mapload)
+/obj/item/food/pizzabread/Initialize()
 	. = ..()
 	AddComponent(/datum/component/customizable_reagent_holder, /obj/item/food/pizza/margherita, CUSTOM_INGREDIENT_ICON_SCATTER, max_ingredients = 12)
 
@@ -70,7 +70,7 @@
 	foodtypes = GRAIN
 	burns_in_oven = TRUE
 
-/obj/item/food/bun/Initialize(mapload)
+/obj/item/food/bun/Initialize()
 	. = ..()
 	AddComponent(/datum/component/customizable_reagent_holder, /obj/item/food/burger/empty, CUSTOM_INGREDIENT_ICON_STACKPLUSTOP)
 
@@ -87,7 +87,7 @@
 	AddComponent(/datum/component/bakeable, /obj/item/food/cake/plain, rand(70 SECONDS, 90 SECONDS), TRUE, TRUE)
 
 /obj/item/food/cakebatter/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_ROLLINGPIN, /obj/item/food/piedough, 1, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_ROLLINGPIN, /obj/item/food/piedough, 1, 30)
 
 /obj/item/food/piedough
 	name = "pie dough"
@@ -102,7 +102,7 @@
 	AddComponent(/datum/component/bakeable, /obj/item/food/pie/plain, rand(30 SECONDS, 45 SECONDS), TRUE, TRUE)
 
 /obj/item/food/piedough/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/rawpastrybase, 6, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/rawpastrybase, 3, 30)
 
 /obj/item/food/rawpastrybase
 	name = "raw pastry base"

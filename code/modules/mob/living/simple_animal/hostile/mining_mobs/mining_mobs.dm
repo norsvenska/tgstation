@@ -3,7 +3,7 @@
 	vision_range = 2
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_plas" = 0, "max_plas" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	faction = list("mining")
-	weather_immunities = list(TRAIT_LAVA_IMMUNE,TRAIT_ASHSTORM_IMMUNE)
+	weather_immunities = list(WEATHER_LAVA,WEATHER_ASH)
 	obj_damage = 30
 	environment_smash = ENVIRONMENT_SMASH_WALLS
 	minbodytemp = 0
@@ -53,7 +53,7 @@
 
 /mob/living/simple_animal/hostile/asteroid/death(gibbed)
 	SSblackbox.record_feedback("tally", "mobs_killed_mining", 1, type)
-	var/datum/status_effect/crusher_damage/C = has_status_effect(/datum/status_effect/crusher_damage)
+	var/datum/status_effect/crusher_damage/C = has_status_effect(STATUS_EFFECT_CRUSHERDAMAGETRACKING)
 	if(C && crusher_loot && prob((C.total_damage/maxHealth) * crusher_drop_mod)) //on average, you'll need to kill 4 creatures before getting the item
 		spawn_crusher_loot()
 	..(gibbed)

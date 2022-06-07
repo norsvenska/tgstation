@@ -1,14 +1,10 @@
 
 /datum/antagonist/nukeop/clownop
-	name = ROLE_CLOWN_OPERATIVE
+	name = "Clown Operative"
 	roundend_category = "clown operatives"
 	antagpanel_category = "ClownOp"
 	nukeop_outfit = /datum/outfit/syndicate/clownop
 	suicide_cry = "HAPPY BIRTHDAY!!"
-
-	preview_outfit = /datum/outfit/clown_operative_elite
-	preview_outfit_behind = /datum/outfit/clown_operative
-	nuke_icon_state = "bananiumbomb_base"
 
 /datum/antagonist/nukeop/clownop/admin_add(datum/mind/new_owner,mob/admin)
 	new_owner.set_assigned_role(SSjob.GetJobType(/datum/job/clown_operative))
@@ -29,7 +25,7 @@
 /datum/antagonist/nukeop/clownop/equip_op()
 	. = ..()
 	var/mob/living/current_mob = owner.current
-	var/obj/item/organ/internal/liver/liver = current_mob.getorganslot(ORGAN_SLOT_LIVER)
+	var/obj/item/organ/liver/liver = current_mob.getorganslot(ORGAN_SLOT_LIVER)
 	if(liver)
 		ADD_TRAIT(liver, TRAIT_COMEDY_METABOLISM, CLOWNOP_TRAIT)
 
@@ -61,28 +57,6 @@
 /datum/antagonist/nukeop/leader/clownop/equip_op()
 	. = ..()
 	var/mob/living/L = owner.current
-	var/obj/item/organ/internal/liver/liver = L.getorganslot(ORGAN_SLOT_LIVER)
+	var/obj/item/organ/liver/liver = L.getorganslot(ORGAN_SLOT_LIVER)
 	if(liver)
 		ADD_TRAIT(liver, TRAIT_COMEDY_METABOLISM, CLOWNOP_TRAIT)
-
-/datum/outfit/clown_operative
-	name = "Clown Operative (Preview only)"
-
-	back = /obj/item/mod/control/pre_equipped/empty/syndicate/honkerative
-	uniform = /obj/item/clothing/under/syndicate
-
-/datum/outfit/clown_operative/post_equip(mob/living/carbon/human/H, visualsOnly)
-	var/obj/item/mod/module/armor_booster/booster = locate() in H.back
-	booster.active = TRUE
-	H.update_inv_back()
-
-/datum/outfit/clown_operative_elite
-	name = "Clown Operative (Elite, Preview only)"
-
-	back = /obj/item/mod/control/pre_equipped/empty/syndicate/honkerative
-	uniform = /obj/item/clothing/under/syndicate
-
-/datum/outfit/clown_operative_elite/post_equip(mob/living/carbon/human/H, visualsOnly)
-	var/obj/item/mod/module/armor_booster/booster = locate() in H.back
-	booster.active = TRUE
-	H.update_inv_back()

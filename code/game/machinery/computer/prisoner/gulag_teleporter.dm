@@ -4,7 +4,7 @@
 	desc = "Used to send criminals to the Labor Camp."
 	icon_screen = "explosive"
 	icon_keyboard = "security_key"
-	req_access = list(ACCESS_BRIG)
+	req_access = list(ACCESS_ARMORY)
 	circuit = /obj/item/circuitboard/computer/gulag_teleporter_console
 	light_color = COLOR_SOFT_RED
 
@@ -15,12 +15,11 @@
 	var/datum/data/record/temporary_record = null
 
 
-/obj/machinery/computer/prisoner/gulag_teleporter_computer/Initialize(mapload)
+/obj/machinery/computer/prisoner/gulag_teleporter_computer/Initialize()
 	. = ..()
 	scan_machinery()
 
 /obj/machinery/computer/prisoner/gulag_teleporter_computer/ui_interact(mob/user, datum/tgui/ui)
-	. = ..()
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "GulagTeleporterConsole", name)
@@ -91,8 +90,6 @@
 				id_insert(usr)
 			return TRUE
 		if("set_goal")
-			if(!contained_id)
-				return
 			var/new_goal = text2num(params["value"])
 			if(!isnum(new_goal))
 				return
@@ -149,7 +146,7 @@
 	prisoner.Paralyze(40) // small travel dizziness
 	to_chat(prisoner, span_warning("The teleportation makes you a little dizzy."))
 	new /obj/effect/particle_effect/sparks(get_turf(prisoner))
-	playsound(src, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+	playsound(src, "sparks", 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 	if(teleporter.locked)
 		teleporter.locked = FALSE
 	teleporter.toggle_open()

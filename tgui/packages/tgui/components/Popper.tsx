@@ -1,11 +1,11 @@
-import { createPopper } from '@popperjs/core';
-import { ArgumentsOf } from 'common/types';
-import { Component, findDOMfromVNode, InfernoNode, render } from 'inferno';
+import { createPopper, OptionsGeneric } from "@popperjs/core";
+import { ArgumentsOf } from "common/types";
+import { Component, findDOMfromVNode, InfernoNode, render } from "inferno";
 
 type PopperProps = {
   popperContent: InfernoNode;
   options?: ArgumentsOf<typeof createPopper>[2];
-  additionalStyles?: CSSProperties;
+  additionalStyles?: CSSProperties,
 };
 
 export class Popper extends Component<PopperProps> {
@@ -21,10 +21,12 @@ export class Popper extends Component<PopperProps> {
   }
 
   componentDidMount() {
-    const { additionalStyles, options } = this.props;
+    const {
+      additionalStyles,
+      options,
+    } = this.props;
 
-    this.renderedContent = document.createElement('div');
-
+    this.renderedContent = document.createElement("div");
     if (additionalStyles) {
       for (const [attribute, value] of Object.entries(additionalStyles)) {
         this.renderedContent.style[attribute] = value;
@@ -51,7 +53,7 @@ export class Popper extends Component<PopperProps> {
       this.popperInstance = createPopper(
         domNode,
         this.renderedContent,
-        options
+        options,
       );
     });
   }
@@ -62,20 +64,11 @@ export class Popper extends Component<PopperProps> {
 
   componentWillUnmount() {
     this.popperInstance?.destroy();
-    render(null, this.renderedContent, () => {
-      this.renderedContent.remove();
-    });
+    this.renderedContent.remove();
   }
 
   renderPopperContent(callback: () => void) {
-    // `render` errors when given false, so we convert it to `null`,
-    // which is supported.
-    render(
-      this.props.popperContent || null,
-      this.renderedContent,
-      callback,
-      this.context
-    );
+    render(this.props.popperContent, this.renderedContent, callback);
   }
 
   render() {

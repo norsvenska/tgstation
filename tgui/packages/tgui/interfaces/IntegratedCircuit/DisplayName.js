@@ -1,15 +1,17 @@
+import { useBackend } from '../../backend';
 import { Box, Button, Flex } from '../../components';
 import { FUNDAMENTAL_DATA_TYPES, DATATYPE_DISPLAY_HANDLERS } from './FundamentalTypes';
+import { NULL_REF } from './constants';
 
 export const DisplayName = (props, context) => {
-  const { port, isOutput, componentId, portIndex, act, ...rest } = props;
+  const { act } = useBackend(context);
+  const { port, isOutput, componentId, portIndex, ...rest } = props;
 
   const InputComponent = FUNDAMENTAL_DATA_TYPES[port.type || 'unknown'];
   const TypeDisplayHandler = DATATYPE_DISPLAY_HANDLERS[port.type || 'unknown'];
 
   const hasInput = !isOutput
     && !port.connected_to?.length
-    && (componentId || port.type === "option")
     && InputComponent;
 
   const displayType = TypeDisplayHandler? TypeDisplayHandler(port) : port.type;
@@ -17,7 +19,7 @@ export const DisplayName = (props, context) => {
   return (
     <Box {...rest}>
       <Flex direction="column">
-        <Flex.Item textAlign={isOutput? "right" : "left"}>
+        <Flex.Item>
           {(hasInput && (
             <InputComponent
               setValue={(val, extraParams) =>

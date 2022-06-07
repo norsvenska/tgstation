@@ -22,7 +22,7 @@
 
 /datum/round_event/meteor_wave/proc/determine_wave_type()
 	if(!wave_name)
-		wave_name = pick_weight(list(
+		wave_name = pickweight(list(
 			"normal" = 50,
 			"threatening" = 40,
 			"catastrophic" = 10))

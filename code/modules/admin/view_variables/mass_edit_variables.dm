@@ -29,7 +29,7 @@
 		for (var/V in O.vars)
 			names += V
 
-		names = sort_list(names)
+		names = sortList(names)
 
 		variable = input("Which var?", "Var") as null|anything in names
 	else

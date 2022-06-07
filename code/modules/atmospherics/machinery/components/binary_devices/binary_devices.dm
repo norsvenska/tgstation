@@ -3,19 +3,18 @@
 	dir = SOUTH
 	initialize_directions = SOUTH|NORTH
 	use_power = IDLE_POWER_USE
-	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.25
 	device_type = BINARY
 	layer = GAS_PUMP_LAYER
 	pipe_flags = PIPING_BRIDGE
 
-/obj/machinery/atmospherics/components/binary/set_init_directions()
+/obj/machinery/atmospherics/components/binary/SetInitDirections()
 	switch(dir)
 		if(NORTH, SOUTH)
 			initialize_directions = NORTH|SOUTH
 		if(EAST, WEST)
 			initialize_directions = EAST|WEST
 
-/obj/machinery/atmospherics/components/binary/get_node_connects()
+/obj/machinery/atmospherics/components/binary/getNodeConnects()
 	return list(turn(dir, 180), dir)
 
 /**

@@ -10,7 +10,7 @@
 	bite_consumption = 3
 	food_reagents = list(/datum/reagent/consumable/nutriment = 2, /datum/reagent/consumable/nutriment/protein = 6,  /datum/reagent/consumable/capsaicin = 1, /datum/reagent/consumable/nutriment/vitamin = 4)
 	tastes = list("fish" = 4, "batter" = 1, "hot peppers" = 1)
-	foodtypes = SEAFOOD | FRIED
+	foodtypes = MEAT | FRIED
 	w_class = WEIGHT_CLASS_SMALL
 
 
@@ -21,8 +21,8 @@
 	food_reagents = list(/datum/reagent/consumable/nutriment/protein = 4, /datum/reagent/consumable/nutriment/vitamin = 2)
 	bite_consumption = 6
 	tastes = list("fish" = 1)
-	foodtypes = SEAFOOD
-	eatverbs = list("bite", "chew", "gnaw", "swallow", "chomp")
+	foodtypes = MEAT
+	eatverbs = list("bite","chew","gnaw","swallow","chomp")
 	w_class = WEIGHT_CLASS_SMALL
 
 /obj/item/food/fishmeat/carp
@@ -32,7 +32,7 @@
 	/// Cytology category you can swab the meat for.
 	var/cell_line = CELL_LINE_TABLE_CARP
 
-/obj/item/food/fishmeat/carp/Initialize(mapload)
+/obj/item/food/fishmeat/carp/Initialize()
 	. = ..()
 	if(cell_line)
 		AddElement(/datum/element/swabable, cell_line, CELL_VIRUS_TABLE_GENERIC_MOB)
@@ -65,12 +65,6 @@
 	icon_state = "armorfish_fillet"
 	food_reagents = list(/datum/reagent/consumable/nutriment/protein = 3)
 
-/obj/item/food/fishmeat/donkfish
-	name = "donkfillet"
-	desc = "The dreaded donkfish fillet. No sane spaceman would eat this, and it does not get better when cooked."
-	icon_state = "donkfillet"
-	food_reagents = list(/datum/reagent/yuck = 3)
-
 /obj/item/food/fishfingers
 	name = "fish fingers"
 	desc = "A finger of fish."
@@ -78,7 +72,7 @@
 	food_reagents = list(/datum/reagent/consumable/nutriment = 2, /datum/reagent/consumable/nutriment/protein = 5, /datum/reagent/consumable/nutriment/vitamin = 2)
 	bite_consumption = 1
 	tastes = list("fish" = 1, "breadcrumbs" = 1)
-	foodtypes = SEAFOOD | FRIED
+	foodtypes = MEAT | FRIED
 	w_class = WEIGHT_CLASS_SMALL
 	venue_value = FOOD_PRICE_EXOTIC
 
@@ -88,7 +82,7 @@
 	icon_state = "fishandchips"
 	food_reagents = list(/datum/reagent/consumable/nutriment = 3, /datum/reagent/consumable/nutriment/protein = 5, /datum/reagent/consumable/nutriment/vitamin = 2)
 	tastes = list("fish" = 1, "chips" = 1)
-	foodtypes = SEAFOOD | VEGETABLES | FRIED
+	foodtypes = MEAT | VEGETABLES | FRIED
 	venue_value = FOOD_PRICE_NORMAL
 
 /obj/item/food/fishfry
@@ -97,58 +91,7 @@
 	icon_state = "fishfry"
 	food_reagents = list (/datum/reagent/consumable/nutriment = 6, /datum/reagent/consumable/nutriment/vitamin = 3)
 	tastes = list("fish" = 1, "pan seared vegtables" = 1)
-	foodtypes = SEAFOOD | VEGETABLES | FRIED
-	w_class = WEIGHT_CLASS_SMALL
-
-/obj/item/food/fishtaco
-	name = "fish taco"
-	desc = "A taco with fish, cheese, and cabbage."
-	icon_state = "fishtaco"
-	food_reagents = list(/datum/reagent/consumable/nutriment = 2, /datum/reagent/consumable/nutriment/protein = 3, /datum/reagent/consumable/nutriment/vitamin = 2)
-	tastes = list("taco" = 4, "fish" = 2, "cheese" = 2, "cabbage" = 1)
-	foodtypes = SEAFOOD | DAIRY | GRAIN | VEGETABLES
-	w_class = WEIGHT_CLASS_SMALL
-
-/obj/item/food/vegetariansushiroll
-	name = "vegetarian sushi roll"
-	desc = "A roll of simple vegetarian sushi with rice, carrots, and potatoes. Sliceable into pieces!"
-	icon_state = "vegetariansushiroll"
-	food_reagents = list(/datum/reagent/consumable/nutriment = 12, /datum/reagent/consumable/nutriment/vitamin = 4)
-	tastes = list("boiled rice" = 4, "carrots" = 2, "potato" = 2)
-	foodtypes = VEGETABLES
-	w_class = WEIGHT_CLASS_SMALL
-
-/obj/item/food/vegetariansushiroll/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/vegetariansushislice, 4, 20)
-
-/obj/item/food/vegetariansushislice
-	name = "vegetarian sushi slice"
-	desc = "A slice of simple vegetarian sushi with rice, carrots, and potatoes."
-	icon_state = "vegetariansushislice"
-	food_reagents = list(/datum/reagent/consumable/nutriment = 3, /datum/reagent/consumable/nutriment/vitamin = 1)
-	tastes = list("boiled rice" = 4, "carrots" = 2, "potato" = 2)
-	foodtypes = VEGETABLES
-	w_class = WEIGHT_CLASS_SMALL
-
-/obj/item/food/spicyfiletsushiroll
-	name = "spicy filet sushi roll"
-	desc = "A roll of tasty, spicy sushi made with fish and vegetables. Sliceable into pieces!"
-	icon_state = "spicyfiletroll"
-	food_reagents = list(/datum/reagent/consumable/nutriment = 12, /datum/reagent/consumable/nutriment/protein = 4, /datum/reagent/consumable/capsaicin = 4, /datum/reagent/consumable/nutriment/vitamin = 4)
-	tastes = list("boiled rice" = 4, "fish" = 2, "spicyness" = 2)
-	foodtypes = VEGETABLES | SEAFOOD
-	w_class = WEIGHT_CLASS_SMALL
-
-/obj/item/food/spicyfiletsushiroll/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/spicyfiletsushislice, 4, 20)
-
-/obj/item/food/spicyfiletsushislice
-	name = "spicy filet sushi slice"
-	desc = "A slice of tasty, spicy sushi made with fish and vegetables. Don't eat it too fast!."
-	icon_state = "spicyfiletslice"
-	food_reagents = list(/datum/reagent/consumable/nutriment = 3, /datum/reagent/consumable/nutriment/protein = 1, /datum/reagent/consumable/capsaicin = 1, /datum/reagent/consumable/nutriment/vitamin = 1)
-	tastes = list("boiled rice" = 4, "fish" = 2, "spicyness" = 2)
-	foodtypes = VEGETABLES | SEAFOOD
+	foodtypes = MEAT | VEGETABLES | FRIED
 	w_class = WEIGHT_CLASS_SMALL
 
 ////////////////////////////////////////////MEATS AND ALIKE////////////////////////////////////////////
@@ -215,8 +158,7 @@
 	AddComponent(/datum/component/grillable, meatball_type, rand(30 SECONDS, 40 SECONDS), TRUE)
 
 /obj/item/food/raw_meatball/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_ROLLINGPIN, patty_type, 1, 20, table_required = TRUE)
-
+	AddElement(/datum/element/processable, TOOL_ROLLINGPIN, patty_type, 1, 20)
 /obj/item/food/raw_meatball/human
 	name = "strange raw meatball"
 	meatball_type = /obj/item/food/meatball/human
@@ -348,7 +290,7 @@
 	food_reagents = list(/datum/reagent/consumable/nutriment/protein = 5, /datum/reagent/consumable/nutriment/vitamin = 2)
 	tastes = list("meat" = 1)
 	foodtypes = MEAT | RAW
-	eatverbs = list("bite", "chew", "nibble", "deep throat", "gobble", "chomp")
+	eatverbs = list("bite","chew","nibble","deep throat","gobble","chomp")
 	w_class = WEIGHT_CLASS_SMALL
 
 /obj/item/food/raw_sausage/MakeGrillable()
@@ -362,22 +304,20 @@
 	tastes = list("meat" = 1)
 	foodtypes = MEAT | BREAKFAST
 	food_flags = FOOD_FINGER_FOOD
-	eatverbs = list("bite", "chew", "nibble", "deep throat", "gobble", "chomp")
+	eatverbs = list("bite","chew","nibble","deep throat","gobble","chomp")
+	var/roasted = FALSE
 	w_class = WEIGHT_CLASS_SMALL
 	burns_on_grill = TRUE
 	venue_value = FOOD_PRICE_CHEAP
 
 /obj/item/food/sausage/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/salami, 6, 30, table_required = TRUE)
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/sausage/american, 1, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/salami, 6, 30)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/american_sausage, 1, 30)
 
-/obj/item/food/sausage/american
+/obj/item/food/american_sausage
 	name = "american sausage"
 	desc = "Snip."
 	icon_state = "american_sausage"
-
-/obj/item/food/sausage/american/MakeProcessable()
-	return
 
 /obj/item/food/salami
 	name = "salami"
@@ -447,32 +387,32 @@
 		visible_message(span_notice("[src] fails to expand!"))
 	qdel(src)
 
-/obj/item/food/monkeycube/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] is putting [src] in [user.p_their()] mouth! It looks like [user.p_theyre()] trying to commit suicide!"))
-	var/eating_success = do_after(user, 1 SECONDS, src)
-	if(QDELETED(user)) //qdeletion: the nuclear option of self-harm
+/obj/item/food/monkeycube/suicide_act(mob/living/M)
+	M.visible_message(span_suicide("[M] is putting [src] in [M.p_their()] mouth! It looks like [M.p_theyre()] trying to commit suicide!"))
+	var/eating_success = do_after(M, 1 SECONDS, src)
+	if(QDELETED(M)) //qdeletion: the nuclear option of self-harm
 		return SHAME
 	if(!eating_success || QDELETED(src)) //checks if src is gone or if they failed to wait for a second
-		user.visible_message(span_suicide("[user] chickens out!"))
+		M.visible_message(span_suicide("[M] chickens out!"))
 		return SHAME
-	if(HAS_TRAIT(user, TRAIT_NOHUNGER)) //plasmamen don't have saliva/stomach acid
-		user.visible_message(span_suicide("[user] realizes [user.p_their()] body won't activate [src]!")
+	if(HAS_TRAIT(M, TRAIT_NOHUNGER)) //plasmamen don't have saliva/stomach acid
+		M.visible_message(span_suicide("[M] realizes [M.p_their()] body won't activate [src]!")
 		,span_warning("Your body won't activate [src]..."))
 		return SHAME
-	playsound(user, 'sound/items/eatfood.ogg', rand(10, 50), TRUE)
-	user.temporarilyRemoveItemFromInventory(src) //removes from hands, keeps in M
-	addtimer(CALLBACK(src, .proc/finish_suicide, user), 15) //you've eaten it, you can run now
+	playsound(M, 'sound/items/eatfood.ogg', rand(10,50), TRUE)
+	M.temporarilyRemoveItemFromInventory(src) //removes from hands, keeps in M
+	addtimer(CALLBACK(src, .proc/finish_suicide, M), 15) //you've eaten it, you can run now
 	return MANUAL_SUICIDE
 
-/obj/item/food/monkeycube/proc/finish_suicide(mob/living/user) ///internal proc called by a monkeycube's suicide_act using a timer and callback. takes as argument the mob/living who activated the suicide
-	if(QDELETED(user) || QDELETED(src))
+/obj/item/food/monkeycube/proc/finish_suicide(mob/living/M) ///internal proc called by a monkeycube's suicide_act using a timer and callback. takes as argument the mob/living who activated the suicide
+	if(QDELETED(M) || QDELETED(src))
 		return
-	if(src.loc != user) //how the hell did you manage this
-		to_chat(user, span_warning("Something happened to [src]..."))
+	if((src.loc != M)) //how the hell did you manage this
+		to_chat(M, span_warning("Something happened to [src]..."))
 		return
 	Expand()
-	user.visible_message(span_danger("[user]'s torso bursts open as a primate emerges!"))
-	user.gib(null, TRUE, null, TRUE)
+	M.visible_message(span_danger("[M]'s torso bursts open as a primate emerges!"))
+	M.gib(null, TRUE, null, TRUE)
 
 /obj/item/food/monkeycube/syndicate
 	faction = list("neutral", ROLE_SYNDICATE)
@@ -507,7 +447,7 @@
 	icon_state = "stewedsoymeat"
 	food_reagents = list(/datum/reagent/consumable/nutriment = 5, /datum/reagent/consumable/nutriment/protein = 6, /datum/reagent/consumable/nutriment/vitamin = 2)
 	tastes = list("soy" = 1, "vegetables" = 1)
-	eatverbs = list("slurp", "sip", "inhale", "drink")
+	eatverbs = list("slurp","sip","inhale","drink")
 	foodtypes = VEGETABLES
 	w_class = WEIGHT_CLASS_SMALL
 
@@ -533,16 +473,16 @@
 
 /obj/item/food/sashimi
 	name = "carp sashimi"
-	desc = "Celebrate surviving attack from hostile alien lifeforms by hospitalising yourself. You sure hope whoever made this is skilled."
+	desc = "Celebrate surviving attack from hostile alien lifeforms by hospitalising yourself."
 	icon_state = "sashimi"
 	food_reagents = list(/datum/reagent/consumable/nutriment/protein = 10, /datum/reagent/consumable/capsaicin = 9, /datum/reagent/consumable/nutriment/vitamin = 4)
 	tastes = list("fish" = 1, "hot peppers" = 1)
-	foodtypes = SEAFOOD
+	foodtypes = MEAT | TOXIC
 	w_class = WEIGHT_CLASS_TINY
 	//total price of this dish is 20 and a small amount more for soy sauce, all of which are available at the orders console
 	venue_value = FOOD_PRICE_CHEAP
 
-/obj/item/food/sashimi/Initialize(mapload)
+/obj/item/food/sashimi/Initialize()
 	. = ..()
 	AddElement(/datum/element/swabable, CELL_LINE_TABLE_CARP, CELL_VIRUS_TABLE_GENERIC_MOB)
 
@@ -555,7 +495,7 @@
 	w_class = WEIGHT_CLASS_TINY
 	venue_value = FOOD_PRICE_CHEAP
 
-/obj/item/food/nugget/Initialize(mapload)
+/obj/item/food/nugget/Initialize()
 	. = ..()
 	var/shape = pick("lump", "star", "lizard", "corgi")
 	desc = "A 'chicken' nugget vaguely shaped like a [shape]."
@@ -666,9 +606,9 @@
 
 /obj/item/food/meat
 	custom_materials = list(/datum/material/meat = MINERAL_MATERIAL_AMOUNT * 4)
-	w_class = WEIGHT_CLASS_SMALL
 	var/subjectname = ""
 	var/subjectjob = null
+	w_class = WEIGHT_CLASS_SMALL
 
 /obj/item/food/meat/slab
 	name = "meat"
@@ -681,7 +621,7 @@
 	///Legacy code, handles the coloring of the overlay of the cutlets made from this.
 	var/slab_color = "#FF0000"
 
-/obj/item/food/meat/slab/Initialize(mapload)
+/obj/item/food/meat/slab/Initialize()
 	. = ..()
 	AddElement(/datum/element/dryable,  /obj/item/food/sosjerky/healthy)
 
@@ -689,7 +629,7 @@
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/plain, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE) //Add medium rare later maybe?
 
 /obj/item/food/meat/slab/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE,  /obj/item/food/meat/rawcutlet/plain, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE,  /obj/item/food/meat/rawcutlet/plain, 3, 30)
 
 ///////////////////////////////////// HUMAN MEATS //////////////////////////////////////////////////////
 
@@ -697,13 +637,12 @@
 	name = "meat"
 	tastes = list("tender meat" = 1)
 	foodtypes = MEAT | RAW | GROSS
-	venue_value = FOOD_MEAT_HUMAN
 
 /obj/item/food/meat/slab/human/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/plain/human, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE) //Add medium rare later maybe?
 
 /obj/item/food/meat/slab/human/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE,  /obj/item/food/meat/rawcutlet/plain/human, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE,  /obj/item/food/meat/rawcutlet/plain/human, 3, 30)
 
 /obj/item/food/meat/slab/human/mutant/slime
 	icon_state = "slimemeat"
@@ -711,7 +650,6 @@
 	food_reagents = list(/datum/reagent/consumable/nutriment/protein = 4, /datum/reagent/toxin/slimejelly = 3)
 	tastes = list("slime" = 1, "jelly" = 1)
 	foodtypes = MEAT | RAW | TOXIC
-	venue_value = FOOD_MEAT_MUTANT_RARE
 
 /obj/item/food/meat/slab/human/mutant/golem
 	icon_state = "golemmeat"
@@ -719,7 +657,6 @@
 	food_reagents = list(/datum/reagent/consumable/nutriment = 3, /datum/reagent/iron = 3)
 	tastes = list("rock" = 1)
 	foodtypes = MEAT | RAW | GROSS
-	venue_value = FOOD_MEAT_MUTANT_RARE
 
 /obj/item/food/meat/slab/human/mutant/golem/adamantine
 	icon_state = "agolemmeat"
@@ -731,7 +668,6 @@
 	desc = "Delicious dino damage."
 	tastes = list("meat" = 4, "scales" = 1)
 	foodtypes = MEAT | RAW
-	venue_value = FOOD_MEAT_MUTANT
 
 /obj/item/food/meat/slab/human/mutant/lizard/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/plain/human/lizard, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE)
@@ -741,29 +677,25 @@
 	desc = "All the joys of healthy eating with all the fun of cannibalism."
 	tastes = list("salad" = 1, "wood" = 1)
 	foodtypes = VEGETABLES
-	venue_value = FOOD_MEAT_MUTANT_RARE
 
 /obj/item/food/meat/slab/human/mutant/shadow
 	icon_state = "shadowmeat"
 	desc = "Ow, the edge."
 	tastes = list("darkness" = 1, "meat" = 1)
 	foodtypes = MEAT | RAW
-	venue_value = FOOD_MEAT_MUTANT_RARE
 
 /obj/item/food/meat/slab/human/mutant/fly
 	icon_state = "flymeat"
 	desc = "Nothing says tasty like maggot filled radioactive mutant flesh."
 	food_reagents = list(/datum/reagent/consumable/nutriment/protein = 4, /datum/reagent/uranium = 3)
 	tastes = list("maggots" = 1, "the inside of a reactor" = 1)
-	foodtypes = MEAT | RAW | GROSS | BUGS
-	venue_value = FOOD_MEAT_MUTANT
+	foodtypes = MEAT | RAW | GROSS
 
 /obj/item/food/meat/slab/human/mutant/moth
 	icon_state = "mothmeat"
 	desc = "Unpleasantly powdery and dry. Kind of pretty, though."
 	tastes = list("dust" = 1, "powder" = 1, "meat" = 2)
-	foodtypes = MEAT | RAW | BUGS
-	venue_value = FOOD_MEAT_MUTANT
+	foodtypes = MEAT | RAW
 
 /obj/item/food/meat/slab/human/mutant/skeleton
 	name = "bone"
@@ -771,13 +703,12 @@
 	desc = "There's a point where this needs to stop, and clearly we have passed it."
 	tastes = list("bone" = 1)
 	foodtypes = GROSS
-	venue_value = FOOD_MEAT_MUTANT_RARE
 
 /obj/item/food/meat/slab/human/mutant/skeleton/MakeProcessable()
 	return //skeletons dont have cutlets
 
 /obj/item/food/meat/slab/human/mutant/zombie
-	name = "meat (rotten)"
+	name = " meat (rotten)"
 	icon_state = "rottenmeat"
 	desc = "Halfway to becoming fertilizer for your garden."
 	tastes = list("brains" = 1, "meat" = 1)
@@ -789,7 +720,6 @@
 	food_reagents = list(/datum/reagent/consumable/liquidelectricity/enriched = 10)
 	tastes = list("pure electricity" = 2, "meat" = 1)
 	foodtypes = RAW | MEAT | TOXIC
-	venue_value = FOOD_MEAT_MUTANT
 
 ////////////////////////////////////// OTHER MEATS ////////////////////////////////////////////////////////
 
@@ -799,11 +729,9 @@
 	icon_state = "meat_old"
 	desc = "A synthetic slab of meat."
 	foodtypes = RAW | MEAT //hurr durr chemicals we're harmed in the production of this meat thus its non-vegan.
-	venue_value = FOOD_PRICE_WORTHLESS
 
 /obj/item/food/meat/slab/synthmeat/MakeGrillable()
-	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/plain/synth, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE)
-
+	AddComponent(/datum/component/grillable,/obj/item/food/meat/steak/plain/synth, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE)
 /obj/item/food/meat/slab/meatproduct
 	name = "meat product"
 	icon_state = "meatproduct"
@@ -823,7 +751,7 @@
 	desc = "A slab of mouse meat. Best not eat it raw."
 	foodtypes = RAW | MEAT | GROSS
 
-/obj/item/food/meat/slab/mouse/Initialize(mapload)
+/obj/item/food/meat/slab/mouse/Initialize()
 	. = ..()
 	AddElement(/datum/element/swabable, CELL_LINE_TABLE_MOUSE, CELL_VIRUS_TABLE_GENERIC_MOB)
 
@@ -833,7 +761,7 @@
 	tastes = list("meat" = 4, "a fondness for wearing hats" = 1)
 	foodtypes = RAW | MEAT | GROSS
 
-/obj/item/food/meat/slab/corgi/Initialize(mapload)
+/obj/item/food/meat/slab/corgi/Initialize()
 	. = ..()
 	AddElement(/datum/element/swabable, CELL_LINE_TABLE_CORGI, CELL_VIRUS_TABLE_GENERIC_MOB)
 
@@ -842,7 +770,7 @@
 	desc = "Tastes like... well you know..."
 	foodtypes = RAW | MEAT | GROSS
 
-/obj/item/food/meat/slab/pug/Initialize(mapload)
+/obj/item/food/meat/slab/pug/Initialize()
 	. = ..()
 	AddElement(/datum/element/swabable, CELL_LINE_TABLE_PUG, CELL_VIRUS_TABLE_GENERIC_MOB)
 
@@ -858,7 +786,7 @@
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/killertomato, rand(70 SECONDS, 85 SECONDS), TRUE, TRUE)
 
 /obj/item/food/meat/slab/killertomato/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/killertomato, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/killertomato, 3, 30)
 
 /obj/item/food/meat/slab/bear
 	name = "bear meat"
@@ -869,12 +797,12 @@
 	foodtypes = RAW | MEAT
 
 /obj/item/food/meat/slab/bear/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/bear, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/bear, 3, 30)
 
 /obj/item/food/meat/slab/bear/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/bear, rand(40 SECONDS, 70 SECONDS), TRUE, TRUE)
 
-/obj/item/food/meat/slab/bear/Initialize(mapload)
+/obj/item/food/meat/slab/bear/Initialize()
 	. = ..()
 	AddElement(/datum/element/swabable, CELL_LINE_TABLE_BEAR, CELL_VIRUS_TABLE_GENERIC_MOB)
 
@@ -888,7 +816,7 @@
 	foodtypes = RAW | MEAT
 
 /obj/item/food/meat/slab/xeno/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/xeno, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/xeno, 3, 30)
 
 /obj/item/food/meat/slab/xeno/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/xeno, rand(40 SECONDS, 70 SECONDS), TRUE, TRUE)
@@ -902,7 +830,7 @@
 	foodtypes = RAW | MEAT | TOXIC
 
 /obj/item/food/meat/slab/spider/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/spider, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/spider, 3, 30)
 
 /obj/item/food/meat/slab/spider/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/spider, rand(40 SECONDS, 70 SECONDS), TRUE, TRUE)
@@ -963,7 +891,7 @@
 	foodtypes = RAW | MEAT
 
 /obj/item/food/meat/slab/gondola/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/gondola, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/gondola, 3, 30)
 
 /obj/item/food/meat/slab/gondola/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/gondola, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE) //Add medium rare later maybe?
@@ -978,12 +906,12 @@
 
 /obj/item/food/meat/slab/penguin/MakeProcessable()
 	. = ..()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/penguin, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/penguin, 3, 30)
 
 /obj/item/food/meat/slab/penguin/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/penguin, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE) //Add medium rare later maybe?
 
-/obj/item/food/meat/slab/rawcrab
+/obj/item/food/meat/rawcrab
 	name = "raw crab meat"
 	desc = "A pile of raw crab meat."
 	icon_state = "crabmeatraw"
@@ -1001,7 +929,7 @@
 	icon_state = "crabmeat"
 	food_reagents = list(/datum/reagent/consumable/nutriment = 2, /datum/reagent/consumable/nutriment/vitamin = 2, /datum/reagent/consumable/cooking_oil = 2)
 	tastes = list("crab" = 1)
-	foodtypes = SEAFOOD
+	foodtypes = MEAT
 	burns_on_grill = TRUE
 
 /obj/item/food/meat/slab/chicken
@@ -1012,12 +940,12 @@
 	tastes = list("chicken" = 1)
 
 /obj/item/food/meat/slab/chicken/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/chicken, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE, /obj/item/food/meat/rawcutlet/chicken, 3, 30)
 
 /obj/item/food/meat/slab/chicken/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/chicken, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE) //Add medium rare later maybe? (no this is chicken)
 
-/obj/item/food/meat/slab/chicken/Initialize(mapload)
+/obj/item/food/meat/slab/chicken/Initialize()
 	. = ..()
 	AddElement(/datum/element/swabable, CELL_LINE_TABLE_CHICKEN, CELL_VIRUS_TABLE_GENERIC_MOB)
 ////////////////////////////////////// MEAT STEAKS ///////////////////////////////////////////////////////////
@@ -1031,7 +959,7 @@
 	tastes = list("meat" = 1)
 	burns_on_grill = TRUE
 
-/obj/item/food/meat/steak/Initialize(mapload)
+/obj/item/food/meat/steak/Initialize()
 	. = ..()
 	RegisterSignal(src, COMSIG_ITEM_MICROWAVE_COOKED, .proc/OnMicrowaveCooked)
 
@@ -1134,16 +1062,15 @@
 /obj/item/food/meat/rawcutlet/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/cutlet/plain, rand(35 SECONDS, 50 SECONDS), TRUE, TRUE)
 
-/obj/item/food/meat/rawcutlet/OnCreatedFromProcessing(mob/living/user, obj/item/item, list/chosen_option, atom/original_atom)
+/obj/item/food/meat/rawcutlet/OnCreatedFromProcessing(mob/living/user, obj/item/I, list/chosen_option, atom/original_atom)
 	..()
-	if(!istype(original_atom, /obj/item/food/meat/slab))
-		return
-	var/obj/item/food/meat/slab/original_slab = original_atom
-	var/mutable_appearance/filling = mutable_appearance(icon, "rawcutlet_coloration")
-	filling.color = original_slab.slab_color
-	add_overlay(filling)
-	name = "raw [original_atom.name] cutlet"
-	meat_type = original_atom.name
+	if(istype(original_atom, /obj/item/food/meat/slab))
+		var/obj/item/food/meat/slab/original_slab = original_atom
+		var/mutable_appearance/filling = mutable_appearance(icon, "rawcutlet_coloration")
+		filling.color = original_slab.slab_color
+		add_overlay(filling)
+		name = "raw [original_atom.name] cutlet"
+		meat_type = original_atom.name
 
 /obj/item/food/meat/rawcutlet/plain
 	foodtypes = MEAT
@@ -1157,17 +1084,16 @@
 /obj/item/food/meat/rawcutlet/plain/human/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/cutlet/plain/human, rand(35 SECONDS, 50 SECONDS), TRUE, TRUE)
 
-/obj/item/food/meat/rawcutlet/plain/human/OnCreatedFromProcessing(mob/living/user, obj/item/item, list/chosen_option, atom/original_atom)
+/obj/item/food/meat/rawcutlet/plain/human/OnCreatedFromProcessing(mob/living/user, obj/item/I, list/chosen_option, atom/original_atom)
 	. = ..()
-	if(!istype(original_atom, /obj/item/food/meat))
-		return
-	var/obj/item/food/meat/origin_meat = original_atom
-	subjectname = origin_meat.subjectname
-	subjectjob = origin_meat.subjectjob
-	if(subjectname)
-		name = "raw [origin_meat.subjectname] cutlet"
-	else if(subjectjob)
-		name = "raw [origin_meat.subjectjob] cutlet"
+	if(istype(original_atom, /obj/item/food/meat))
+		var/obj/item/food/meat/origin_meat = original_atom
+		subjectname = origin_meat.subjectname
+		subjectjob = origin_meat.subjectjob
+		if(subjectname)
+			name = "raw [origin_meat.subjectname] cutlet"
+		else if(subjectjob)
+			name = "raw [origin_meat.subjectjob] cutlet"
 
 /obj/item/food/meat/rawcutlet/killertomato
 	name = "raw killer tomato cutlet"
@@ -1181,7 +1107,7 @@
 	name = "raw bear cutlet"
 	tastes = list("meat" = 1, "salmon" = 1)
 
-/obj/item/food/meat/rawcutlet/bear/Initialize(mapload)
+/obj/item/food/meat/rawcutlet/bear/Initialize()
 	. = ..()
 	AddElement(/datum/element/swabable, CELL_LINE_TABLE_BEAR, CELL_VIRUS_TABLE_GENERIC_MOB)
 
@@ -1220,7 +1146,7 @@
 /obj/item/food/meat/rawcutlet/chicken/MakeGrillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/cutlet/chicken, rand(35 SECONDS, 50 SECONDS), TRUE, TRUE)
 
-/obj/item/food/meat/rawcutlet/chicken/Initialize(mapload)
+/obj/item/food/meat/rawcutlet/chicken/Initialize()
 	. = ..()
 	AddElement(/datum/element/swabable, CELL_LINE_TABLE_CHICKEN, CELL_VIRUS_TABLE_GENERIC_MOB)
 
@@ -1236,7 +1162,7 @@
 	foodtypes = MEAT
 	burns_on_grill = TRUE
 
-/obj/item/food/meat/cutlet/Initialize(mapload)
+/obj/item/food/meat/cutlet/Initialize()
 	. = ..()
 	RegisterSignal(src, COMSIG_ITEM_MICROWAVE_COOKED, .proc/OnMicrowaveCooked)
 
@@ -1301,7 +1227,7 @@
 	junkiness = 25
 	w_class = WEIGHT_CLASS_SMALL
 
-/obj/item/food/fried_chicken/Initialize(mapload)
+/obj/item/food/fried_chicken/Initialize()
 	. = ..()
 	if(prob(50))
 		icon_state = "fried_chicken2"
@@ -1329,7 +1255,7 @@
 	venue_value = FOOD_PRICE_EXOTIC
 
 /obj/item/food/beef_wellington/MakeProcessable()
-	AddElement(/datum/element/processable, TOOL_KNIFE,  /obj/item/food/beef_wellington_slice, 3, 30, table_required = TRUE)
+	AddElement(/datum/element/processable, TOOL_KNIFE,  /obj/item/food/beef_wellington_slice, 3, 30)
 
 /obj/item/food/beef_wellington_slice
 	name = "beef wellington slice"

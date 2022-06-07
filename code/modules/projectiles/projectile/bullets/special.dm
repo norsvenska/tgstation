@@ -13,7 +13,7 @@
 	embedding = null
 	shrapnel_type = null
 
-/obj/projectile/bullet/honker/Initialize(mapload)
+/obj/projectile/bullet/honker/Initialize()
 	. = ..()
 	SpinAnimation()
 
@@ -21,7 +21,7 @@
 	. = ..()
 	var/mob/M = target
 	if(istype(M))
-		if(M.can_block_magic())
+		if(M.anti_magic_check())
 			return BULLET_ACT_BLOCK
 		else
 			M.slip(100, M.loc, GALOSHES_DONT_HELP|SLIDE, 0, FALSE)

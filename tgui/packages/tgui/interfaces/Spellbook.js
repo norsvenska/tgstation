@@ -1,6 +1,6 @@
 import { multiline } from 'common/string';
 import { useBackend, useLocalState } from '../backend';
-import { Box, Button, Dimmer, Divider, Icon, NoticeBox, ProgressBar, Section, Stack } from '../components';
+import { Blink, Box, Button, Dimmer, Divider, Icon, Modal, NoticeBox, ProgressBar, Section, Stack } from '../components';
 import { Window } from '../layouts';
 
 const TAB2NAME = [
@@ -225,9 +225,7 @@ const SingleLoadout = (props, context) => {
           fluid
           icon={icon}
           content="Purchase Loadout"
-          onClick={() => act('purchase_loadout', {
-            id: loadoutId,
-          })} />
+          onClick={() => act(loadoutId)} />
         <Divider />
         <Box color={loadoutColor}>
           Added by {author}.

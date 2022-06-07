@@ -1,5 +1,4 @@
 /mob/living/carbon/human/species/monkey
-	icon_state = "monkey" //for mapping
 	race = /datum/species/monkey
 	ai_controller = /datum/ai_controller/monkey
 	faction = list("neutral", "monkey")
@@ -21,15 +20,13 @@
 /mob/living/carbon/human/species/monkey/angry
 	ai_controller = /datum/ai_controller/monkey/angry
 
-/mob/living/carbon/human/species/monkey/angry/Initialize(mapload)
+/mob/living/carbon/human/species/monkey/angry/Initialize()
 	. = ..()
 	if(prob(10))
 		var/obj/item/clothing/head/helmet/justice/escape/helmet = new(src)
 		equip_to_slot_or_del(helmet,ITEM_SLOT_HEAD)
 		helmet.attack_self(src) // todo encapsulate toggle
 
-
-GLOBAL_DATUM(the_one_and_only_punpun, /mob/living/carbon/human/species/monkey/punpun)
 
 /mob/living/carbon/human/species/monkey/punpun //except for a few special persistence features, pun pun is just a normal monkey
 	name = "Pun Pun" //C A N O N
@@ -43,7 +40,7 @@ GLOBAL_DATUM(the_one_and_only_punpun, /mob/living/carbon/human/species/monkey/pu
 	var/relic_mask
 	var/memory_saved = FALSE
 
-/mob/living/carbon/human/species/monkey/punpun/Initialize(mapload)
+/mob/living/carbon/human/species/monkey/punpun/Initialize()
 	Read_Memory()
 
 	var/name_to_use = name
@@ -56,11 +53,7 @@ GLOBAL_DATUM(the_one_and_only_punpun, /mob/living/carbon/human/species/monkey/pu
 		name_to_use = pick(list("Professor Bobo", "Deempisi's Revenge", "Furious George", "King Louie", "Dr. Zaius", "Jimmy Rustles", "Dinner", "Lanky"))
 		if(name_to_use == "Furious George")
 			ai_controller = /datum/ai_controller/monkey/angry //hes always mad
-
 	. = ..()
-
-	if(!GLOB.the_one_and_only_punpun && mapload)
-		GLOB.the_one_and_only_punpun = src
 
 	fully_replace_character_name(real_name, name_to_use)
 
@@ -74,24 +67,16 @@ GLOBAL_DATUM(the_one_and_only_punpun, /mob/living/carbon/human/species/monkey/pu
 	if(relic_mask)
 		equip_to_slot_or_del(new relic_mask, ITEM_SLOT_MASK)
 
-/mob/living/carbon/human/species/monkey/punpun/Destroy()
-	if(GLOB.the_one_and_only_punpun == src)
-		GLOB.the_one_and_only_punpun = null
-
-	return ..()
-
 /mob/living/carbon/human/species/monkey/punpun/Life(delta_time = SSMOBS_DT, times_fired)
 	if(!stat && SSticker.current_state == GAME_STATE_FINISHED && !memory_saved)
 		Write_Memory(FALSE, FALSE)
 		memory_saved = TRUE
-
-	return ..()
+	..()
 
 /mob/living/carbon/human/species/monkey/punpun/death(gibbed)
 	if(!memory_saved)
 		Write_Memory(TRUE, gibbed)
-
-	return ..()
+	..()
 
 /mob/living/carbon/human/species/monkey/punpun/proc/Read_Memory()
 	if(fexists("data/npc_saves/Punpun.sav")) //legacy compatability to convert old format to new
@@ -111,10 +96,7 @@ GLOBAL_DATUM(the_one_and_only_punpun, /mob/living/carbon/human/species/monkey/pu
 		relic_hat = json["relic_hat"]
 		relic_mask = json["relic_hat"]
 
-/mob/living/carbon/human/species/monkey/punpun/Write_Memory(dead, gibbed)
-	. = ..()
-	if(!.)
-		return
+/mob/living/carbon/human/species/monkey/punpun/proc/Write_Memory(dead, gibbed)
 	var/json_file = file("data/npc_saves/Punpun.json")
 	var/list/file_data = list()
 	if(gibbed)

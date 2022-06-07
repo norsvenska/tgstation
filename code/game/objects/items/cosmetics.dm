@@ -32,7 +32,7 @@
 	name = "lipstick"
 	icon_state = "random_lipstick"
 
-/obj/item/lipstick/random/Initialize(mapload)
+/obj/item/lipstick/random/Initialize()
 	. = ..()
 	icon_state = "lipstick"
 	colour = pick("red","purple","lime","black","green","blue","white")
@@ -121,7 +121,7 @@
 	else
 		H.hairstyle = "Skinhead"
 
-	H.update_hair(is_creating = TRUE)
+	H.update_hair()
 	playsound(loc, 'sound/items/welder2.ogg', 20, TRUE)
 
 
@@ -140,9 +140,7 @@
 						return
 					if(!user.canUseTopic(src, BE_CLOSE, FALSE, NO_TK))
 						return
-					var/new_style = tgui_input_list(user, "Select a facial hairstyle", "Grooming", GLOB.facial_hairstyles_list)
-					if(isnull(new_style))
-						return
+					var/new_style = input(user, "Select a facial hairstyle", "Grooming")  as null|anything in GLOB.facial_hairstyles_list
 					if(!get_location_accessible(H, location))
 						to_chat(user, span_warning("The mask is in the way!"))
 						return
@@ -150,7 +148,7 @@
 					if(new_style && do_after(user, 60, target = H))
 						user.visible_message(span_notice("[user] successfully changes [H]'s facial hairstyle using [src]."), span_notice("You successfully change [H]'s facial hairstyle using [src]."))
 						H.facial_hairstyle = new_style
-						H.update_hair(is_creating = TRUE)
+						H.update_hair()
 						return
 				else
 					return
@@ -188,9 +186,7 @@
 					return
 				if(!user.canUseTopic(src, BE_CLOSE, FALSE, NO_TK))
 					return
-				var/new_style = tgui_input_list(user, "Select a hairstyle", "Grooming", GLOB.hairstyles_list)
-				if(isnull(new_style))
-					return
+				var/new_style = input(user, "Select a hairstyle", "Grooming")  as null|anything in GLOB.hairstyles_list
 				if(!get_location_accessible(H, location))
 					to_chat(user, span_warning("The headgear is in the way!"))
 					return
@@ -201,7 +197,7 @@
 				if(new_style && do_after(user, 60, target = H))
 					user.visible_message(span_notice("[user] successfully changes [H]'s hairstyle using [src]."), span_notice("You successfully change [H]'s hairstyle using [src]."))
 					H.hairstyle = new_style
-					H.update_hair(is_creating = TRUE)
+					H.update_hair()
 					return
 
 			else

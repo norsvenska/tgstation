@@ -9,11 +9,10 @@
 	RegisterSignal(src, COMSIG_PROJECTILE_ON_HIT, .proc/on_projectile_hit)
 
 /obj/effect/proc_holder/spell/aimed/sdql/proc/on_projectile_hit(source, firer, target)
-	SIGNAL_HANDLER
 	var/datum/component/sdql_executor/executor = GetComponent(/datum/component/sdql_executor)
 	if(!executor)
 		CRASH("[src]'s SDQL executor component went missing!")
-	INVOKE_ASYNC(executor, /datum/component/sdql_executor/proc/execute, list(target), owner.resolve())
+	executor.execute(list(target), owner.resolve())
 
 /obj/effect/proc_holder/spell/aoe_turf/sdql
 	name = "AoE SDQL Spell"
@@ -141,8 +140,7 @@
 		user.update_inv_hands()
 
 /obj/effect/proc_holder/spell/targeted/touch/sdql/proc/on_touch_attack(source, target, user)
-	SIGNAL_HANDLER
 	var/datum/component/sdql_executor/executor = GetComponent(/datum/component/sdql_executor)
 	if(!executor)
 		CRASH("[src]'s SDQL executor component went missing!")
-	INVOKE_ASYNC(executor, /datum/component/sdql_executor/proc/execute, list(target), user)
+	executor.execute(list(target), user)

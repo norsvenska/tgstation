@@ -24,8 +24,6 @@
 		COMSIG_ATOM_ENTERED = .proc/on_entered,
 	)
 
-	///So we can update ant damage
-	dupe_mode = COMPONENT_DUPE_UNIQUE_PASSARGS
 
 /datum/component/caltrop/Initialize(min_damage = 0, max_damage = 0, probability = 100, flags = NONE, soundfile = null)
 	. = ..()
@@ -42,21 +40,6 @@
 		AddComponent(/datum/component/connect_loc_behalf, parent, crossed_connections)
 	else
 		RegisterSignal(get_turf(parent), COMSIG_ATOM_ENTERED, .proc/on_entered)
-
-// Inherit the new values passed to the component
-/datum/component/caltrop/InheritComponent(datum/component/caltrop/new_comp, original, min_damage, max_damage, probability, flags, soundfile)
-	if(!original)
-		return
-	if(min_damage)
-		src.min_damage = min_damage
-	if(max_damage)
-		src.max_damage = max_damage
-	if(probability)
-		src.probability = probability
-	if(flags)
-		src.flags = flags
-	if(soundfile)
-		src.soundfile = soundfile
 
 /datum/component/caltrop/proc/on_entered(datum/source, atom/movable/arrived, atom/old_loc, list/atom/old_locs)
 	SIGNAL_HANDLER
@@ -89,7 +72,7 @@
 	if(!istype(O))
 		return
 
-	if(!IS_ORGANIC_LIMB(O))
+	if(O.status == BODYPART_ROBOTIC)
 		return
 
 	if (!(flags & CALTROP_BYPASS_SHOES))
@@ -104,8 +87,8 @@
 	if(!(flags & CALTROP_SILENT) && !H.has_status_effect(/datum/status_effect/caltropped))
 		H.apply_status_effect(/datum/status_effect/caltropped)
 		H.visible_message(
-			span_danger("[H] steps on [parent]."),
-			span_userdanger("You step on [parent]!")
+			span_danger("[H] steps on [source]."),
+			span_userdanger("You step on [source]!")
 		)
 
 	H.apply_damage(damage, BRUTE, picked_def_zone, wound_bonus = CANT_WOUND)

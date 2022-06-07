@@ -21,7 +21,7 @@
 	if(!..())
 		return
 	var/mob/living/silicon/pai/pAI = usr
-	pAI.ui_interact(pAI)
+	pAI.paiInterface()
 
 /atom/movable/screen/pai/shell
 	name = "Toggle Holoform"
@@ -88,14 +88,13 @@
 		return
 	var/mob/living/silicon/pai/pAI = usr
 	var/list/modifiers = params2list(params)
-	var/mob/living/carbon/holder = get(pAI.card.loc, /mob/living/carbon)
-	if(holder)
+	if(iscarbon(pAI.card.loc))
 		if (LAZYACCESS(modifiers, RIGHT_CLICK))
-			pAI.hostscan.attack_secondary(holder, pAI)
+			pAI.hostscan.attack_secondary(pAI.card.loc, pAI)
 		else
-			pAI.hostscan.attack(holder, pAI)
+			pAI.hostscan.attack(pAI.card.loc, pAI)
 	else
-		to_chat(usr, span_warning("You are not being carried by anyone!"))
+		to_chat(src, span_warning("You are not being carried by anyone!"))
 		return FALSE
 
 /atom/movable/screen/pai/crew_manifest
@@ -119,16 +118,27 @@
 	var/mob/living/silicon/pai/pAI = usr
 	pAI.checklaws()
 
-/atom/movable/screen/pai/modpc
-	name = "Messenger"
+/atom/movable/screen/pai/pda_msg_send
+	name = "PDA - Send Message"
 	icon_state = "pda_send"
-	var/mob/living/silicon/pai/pAI
+	required_software = "digital messenger"
 
-/atom/movable/screen/pai/modpc/Click()
-	. = ..()
-	if(!.) // this works for some reason.
+/atom/movable/screen/pai/pda_msg_send/Click()
+	if(!..())
 		return
-	pAI.modularInterface?.interact(pAI)
+	var/mob/living/silicon/pai/pAI = usr
+	pAI.cmd_send_pdamesg(usr)
+
+/atom/movable/screen/pai/pda_msg_show
+	name = "PDA - Show Message Log"
+	icon_state = "pda_receive"
+	required_software = "digital messenger"
+
+/atom/movable/screen/pai/pda_msg_show/Click()
+	if(!..())
+		return
+	var/mob/living/silicon/pai/pAI = usr
+	pAI.cmd_show_message_log(usr)
 
 /atom/movable/screen/pai/internal_gps
 	name = "Internal GPS"
@@ -180,7 +190,6 @@
 /datum/hud/pai/New(mob/living/silicon/pai/owner)
 	..()
 	var/atom/movable/screen/using
-	var/mob/living/silicon/pai/mypai = mymob
 
 // Software menu
 	using = new /atom/movable/screen/pai/software
@@ -217,11 +226,6 @@
 	using.screen_loc = ui_pai_language_menu
 	static_inventory += using
 
-// Navigation
-	using = new /atom/movable/screen/navigate
-	using.screen_loc = ui_pai_navigate_menu
-	static_inventory += using
-
 // Host Monitor
 	using = new /atom/movable/screen/pai/host_monitor()
 	using.screen_loc = ui_pai_host_monitor
@@ -237,13 +241,15 @@
 	using.screen_loc = ui_pai_state_laws
 	static_inventory += using
 
-// Modular Interface
-	using = new /atom/movable/screen/pai/modpc()
-	using.screen_loc = ui_pai_mod_int
+// PDA message
+	using = new /atom/movable/screen/pai/pda_msg_send()
+	using.screen_loc = ui_pai_pda_send
 	static_inventory += using
-	mypai.interfaceButton = using
-	var/atom/movable/screen/pai/modpc/tabletbutton = using
-	tabletbutton.pAI = mypai
+
+// PDA log
+	using = new /atom/movable/screen/pai/pda_msg_show()
+	using.screen_loc = ui_pai_pda_log
+	static_inventory += using
 
 // Internal GPS
 	using = new /atom/movable/screen/pai/internal_gps()

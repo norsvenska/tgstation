@@ -7,12 +7,12 @@
 	see_invisible = SEE_INVISIBLE_LIVING
 	speech_span = SPAN_ROBOT
 
-/mob/living/brain/Initialize(mapload)
+/mob/living/brain/Initialize()
 	. = ..()
 	create_dna(src)
 	stored_dna.initialize_dna(random_blood_type())
 	if(isturf(loc)) //not spawned in an MMI or brain organ (most likely adminspawned)
-		var/obj/item/organ/internal/brain/OB = new(loc) //we create a new brain organ for it.
+		var/obj/item/organ/brain/OB = new(loc) //we create a new brain organ for it.
 		OB.brainmob = src
 		forceMove(OB)
 	if(!container?.mecha) //Unless inside a mecha, brains are rather helpless.
@@ -23,7 +23,7 @@
 /mob/living/brain/proc/create_dna()
 	stored_dna = new /datum/dna/stored(src)
 	if(!stored_dna.species)
-		var/rando_race = pick(get_selectable_species())
+		var/rando_race = GLOB.species_list[pick(GLOB.roundstart_races)]
 		stored_dna.species = new rando_race()
 
 /mob/living/brain/Destroy()
@@ -66,10 +66,10 @@
 /mob/living/brain/forceMove(atom/destination)
 	if(container)
 		return container.forceMove(destination)
-	else if (istype(loc, /obj/item/organ/internal/brain))
-		var/obj/item/organ/internal/brain/B = loc
+	else if (istype(loc, /obj/item/organ/brain))
+		var/obj/item/organ/brain/B = loc
 		B.forceMove(destination)
-	else if (istype(destination, /obj/item/organ/internal/brain))
+	else if (istype(destination, /obj/item/organ/brain))
 		doMove(destination)
 	else if (istype(destination, /obj/item/mmi))
 		doMove(destination)
@@ -91,8 +91,8 @@
 
 /mob/living/brain/proc/get_traumas()
 	. = list()
-	if(istype(loc, /obj/item/organ/internal/brain))
-		var/obj/item/organ/internal/brain/B = loc
+	if(istype(loc, /obj/item/organ/brain))
+		var/obj/item/organ/brain/B = loc
 		. = B.traumas
 
 /mob/living/brain/get_policy_keywords()

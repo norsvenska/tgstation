@@ -9,9 +9,9 @@
 	name = "telecommunication server"
 	icon_state = "comm_server"
 	desc = "A machine used to store data and network statistics."
-	telecomms_type = /obj/machinery/telecomms/server
 	density = TRUE
-	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.01
+	use_power = IDLE_POWER_USE
+	idle_power_usage = 15
 	circuit = /obj/item/circuitboard/machine/telecomms/server
 	var/list/log_entries = list()
 	var/totaltraffic = 0 // gigabytes (if > 1024, divide by 1024 -> terrabytes)
@@ -53,7 +53,6 @@
 	if(!can_send)
 		relay_information(signal, /obj/machinery/telecomms/broadcaster)
 
-	use_power(idle_power_usage)
 
 // Simple log entry datum
 /datum/comm_log_entry
@@ -66,7 +65,7 @@
 /obj/machinery/telecomms/server/presets
 	network = "tcommsat"
 
-/obj/machinery/telecomms/server/presets/Initialize(mapload)
+/obj/machinery/telecomms/server/presets/Initialize()
 	. = ..()
 	name = id
 
@@ -97,7 +96,7 @@
 	autolinkers = list("common")
 
 //Common and other radio frequencies for people to freely use
-/obj/machinery/telecomms/server/presets/common/Initialize(mapload)
+/obj/machinery/telecomms/server/presets/common/Initialize()
 	. = ..()
 	for(var/i = MIN_FREQ, i <= MAX_FREQ, i += 2)
 		freq_listening |= i
@@ -117,6 +116,6 @@
 	freq_listening = list(FREQ_SECURITY)
 	autolinkers = list("security")
 
-/obj/machinery/telecomms/server/presets/common/birdstation/Initialize(mapload)
+/obj/machinery/telecomms/server/presets/common/birdstation/Initialize()
 	. = ..()
 	freq_listening = list()

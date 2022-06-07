@@ -3,7 +3,7 @@
 This component makes it possible to make things edible. What this means is that you can take a bite or force someone to take a bite (in the case of items).
 These items take a specific time to eat, and can do most of the things our original food items could.
 
-Behavior that's still missing from this component that original food items had that should either be put into separate components or somewhere else:
+Behavior that's still missing from this component that original food items had that should either be put into seperate components or somewhere else:
 	Components:
 	Drying component (jerky etc)
 	Processable component (Slicing and cooking behavior essentialy, making it go from item A to B when conditions are met.)
@@ -70,20 +70,15 @@ Behavior that's still missing from this component that original food items had t
 	RegisterSignal(parent, COMSIG_ATOM_CREATEDBY_PROCESSING, .proc/OnProcessed)
 	RegisterSignal(parent, COMSIG_ITEM_MICROWAVE_COOKED, .proc/OnMicrowaveCooked)
 	RegisterSignal(parent, COMSIG_EDIBLE_INGREDIENT_ADDED, .proc/edible_ingredient_added)
-	RegisterSignal(parent, COMSIG_OOZE_EAT_ATOM, .proc/on_ooze_eat)
 
-	if(!isturf(parent))
-		var/static/list/loc_connections = list(
-			COMSIG_ATOM_ENTERED = .proc/on_entered,
-		)
-		AddComponent(/datum/component/connect_loc_behalf, parent, loc_connections)
-	else
-		RegisterSignal(parent, COMSIG_ATOM_ENTERED, .proc/on_entered)
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_ENTERED = .proc/on_entered,
+	)
+	AddComponent(/datum/component/connect_loc_behalf, parent, loc_connections)
 
 	if(isitem(parent))
 		RegisterSignal(parent, COMSIG_ITEM_ATTACK, .proc/UseFromHand)
 		RegisterSignal(parent, COMSIG_ITEM_FRIED, .proc/OnFried)
-		RegisterSignal(parent, COMSIG_GRILL_FOOD, .proc/GrillFood)
 		RegisterSignal(parent, COMSIG_ITEM_MICROWAVE_ACT, .proc/OnMicrowaved)
 		RegisterSignal(parent, COMSIG_ITEM_USED_AS_INGREDIENT, .proc/used_to_customize)
 
@@ -177,36 +172,12 @@ Behavior that's still missing from this component that original food items had t
 
 	return TryToEat(user, user)
 
-/datum/component/edible/proc/OnFried(datum/source, atom/fry_object)
+/datum/component/edible/proc/OnFried(fry_object)
 	SIGNAL_HANDLER
 	var/atom/our_atom = parent
-	fry_object.reagents.maximum_volume = our_atom.reagents.maximum_volume
 	our_atom.reagents.trans_to(fry_object, our_atom.reagents.total_volume)
 	qdel(our_atom)
 	return COMSIG_FRYING_HANDLED
-
-/datum/component/edible/proc/GrillFood(datum/source, atom/fry_object, grill_time)
-	SIGNAL_HANDLER
-
-	var/atom/this_food = parent
-
-	switch(grill_time) //no 0-20 to prevent spam
-		if(20 to 30)
-			this_food.name = "lightly-grilled [this_food.name]"
-			this_food.desc = "[this_food.desc] It's been lightly grilled."
-		if(30 to 80)
-			this_food.name = "grilled [this_food.name]"
-			this_food.desc = "[this_food.desc] It's been grilled."
-			foodtypes |= FRIED
-		if(80 to 100)
-			this_food.name = "heavily grilled [this_food.name]"
-			this_food.desc = "[this_food.desc] It's been heavily grilled."
-			foodtypes |= FRIED
-		if(100 to INFINITY) //grill marks reach max alpha
-			this_food.name = "Powerfully Grilled [this_food.name]"
-			this_food.desc = "A [this_food.name]. Reminds you of your wife, wait, no, it's prettier!"
-			foodtypes |= FRIED
-
 
 ///Called when food is created through processing (Usually this means it was sliced). We use this to pass the OG items reagents.
 /datum/component/edible/proc/OnProcessed(datum/source, atom/original_atom, list/chosen_processing_option)
@@ -216,12 +187,11 @@ Behavior that's still missing from this component that original food items had t
 		return
 
 	var/atom/this_food = parent
+	var/reagents_for_slice = chosen_processing_option[TOOL_PROCESSING_AMOUNT]
 
-	//Make sure we have a reagent container large enough to fit the original atom's reagents.
-	volume = max(volume, ROUND_UP(original_atom.reagents.maximum_volume / chosen_processing_option[TOOL_PROCESSING_AMOUNT]))
+	this_food.create_reagents(volume) //Make sure we have a reagent container
 
-	this_food.create_reagents(volume)
-	original_atom.reagents.copy_to(this_food, original_atom.reagents.total_volume, 1 / chosen_processing_option[TOOL_PROCESSING_AMOUNT])
+	original_atom.reagents.trans_to(this_food, reagents_for_slice)
 
 	if(original_atom.name != initial(original_atom.name))
 		this_food.name = "slice of [original_atom.name]"
@@ -235,16 +205,9 @@ Behavior that's still missing from this component that original food items had t
 	var/atom/this_food = parent
 
 	this_food.reagents.multiply_reagents(CRAFTED_FOOD_BASE_REAGENT_MODIFIER)
-	this_food.reagents.maximum_volume *= CRAFTED_FOOD_BASE_REAGENT_MODIFIER
 
 	for(var/obj/item/food/crafted_part in parts_list)
-		if(!crafted_part.reagents)
-			continue
-
-		this_food.reagents.maximum_volume += crafted_part.reagents.maximum_volume * CRAFTED_FOOD_INGREDIENT_REAGENT_MODIFIER
-		crafted_part.reagents.trans_to(this_food.reagents, crafted_part.reagents.maximum_volume, CRAFTED_FOOD_INGREDIENT_REAGENT_MODIFIER)
-
-	this_food.reagents.maximum_volume = ROUND_UP(this_food.reagents.maximum_volume) // Just because I like whole numbers for this.
+		crafted_part.reagents?.trans_to(this_food.reagents, crafted_part.reagents.maximum_volume, CRAFTED_FOOD_INGREDIENT_REAGENT_MODIFIER)
 
 	SSblackbox.record_feedback("tally", "food_made", 1, type)
 
@@ -298,14 +261,14 @@ Behavior that's still missing from this component that original food items had t
 	if(feeder.combat_mode)
 		return
 
-	. = COMPONENT_CANCEL_ATTACK_CHAIN //Point of no return I suppose
-
 	if(IsFoodGone(owner, feeder))
 		return
 
 	if(!CanConsume(eater, feeder))
 		return
 	var/fullness = eater.get_fullness() + 10 //The theoretical fullness of the person eating if they were to eat this
+
+	. = COMPONENT_CANCEL_ATTACK_CHAIN //Point of no return I suppose
 
 	if(eater == feeder)//If you're eating it yourself.
 		if(eat_time && !do_mob(feeder, eater, eat_time, timed_action_flags = food_flags & FOOD_FINGER_FOOD ? IGNORE_USER_LOC_CHANGE | IGNORE_TARGET_LOC_CHANGE : NONE)) //Gotta pass the minimal eat time
@@ -352,25 +315,19 @@ Behavior that's still missing from this component that original food items had t
 			to_chat(feeder, span_warning("[eater] doesn't seem to have a mouth!"))
 			return
 		if(fullness <= (600 * (1 + eater.overeatduration / (2000 SECONDS))))
-			eater.visible_message(
-				span_danger("[feeder] attempts to [eater.get_bodypart(BODY_ZONE_HEAD) ? "feed [eater] [parent]." : "stuff [parent] down [eater]'s throat hole! Gross."]"),
-				span_userdanger("[feeder] attempts to [eater.get_bodypart(BODY_ZONE_HEAD) ? "feed you [parent]." : "stuff [parent] down your throat hole! Gross."]")
-			)
+			eater.visible_message(span_danger("[feeder] attempts to feed [eater] [parent]."), \
+									span_userdanger("[feeder] attempts to feed you [parent]."))
 		else
-			eater.visible_message(
-				span_danger("[feeder] cannot force any more of [parent] down [eater]'s [eater.get_bodypart(BODY_ZONE_HEAD) ? "throat!" : "throat hole! Eugh."]"),
-				span_userdanger("[feeder] cannot force any more of [parent] down your [eater.get_bodypart(BODY_ZONE_HEAD) ? "throat!" : "throat hole! Eugh."]")
-			)
+			eater.visible_message(span_warning("[feeder] cannot force any more of [parent] down [eater]'s throat!"), \
+									span_warning("[feeder] cannot force any more of [parent] down your throat!"))
 			return
 		if(!do_mob(feeder, eater)) //Wait 3 seconds before you can feed
 			return
 		if(IsFoodGone(owner, feeder))
 			return
-		log_combat(feeder, eater, "fed", owner.reagents.get_reagent_log_string())
-		eater.visible_message(
-			span_danger("[feeder] forces [eater] to eat [parent]!"),
-			span_userdanger("[feeder] forces you to eat [parent]!")
-		)
+		log_combat(feeder, eater, "fed", owner.reagents.log_list())
+		eater.visible_message(span_danger("[feeder] forces [eater] to eat [parent]!"), \
+									span_userdanger("[feeder] forces you to eat [parent]!"))
 
 	TakeBite(eater, feeder)
 
@@ -452,8 +409,6 @@ Behavior that's still missing from this component that original food items had t
 			food_taste_reaction = FOOD_DISLIKED
 		else if(foodtypes & H.dna.species.liked_food)
 			food_taste_reaction = FOOD_LIKED
-	if(food_flags & FOOD_SILVER_SPAWNED) // it's not real food
-		food_taste_reaction = FOOD_TOXIC
 
 	switch(food_taste_reaction)
 		if(FOOD_TOXIC)
@@ -468,10 +423,6 @@ Behavior that's still missing from this component that original food items had t
 			to_chat(H,span_notice("I love this taste!"))
 			H.adjust_disgust(-5 + -2.5 * fraction)
 			SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "fav_food", /datum/mood_event/favorite_food)
-			if(istype(parent, /obj/item/food))
-				var/obj/item/food/memorable_food = parent
-				if(memorable_food.venue_value >= FOOD_PRICE_EXOTIC)
-					H.mind?.add_memory(MEMORY_MEAL, list(DETAIL_FOOD = memorable_food), story_value = STORY_VALUE_OKAY)
 
 ///Delete the item when it is fully eaten
 /datum/component/edible/proc/On_Consume(mob/living/eater, mob/living/feeder)
@@ -530,14 +481,3 @@ Behavior that's still missing from this component that original food items had t
 			tastes[t] += E.tastes[t]
 	foodtypes |= E.foodtypes
 
-/// Response to oozes trying to eat something edible
-/datum/component/edible/proc/on_ooze_eat(datum/source, mob/eater, edible_flags)
-	SIGNAL_HANDLER
-
-	if(foodtypes & edible_flags)
-		var/atom/eaten_food = parent
-		eaten_food.reagents.trans_to(eater, eaten_food.reagents.total_volume, transfered_by = eater)
-		eater.visible_message(span_warning("[src] eats [eaten_food]!"), span_notice("You eat [eaten_food]."))
-		playsound(get_turf(eater),'sound/items/eatfood.ogg', rand(30,50), TRUE)
-		qdel(eaten_food)
-		return COMPONENT_ATOM_EATEN

@@ -6,7 +6,6 @@
 /obj/item/circuit_component/get_column
 	display_name = "Get Column"
 	desc = "Gets the column of a table and returns it as a regular list."
-	category = "List"
 	circuit_flags = CIRCUIT_FLAG_INPUT_SIGNAL|CIRCUIT_FLAG_OUTPUT_SIGNAL
 
 	/// The list to perform the filter on
@@ -18,12 +17,16 @@
 	/// The filtered list
 	var/datum/port/output/output_list
 
-/obj/item/circuit_component/get_column/populate_ports()
+/obj/item/circuit_component/get_column/Initialize()
+	. = ..()
 	received_table = add_input_port("Input", PORT_TYPE_TABLE)
 	column_name = add_input_port("Column Name", PORT_TYPE_STRING)
-	output_list = add_output_port("Output", PORT_TYPE_LIST(PORT_TYPE_ANY))
+	output_list = add_output_port("Output", PORT_TYPE_LIST)
 
 /obj/item/circuit_component/get_column/input_received(datum/port/input/port)
+	. = ..()
+	if(.)
+		return
 
 	var/list/input_list = received_table.value
 	if(!islist(input_list) || isnum(column_name.value))

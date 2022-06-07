@@ -35,11 +35,14 @@
 	obj_damage = 40
 	melee_damage_lower = 10
 	melee_damage_upper = 15
-	see_in_dark = NIGHTVISION_FOV_RANGE
+	see_in_dark = 8
 	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
 	del_on_death = TRUE
 	deathmessage = "screams in agony as it sublimates into a sulfurous smoke."
 	deathsound = 'sound/magic/demon_dies.ogg'
+	var/playstyle_string = "<span class='big bold'>You are an imp,</span><B> a mischievous creature from hell. You are the lowest rank on the hellish totem pole \
+							Though you are not obligated to help, perhaps by aiding a higher ranking devil, you might just get a promotion. However, you are incapable \
+							of intentionally harming a fellow devil.</B>"
 
 //////////////////The Man Behind The Slaughter
 
@@ -58,10 +61,16 @@
 	wound_bonus = -10
 	bare_wound_bonus = 0
 	sharpness = SHARP_EDGED
+	playstyle_string = "<span class='big bold'>You are a slaughter demon,</span><B> a terrible creature from another realm. You have a single desire: To kill. \
+							You may use the \"Blood Crawl\" ability near blood pools to travel through them, appearing and disappearing from the station at will. \
+							Pulling a dead or unconscious mob while you enter a pool will pull them in with you, allowing you to feast and regain your health. \
+							You move quickly upon leaving a pool of blood, but the material world will soon sap your strength and leave you sluggish. \
+							You gain strength the more attacks you land on live humanoids, though this resets when you return to the blood zone. You can also \
+							launch a devastating slam attack with right-click, capable of smashing bones in one strike.</B>"
 
 	loot = list(/obj/effect/decal/cleanable/blood, \
 				/obj/effect/decal/cleanable/blood/innards, \
-				/obj/item/organ/internal/heart/demon)
+				/obj/item/organ/heart/demon)
 	del_on_death = 1
 	///Sound played when consuming a body
 	var/feast_sound = 'sound/magic/demon_consume.ogg'
@@ -140,18 +149,18 @@
 	addtimer(CALLBACK(src, .proc/remove_movespeed_modifier, /datum/movespeed_modifier/slaughter), 6 SECONDS, TIMER_UNIQUE | TIMER_OVERRIDE)
 
 //The loot from killing a slaughter demon - can be consumed to allow the user to blood crawl
-/obj/item/organ/internal/heart/demon
+/obj/item/organ/heart/demon
 	name = "demon heart"
 	desc = "Still it beats furiously, emanating an aura of utter hate."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "demon_heart-on"
 	decay_factor = 0
 
-/obj/item/organ/internal/heart/demon/ComponentInitialize()
+/obj/item/organ/heart/demon/ComponentInitialize()
 	. = ..()
 	AddElement(/datum/element/update_icon_blocker)
 
-/obj/item/organ/internal/heart/demon/attack(mob/M, mob/living/carbon/user, obj/target)
+/obj/item/organ/heart/demon/attack(mob/M, mob/living/carbon/user, obj/target)
 	if(M != user)
 		return ..()
 	user.visible_message(span_warning("[user] raises [src] to [user.p_their()] mouth and tears into it with [user.p_their()] teeth!"), \
@@ -167,17 +176,17 @@
 	user.temporarilyRemoveItemFromInventory(src, TRUE)
 	src.Insert(user) //Consuming the heart literally replaces your heart with a demon heart. H A R D C O R E
 
-/obj/item/organ/internal/heart/demon/Insert(mob/living/carbon/M, special = 0)
+/obj/item/organ/heart/demon/Insert(mob/living/carbon/M, special = 0)
 	..()
 	if(M.mind)
 		M.mind.AddSpell(new /obj/effect/proc_holder/spell/bloodcrawl(null))
 
-/obj/item/organ/internal/heart/demon/Remove(mob/living/carbon/M, special = 0)
+/obj/item/organ/heart/demon/Remove(mob/living/carbon/M, special = 0)
 	..()
 	if(M.mind)
 		M.mind.RemoveSpell(/obj/effect/proc_holder/spell/bloodcrawl)
 
-/obj/item/organ/internal/heart/demon/Stop()
+/obj/item/organ/heart/demon/Stop()
 	return 0 // Always beating.
 
 /mob/living/simple_animal/hostile/imp/slaughter/laughter
@@ -194,7 +203,7 @@
 
 	attack_sound = 'sound/items/bikehorn.ogg'
 	attack_vis_effect = null
-	feast_sound = 'sound/misc/scary_horn.ogg'
+	feast_sound = 'sound/spookoween/scary_horn2.ogg'
 	deathsound = 'sound/misc/sadtrombone.ogg'
 
 	icon_state = "bowmon"
@@ -206,7 +215,21 @@
 	// Keep the people we hug!
 	var/list/consumed_mobs = list()
 
-/mob/living/simple_animal/hostile/imp/slaughter/laughter/Initialize(mapload)
+	playstyle_string = "<span class='big bold'>You are a laughter \
+	demon,</span><B> a wonderful creature from another realm. You have a single \
+	desire: <span class='clown'>To hug and tickle.</span><BR>\
+	You may use the \"Blood Crawl\" ability near blood pools to travel \
+	through them, appearing and disappearing from the station at will. \
+	Pulling a dead or unconscious mob while you enter a pool will pull \
+	them in with you, allowing you to hug them and regain your health.<BR> \
+	You move quickly upon leaving a pool of blood, but the material world \
+	will soon sap your strength and leave you sluggish.<BR>\
+	What makes you a little sad is that people seem to die when you tickle \
+	them; but don't worry! When you die, everyone you hugged will be \
+	released and fully healed, because in the end it's just a jape, \
+	sibling!</B>"
+
+/mob/living/simple_animal/hostile/imp/slaughter/laughter/Initialize()
 	. = ..()
 	if(SSevents.holidays && SSevents.holidays[APRIL_FOOLS])
 		icon_state = "honkmon"

@@ -1,21 +1,12 @@
 /obj/item/gun/syringe
-	name = "medical syringe gun"
-	desc = "A spring loaded gun designed to fit syringes, used to incapacitate unruly patients from a distance."
-	icon = 'icons/obj/guns/syringegun.dmi'
-	icon_state = "medicalsyringegun"
-	lefthand_file = 'icons/mob/inhands/weapons/64x_guns_left.dmi'
-	righthand_file = 'icons/mob/inhands/weapons/64x_guns_right.dmi'
-	inhand_icon_state = "medicalsyringegun"
-	inhand_x_dimension = 64
-	inhand_y_dimension = 64
-	worn_icon_state = null
-	w_class = WEIGHT_CLASS_BULKY
-	slot_flags = ITEM_SLOT_BACK
+	name = "syringe gun"
+	desc = "A spring loaded rifle designed to fit syringes, used to incapacitate unruly patients from a distance."
+	icon_state = "syringegun"
+	inhand_icon_state = "syringegun"
+	w_class = WEIGHT_CLASS_NORMAL
 	throw_speed = 3
 	throw_range = 7
-	force = 6
-	base_pixel_x = -4
-	pixel_x = -4
+	force = 4
 	custom_materials = list(/datum/material/iron=2000)
 	clumsy_check = FALSE
 	fire_sound = 'sound/items/syringeproj.ogg'
@@ -24,7 +15,7 @@
 	var/max_syringes = 1 ///The number of syringes it can store.
 	var/has_syringe_overlay = TRUE ///If it has an overlay for inserted syringes. If true, the overlay is determined by the number of syringes inserted into it.
 
-/obj/item/gun/syringe/Initialize(mapload)
+/obj/item/gun/syringe/Initialize()
 	. = ..()
 	chambered = new /obj/item/ammo_casing/syringegun(src)
 	recharge_newshot()
@@ -42,7 +33,7 @@
 /obj/item/gun/syringe/can_shoot()
 	return syringes.len
 
-/obj/item/gun/syringe/handle_chamber()
+/obj/item/gun/syringe/process_chamber()
 	if(chambered && !chambered.loaded_projectile) //we just fired
 		recharge_newshot()
 	update_appearance()
@@ -94,58 +85,27 @@
 	. += "[initial(icon_state)]_[syringe_count ? clamp(syringe_count, 1, initial(max_syringes)) : "empty"]"
 
 /obj/item/gun/syringe/rapidsyringe
-	name = "compact rapid syringe gun"
-	desc = "A modification of the syringe gun design to be more compact and use a rotating cylinder to store up to six syringes."
+	name = "rapid syringe gun"
+	desc = "A modification of the syringe gun design, using a rotating cylinder to store up to six syringes."
 	icon_state = "rapidsyringegun"
-	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
-	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
-	inhand_icon_state = "syringegun"
-	inhand_x_dimension = 32
-	inhand_y_dimension = 32
-	worn_icon_state = "gun"
-	w_class = WEIGHT_CLASS_NORMAL
-	slot_flags = ITEM_SLOT_BELT
-	base_pixel_x = 0
-	pixel_x = 0
 	max_syringes = 6
-	force = 4
 
 /obj/item/gun/syringe/syndicate
 	name = "dart pistol"
 	desc = "A small spring-loaded sidearm that functions identically to a syringe gun."
-	icon_state = "dartsyringegun"
-	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
-	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
+	icon_state = "syringe_pistol"
 	inhand_icon_state = "gun" //Smaller inhand
-	inhand_x_dimension = 32
-	inhand_y_dimension = 32
-	worn_icon_state = "gun"
 	w_class = WEIGHT_CLASS_SMALL
-	slot_flags = ITEM_SLOT_BELT
-	base_pixel_x = 0
-	pixel_x = 0
 	force = 2 //Also very weak because it's smaller
 	suppressed = TRUE //Softer fire sound
 	can_unsuppress = FALSE //Permanently silenced
 	syringes = list(new /obj/item/reagent_containers/syringe())
 
 /obj/item/gun/syringe/dna
-	name = "modified compact syringe gun"
-	desc = "A syringe gun that has been modified to be compact and fit DNA injectors instead of normal syringes."
-	icon_state = "dnasyringegun"
-	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
-	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
-	inhand_icon_state = "syringegun"
-	inhand_x_dimension = 32
-	inhand_y_dimension = 32
-	worn_icon_state = "gun"
-	w_class = WEIGHT_CLASS_NORMAL
-	slot_flags = ITEM_SLOT_BELT
-	base_pixel_x = 0
-	pixel_x = 0
-	force = 4
+	name = "modified syringe gun"
+	desc = "A syringe gun that has been modified to fit DNA injectors instead of normal syringes."
 
-/obj/item/gun/syringe/dna/Initialize(mapload)
+/obj/item/gun/syringe/dna/Initialize()
 	. = ..()
 	chambered = new /obj/item/ammo_casing/dnainjector(src)
 
@@ -161,8 +121,6 @@
 			to_chat(user, span_notice("You load \the [D] into \the [src]."))
 			syringes += D
 			recharge_newshot()
-			update_appearance()
-			playsound(loc, load_sound, 40)
 			return TRUE
 		else
 			to_chat(user, span_warning("[src] cannot hold more syringes!"))
@@ -171,22 +129,10 @@
 /obj/item/gun/syringe/blowgun
 	name = "blowgun"
 	desc = "Fire syringes at a short distance."
-	icon = 'icons/obj/guns/ballistic.dmi'
 	icon_state = "blowgun"
-	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
-	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
 	inhand_icon_state = "blowgun"
-	inhand_x_dimension = 32
-	inhand_y_dimension = 32
-	worn_icon_state = "gun"
 	has_syringe_overlay = FALSE
 	fire_sound = 'sound/items/syringeproj.ogg'
-	w_class = WEIGHT_CLASS_NORMAL
-	slot_flags = ITEM_SLOT_BELT
-	base_pixel_x = 0
-	pixel_x = 0
-	force = 4
-	trigger_guard = TRIGGER_GUARD_ALLOW_ALL
 
 /obj/item/gun/syringe/blowgun/process_fire(atom/target, mob/living/user, message = TRUE, params = null, zone_override = "", bonus_spread = 0)
 	visible_message(span_danger("[user] starts aiming with a blowgun!"))

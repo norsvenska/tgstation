@@ -4,14 +4,13 @@
 	verb_say = "intones"
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "speaking_tile"
-	layer = FLY_LAYER
-	plane = ABOVE_GAME_PLANE
+	layer = 5
 	resistance_flags = INDESTRUCTIBLE
 	var/speaking = FALSE
 	var/times_spoken_to = 0
 	var/list/shenanigans = list()
 
-/obj/structure/speaking_tile/Initialize(mapload)
+/obj/structure/speaking_tile/Initialize()
 	. = ..()
 	var/json_file = file("data/npc_saves/Poly.json")
 	if(!fexists(json_file))
@@ -27,10 +26,10 @@
 	switch(times_spoken_to)
 		if(0)
 			SpeakPeace(list("Welcome to the error handling room.","Something's goofed up bad to send you here.","You should probably tell an admin what you were doing, or make a bug report."))
-			for(var/obj/structure/signpost/salvation/sign in orange(7))
-				sign.invisibility = 0
-				var/datum/effect_system/fluid_spread/smoke/smoke = new
-				smoke.set_up(1, holder = src, location = sign.loc)
+			for(var/obj/structure/signpost/salvation/S in orange(7))
+				S.invisibility = 0
+				var/datum/effect_system/smoke_spread/smoke = new
+				smoke.set_up(1, S.loc)
 				smoke.start()
 				break
 		if(1)
@@ -113,7 +112,7 @@
 
 /obj/structure/speaking_tile/proc/SpeakPeace(list/statements)
 	for(var/i in 1 to statements.len)
-		say(span_deadsay("[statements[i]]"), sanitize=FALSE)
+		say(span_deadsay("[statements[i]]"))
 		if(i != statements.len)
 			sleep(30)
 
@@ -125,9 +124,9 @@
 	w_class = WEIGHT_CLASS_SMALL
 	custom_materials = list(/datum/material/glass = 500)
 
-/obj/item/rupee/Initialize(mapload)
+/obj/item/rupee/Initialize()
 	. = ..()
-	var/newcolor = pick(10;COLOR_GREEN, 5;COLOR_BLUE, 3;COLOR_RED, 1;COLOR_PURPLE)
+	var/newcolor = color2hex(pick(10;"green", 5;"blue", 3;"red", 1;"purple"))
 	add_atom_colour(newcolor, FIXED_COLOUR_PRIORITY)
 	var/static/list/loc_connections = list(
 		COMSIG_ATOM_ENTERED = .proc/on_entered,

@@ -38,7 +38,7 @@
 	if(prob(probability))
 		zone = check_zone(zone)
 	else
-		zone = pick_weight(list(BODY_ZONE_HEAD = 1, BODY_ZONE_CHEST = 1, BODY_ZONE_L_ARM = 4, BODY_ZONE_R_ARM = 4, BODY_ZONE_L_LEG = 4, BODY_ZONE_R_LEG = 4))
+		zone = pickweight(list(BODY_ZONE_HEAD = 1, BODY_ZONE_CHEST = 1, BODY_ZONE_L_ARM = 4, BODY_ZONE_R_ARM = 4, BODY_ZONE_L_LEG = 4, BODY_ZONE_R_LEG = 4))
 	return zone
 
 ///Would this zone be above the neck
@@ -71,6 +71,127 @@
 		else
 			. += "*"
 	return sanitize(.)
+
+/**
+ * Makes you speak like you're drunk
+ */
+/proc/slur(phrase)
+	phrase = html_decode(phrase)
+	var/leng = length(phrase)
+	. = ""
+	var/newletter = ""
+	var/rawchar = ""
+	for(var/i = 1, i <= leng, i += length(rawchar))
+		rawchar = newletter = phrase[i]
+		if(rand(1, 3) == 3)
+			var/lowerletter = lowertext(newletter)
+			if(lowerletter == "o")
+				newletter = "u"
+			else if(lowerletter == "s")
+				newletter = "ch"
+			else if(lowerletter == "a")
+				newletter = "ah"
+			else if(lowerletter == "u")
+				newletter = "oo"
+			else if(lowerletter == "c")
+				newletter = "k"
+		if(rand(1, 20) == 20)
+			if(newletter == " ")
+				newletter = "...huuuhhh..."
+			else if(newletter == ".")
+				newletter = " *BURP*."
+		switch(rand(1, 20))
+			if(1)
+				newletter += "'"
+			if(10)
+				newletter += "[newletter]"
+			if(20)
+				newletter += "[newletter][newletter]"
+		. += "[newletter]"
+	return sanitize(.)
+
+/// Makes you talk like you got cult stunned, which is slurring but with some dark messages
+/proc/cultslur(phrase) // Inflicted on victims of a stun talisman
+	phrase = html_decode(phrase)
+	var/leng = length(phrase)
+	. = ""
+	var/newletter = ""
+	var/rawchar = ""
+	for(var/i = 1, i <= leng, i += length(rawchar))
+		rawchar = newletter = phrase[i]
+		if(rand(1, 2) == 2)
+			var/lowerletter = lowertext(newletter)
+			if(lowerletter == "o")
+				newletter = "u"
+			else if(lowerletter == "t")
+				newletter = "ch"
+			else if(lowerletter == "a")
+				newletter = "ah"
+			else if(lowerletter == "u")
+				newletter = "oo"
+			else if(lowerletter == "c")
+				newletter = " NAR "
+			else if(lowerletter == "s")
+				newletter = " SIE "
+		if(rand(1, 4) == 4)
+			if(newletter == " ")
+				newletter = " no hope... "
+			else if(newletter == "H")
+				newletter = " IT COMES... "
+
+		switch(rand(1, 15))
+			if(1)
+				newletter = "'"
+			if(2)
+				newletter += "agn"
+			if(3)
+				newletter = "fth"
+			if(4)
+				newletter = "nglu"
+			if(5)
+				newletter = "glor"
+		. += newletter
+	return sanitize(.)
+
+///Adds stuttering to the message passed in
+/proc/stutter(phrase)
+	phrase = html_decode(phrase)
+	var/leng = length(phrase)
+	. = ""
+	var/newletter = ""
+	var/rawchar = ""
+	var/static/regex/nostutter = regex(@@[aeiouAEIOU ""''()[\]{}.!?,:;_`~-]@)
+	for(var/i = 1, i <= leng, i += length(rawchar))
+		rawchar = newletter = phrase[i]
+		if(prob(80) && !nostutter.Find(rawchar))
+			if(prob(10))
+				newletter = "[newletter]-[newletter]-[newletter]-[newletter]"
+			else if(prob(20))
+				newletter = "[newletter]-[newletter]-[newletter]"
+			else if (prob(5))
+				newletter = ""
+			else
+				newletter = "[newletter]-[newletter]"
+		. += newletter
+	return sanitize(.)
+
+///Convert a message to derpy speak
+/proc/derpspeech(message, stuttering)
+	message = replacetext(message, " am ", " ")
+	message = replacetext(message, " is ", " ")
+	message = replacetext(message, " are ", " ")
+	message = replacetext(message, "you", "u")
+	message = replacetext(message, "help", "halp")
+	message = replacetext(message, "grief", "grife")
+	message = replacetext(message, "space", "spess")
+	message = replacetext(message, "carp", "crap")
+	message = replacetext(message, "reason", "raisin")
+	if(prob(50))
+		message = uppertext(message)
+		message += "[stutter(pick("!", "!!", "!!!"))]"
+	if(!stuttering && prob(15))
+		message = stutter(message)
+	return message
 
 /**
  * Turn text into complete gibberish!
@@ -230,9 +351,8 @@
 		if(source)
 			var/atom/movable/screen/alert/notify_action/A = O.throw_alert("[REF(source)]_notify_action", /atom/movable/screen/alert/notify_action)
 			if(A)
-				var/ui_style = O.client?.prefs?.read_preference(/datum/preference/choiced/ui_style)
-				if(ui_style)
-					A.icon = ui_style2icon(ui_style)
+				if(O.client.prefs && O.client.prefs.UI_style)
+					A.icon = ui_style2icon(O.client.prefs.UI_style)
 				if (header)
 					A.name = header
 				A.desc = message
@@ -240,17 +360,6 @@
 				A.target = source
 				if(!alert_overlay)
 					alert_overlay = new(source)
-					var/icon/size_check = icon(source.icon, source.icon_state)
-					var/scale = 1
-					var/width = size_check.Width()
-					var/height = size_check.Height()
-					if(width > world.icon_size || height > world.icon_size)
-						if(width >= height)
-							scale = world.icon_size / width
-						else
-							scale = world.icon_size / height
-					alert_overlay.transform = alert_overlay.transform.Scale(scale)
-					alert_overlay.appearance_flags |= TILE_BOUND
 				alert_overlay.layer = FLOAT_LAYER
 				alert_overlay.plane = FLOAT_PLANE
 				A.add_overlay(alert_overlay)
@@ -260,14 +369,14 @@
  */
 /proc/item_heal_robotic(mob/living/carbon/human/H, mob/user, brute_heal, burn_heal)
 	var/obj/item/bodypart/affecting = H.get_bodypart(check_zone(user.zone_selected))
-	if(affecting && !IS_ORGANIC_LIMB(affecting))
+	if(affecting && affecting.status == BODYPART_ROBOTIC)
 		var/dam //changes repair text based on how much brute/burn was supplied
 		if(brute_heal > burn_heal)
 			dam = 1
 		else
 			dam = 0
 		if((brute_heal > 0 && affecting.brute_dam > 0) || (burn_heal > 0 && affecting.burn_dam > 0))
-			if(affecting.heal_damage(brute_heal, burn_heal, 0, BODYTYPE_ROBOTIC))
+			if(affecting.heal_damage(brute_heal, burn_heal, 0, BODYPART_ROBOTIC))
 				H.update_damage_overlays()
 			user.visible_message(span_notice("[user] fixes some of the [dam ? "dents on" : "burnt wires in"] [H]'s [affecting.name]."), \
 			span_notice("You fix some of the [dam ? "dents on" : "burnt wires in"] [H == user ? "your" : "[H]'s"] [affecting.name]."))
@@ -298,7 +407,7 @@
 /**
  * Offer control of the passed in mob to dead player
  *
- * Automatic logging and uses poll_candidates_for_mob, how convenient
+ * Automatic logging and uses pollCandidatesForMob, how convenient
  */
 /proc/offer_control(mob/M)
 	to_chat(M, "Control of your mob has been offered to dead players.")
@@ -314,7 +423,7 @@
 			var/datum/antagonist/A = M.mind.has_antag_datum(/datum/antagonist/)
 			if(A)
 				poll_message = "[poll_message] Status: [A.name]."
-	var/list/mob/dead/observer/candidates = poll_candidates_for_mob(poll_message, ROLE_PAI, FALSE, 10 SECONDS, M)
+	var/list/mob/dead/observer/candidates = pollCandidatesForMob(poll_message, ROLE_PAI, FALSE, 100, M)
 
 	if(LAZYLEN(candidates))
 		var/mob/dead/observer/C = pick(candidates)
@@ -339,6 +448,49 @@
 		var/mob/living/T = pick(nearby_mobs)
 		ClickOn(T)
 
+/// Logs a message in a mob's individual log, and in the global logs as well if log_globally is true
+/mob/log_message(message, message_type, color=null, log_globally = TRUE)
+	if(!LAZYLEN(message))
+		stack_trace("Empty message")
+		return
+
+	// Cannot use the list as a map if the key is a number, so we stringify it (thank you BYOND)
+	var/smessage_type = num2text(message_type)
+
+	if(client)
+		if(!islist(client.player_details.logging[smessage_type]))
+			client.player_details.logging[smessage_type] = list()
+
+	if(!islist(logging[smessage_type]))
+		logging[smessage_type] = list()
+
+	var/colored_message = message
+	if(color)
+		if(color[1] == "#")
+			colored_message = "<font color=[color]>[message]</font>"
+		else
+			colored_message = "<font color='[color]'>[message]</font>"
+
+	//This makes readability a bit better for admins.
+	switch(message_type)
+		if(LOG_WHISPER)
+			colored_message = "(WHISPER) [colored_message]"
+		if(LOG_OOC)
+			colored_message = "(OOC) [colored_message]"
+		if(LOG_ASAY)
+			colored_message = "(ASAY) [colored_message]"
+		if(LOG_EMOTE)
+			colored_message = "(EMOTE) [colored_message]"
+
+	var/list/timestamped_message = list("\[[time_stamp()]\] [key_name(src)] [loc_name(src)] (Event #[LAZYLEN(logging[smessage_type])])" = colored_message)
+
+	logging[smessage_type] += timestamped_message
+
+	if(client)
+		client.player_details.logging[smessage_type] += timestamped_message
+
+	..()
+
 ///Can the mob hear
 /mob/proc/can_hear()
 	. = TRUE
@@ -349,6 +501,15 @@
  * I wish examine was less copypasted. (oranges say, be the change you want to see buddy)
  */
 /mob/proc/common_trait_examine()
+	if(HAS_TRAIT(src, TRAIT_DISSECTED))
+		var/dissectionmsg = ""
+		if(HAS_TRAIT_FROM(src, TRAIT_DISSECTED,"Extraterrestrial Dissection"))
+			dissectionmsg = " via Extraterrestrial Dissection. It is no longer worth experimenting on"
+		else if(HAS_TRAIT_FROM(src, TRAIT_DISSECTED,"Experimental Dissection"))
+			dissectionmsg = " via Experimental Dissection"
+		else if(HAS_TRAIT_FROM(src, TRAIT_DISSECTED,"Thorough Dissection"))
+			dissectionmsg = " via Thorough Dissection"
+		. += "[span_notice("This body has been dissected and analyzed[dissectionmsg].")]<br>"
 	if(HAS_TRAIT(src,TRAIT_HUSK))
 		. += span_warning("This body has been reduced to a grotesque husk.")
 
@@ -370,53 +531,8 @@
 
 ///Can the mob see reagents inside of containers?
 /mob/proc/can_see_reagents()
-	return stat == DEAD || has_unlimited_silicon_privilege || HAS_TRAIT(src, TRAIT_REAGENT_SCANNER) //Dead guys and silicons can always see reagents
+	return stat == DEAD || has_unlimited_silicon_privilege //Dead guys and silicons can always see reagents
 
 ///Can this mob hold items
 /mob/proc/can_hold_items(obj/item/I)
 	return length(held_items)
-
-/// Returns this mob's default lighting alpha
-/mob/proc/default_lighting_alpha()
-	if(client?.combo_hud_enabled && client?.prefs?.toggles & COMBOHUD_LIGHTING)
-		return LIGHTING_PLANE_ALPHA_INVISIBLE
-	return initial(lighting_alpha)
-
-/// Returns a generic path of the object based on the slot
-/proc/get_path_by_slot(slot_id)
-	switch(slot_id)
-		if(ITEM_SLOT_BACK)
-			return /obj/item/storage/backpack
-		if(ITEM_SLOT_MASK)
-			return /obj/item/clothing/mask
-		if(ITEM_SLOT_NECK)
-			return /obj/item/clothing/neck
-		if(ITEM_SLOT_HANDCUFFED)
-			return /obj/item/restraints/handcuffs
-		if(ITEM_SLOT_LEGCUFFED)
-			return /obj/item/restraints/legcuffs
-		if(ITEM_SLOT_BELT)
-			return /obj/item/storage/belt
-		if(ITEM_SLOT_ID)
-			return /obj/item/card/id/advanced
-		if(ITEM_SLOT_EARS)
-			return /obj/item/clothing/ears
-		if(ITEM_SLOT_EYES)
-			return /obj/item/clothing/glasses
-		if(ITEM_SLOT_GLOVES)
-			return /obj/item/clothing/gloves
-		if(ITEM_SLOT_HEAD)
-			return /obj/item/clothing/head
-		if(ITEM_SLOT_FEET)
-			return /obj/item/clothing/shoes
-		if(ITEM_SLOT_OCLOTHING)
-			return /obj/item/clothing/suit
-		if(ITEM_SLOT_ICLOTHING)
-			return /obj/item/clothing/under
-		if(ITEM_SLOT_LPOCKET)
-			return /obj/item
-		if(ITEM_SLOT_RPOCKET)
-			return /obj/item
-		if(ITEM_SLOT_SUITSTORE)
-			return /obj/item
-	return null

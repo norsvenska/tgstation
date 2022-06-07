@@ -4,6 +4,10 @@
 #define DECOMPOSITION_TIME_RAW 5 MINUTES
 #define DECOMPOSITION_TIME_GROSS 7 MINUTES
 
+#define DECOMP_EXAM_NORMAL 0
+#define DECOMP_EXAM_GROSS 1
+#define DECOMP_EXAM_RAW 2
+
 /datum/component/decomposition
 	dupe_mode = COMPONENT_DUPE_UNIQUE
 	/// Makes sure maploaded food only starts decomposing if a player's EVER picked it up before
@@ -12,26 +16,20 @@
 	var/protected = FALSE
 	/// Used to stop the timer & check for the examine proc
 	var/timerid
-	/// The total time that this takes to decompose
-	var/original_time = DECOMPOSITION_TIME
 	/// Used so the timer won't reset.
 	var/time_remaining = DECOMPOSITION_TIME
 	/// Used to give raw/gross food lower timers
 	var/decomp_flags
-	/// Use for determining what kind of item the food decomposes into.
-	var/decomp_result
-	/// Does our food attract ants?
-	var/produce_ants = FALSE
+	/// Used for examining
+	var/examine_type = DECOMP_EXAM_NORMAL
 
-/datum/component/decomposition/Initialize(mapload, decomp_req_handle, decomp_flags = NONE, decomp_result, ant_attracting = FALSE, custom_time = 0)
+/datum/component/decomposition/Initialize(mapload, decomp_flags = NONE)
 	if(!isobj(parent))
 		return COMPONENT_INCOMPATIBLE
 
 	src.decomp_flags = decomp_flags
-	src.decomp_result = decomp_result
-	if(mapload || decomp_req_handle)
+	if(mapload)
 		handled = FALSE
-	src.produce_ants = ant_attracting
 
 	RegisterSignal(parent, COMSIG_MOVABLE_MOVED, .proc/handle_movement)
 	RegisterSignal(parent, list(
@@ -44,14 +42,12 @@
 		.proc/dropped)
 	RegisterSignal(parent, COMSIG_PARENT_EXAMINE, .proc/examine)
 
-	if(custom_time) // We have a custom decomposition time, set it to that
-		original_time = custom_time
-	else if(decomp_flags & RAW) // Raw food overrides gross
-		original_time = DECOMPOSITION_TIME_RAW
+	if(decomp_flags & RAW) // Raw food overrides gross
+		time_remaining = DECOMPOSITION_TIME_RAW
+		examine_type = DECOMP_EXAM_RAW
 	else if(decomp_flags & GROSS)
-		original_time = DECOMPOSITION_TIME_GROSS
-
-	time_remaining = original_time
+		time_remaining = DECOMPOSITION_TIME_GROSS
+		examine_type = DECOMP_EXAM_GROSS
 
 	handle_movement()
 
@@ -73,7 +69,7 @@
 
 	var/turf/open/open_turf = food.loc
 
-	if(!istype(open_turf) || istype(open_turf, /turf/open/lava) || istype(open_turf, /turf/open/misc/asteroid)) //Are we actually in a valid open turf?
+	if(!istype(open_turf)) //Are we actually in an open turf?
 		remove_timer()
 		return
 
@@ -108,11 +104,9 @@
 
 /datum/component/decomposition/proc/decompose()
 	var/obj/decomp = parent //Lets us spawn things at decomp
-	if(produce_ants)
-		new /obj/effect/decal/cleanable/ants(decomp.loc)
-	if(decomp_result)
-		new decomp_result(decomp.loc)
-	decomp.visible_message("<span class='notice'>[decomp] gets overtaken by mold[produce_ants ? " and ants":""]! Gross!</span>")
+	new /obj/effect/decal/cleanable/ants(decomp.loc)
+	new /obj/item/food/badrecipe/moldy(decomp.loc)
+	decomp.visible_message("<span class='notice'>[decomp] gets overtaken by mold and ants! Gross!</span>")
 	qdel(decomp)
 	return
 
@@ -123,14 +117,36 @@
 		time_d = timeleft(timerid)
 	else
 		time_d = time_remaining
-	switch(time_d / original_time)
-		if(0.5 to 0.75) // 25% rotten
-			examine_list += span_notice("[parent] looks kinda stale.")
-		if(0.25 to 0.5) // 50% rotten
-			examine_list += span_notice("[parent] is starting to look pretty gross.")
-		if(0 to 0.25) // 75% rotten
-			examine_list += span_danger("[parent] barely looks edible.")
+	switch(examine_type)
+		if(DECOMP_EXAM_NORMAL)// All other types
+			switch(time_d) // Deciseconds used so there's no gaps between examine times.
+				if(3001 to 4500) // 7.5 to 5 Minutes left
+					examine_list += "[parent] looks kinda stale."
+				if(1501 to 3000) // 5 to 2.5 Minutes left
+					examine_list += "[parent] is starting to look pretty gross."
+				if(1 to 1500) // 2.5 Minutes to 1 Decisecond left
+					examine_list += "[parent] looks barely edible."
+		if(DECOMP_EXAM_GROSS) // Gross food
+			switch(time_d)
+				if(2101 to 3150) // 5.25 to 3.5 Minutes
+					examine_list += "[parent] looks kinda stale."
+				if(1050 to 2100) // 3.5 to 1.75 Minutes left
+					examine_list += "[parent] is starting to look pretty gross."
+				if(1 to 1051) // 1.75 Minutes to 1 Decisecond left
+					examine_list += "[parent] looks barely edible."
+		if(DECOMP_EXAM_RAW) // Raw food
+			switch(time_d)
+				if(1501 to 2250) // 3.75 to 2.5 Minutes left
+					examine_list += "[parent] looks kinda stale."
+				if(751 to 1500) // 2.5 to 1.25 Minutes left
+					examine_list += "[parent] is starting to look pretty gross."
+				if(1 to 750) // 1.25 Minutes to 1 Decisecond left
+					examine_list += "[parent] looks barely edible."
 
 #undef DECOMPOSITION_TIME
 #undef DECOMPOSITION_TIME_GROSS
 #undef DECOMPOSITION_TIME_RAW
+
+#undef DECOMP_EXAM_NORMAL
+#undef DECOMP_EXAM_GROSS
+#undef DECOMP_EXAM_RAW

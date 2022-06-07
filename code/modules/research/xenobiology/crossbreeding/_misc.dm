@@ -60,11 +60,11 @@ Slimecrossing Items
 		return
 	if(!used)//selfie time
 		if(user == target)
-			to_chat(user, span_notice("You take a selfie!"))
+			to_chat(user, "<span class=notice>You take a selfie!</span>")
 		else
-			to_chat(user, span_notice("You take a photo with [target]!"))
-			to_chat(target, span_notice("[user] takes a photo with you!"))
-		to_chat(target, span_boldnotice("You'll remember this moment forever!"))
+			to_chat(user, "<span class=notice>You take a photo with [target]!</span>")
+			to_chat(target, "<span class=notice>[user] takes a photo with you!</span>")
+		to_chat(target, "<span class=notice>You'll remember this moment forever!</span>")
 
 		used = TRUE
 		target.AddComponent(/datum/component/dejavu, 2)
@@ -99,8 +99,6 @@ Slimecrossing Items
 	custom_materials = null
 	maxcharge = 50000
 	chargerate = 2500
-	charge_light_type = null
-	connector_type = "slimecore"
 
 //Barrier cube - Chilling Grey
 /obj/item/barriercube
@@ -134,7 +132,7 @@ Slimecrossing Items
 	desc = "A mass of solidified slime gel - completely impenetrable, but it's melting away!"
 	icon = 'icons/obj/slimecrossing.dmi'
 	icon_state = "slimebarrier_thick"
-	can_atmos_pass = ATMOS_PASS_NO
+	CanAtmosPass = ATMOS_PASS_NO
 	opacity = TRUE
 	timeleft = 100
 
@@ -152,9 +150,9 @@ Slimecrossing Items
 	icon_state = "frozen"
 	density = TRUE
 	max_integrity = 100
-	armor = list(MELEE = 30, BULLET = 50, LASER = -50, ENERGY = -50, BOMB = 0, BIO = 0, FIRE = -80, ACID = 30)
+	armor = list(MELEE = 30, BULLET = 50, LASER = -50, ENERGY = -50, BOMB = 0, BIO = 100, RAD = 100, FIRE = -80, ACID = 30)
 
-/obj/structure/ice_stasis/Initialize(mapload)
+/obj/structure/ice_stasis/Initialize()
 	. = ..()
 	playsound(src, 'sound/magic/ethereal_exit.ogg', 50, TRUE)
 

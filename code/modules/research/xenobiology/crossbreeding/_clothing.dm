@@ -13,7 +13,8 @@ Slimecrossing Armor
 	body_parts_covered = NONE
 	w_class = WEIGHT_CLASS_SMALL
 	clothing_traits = list(TRAIT_NOBREATH)
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 50, FIRE = 0, ACID = 0)
+	gas_transfer_coefficient = 0
+	permeability_coefficient = 0.5
 	flags_cover = MASKCOVERSMOUTH
 	resistance_flags = NONE
 
@@ -21,7 +22,7 @@ Slimecrossing Armor
 	. = ..()
 	if(slot == ITEM_SLOT_MASK)
 		user.failed_last_breath = FALSE
-		user.clear_alert(ALERT_NOT_ENOUGH_OXYGEN)
+		user.clear_alert("not_enough_oxy")
 		user.apply_status_effect(/datum/status_effect/rebreathing)
 
 /obj/item/clothing/mask/nobreath/dropped(mob/living/carbon/human/user)
@@ -64,7 +65,7 @@ Slimecrossing Armor
 	icon_icon = 'icons/obj/slimecrossing.dmi'
 	button_icon_state = "prismcolor"
 
-/datum/action/item_action/change_prism_colour/Trigger(trigger_flags)
+/datum/action/item_action/change_prism_colour/Trigger()
 	if(!IsAvailable())
 		return
 	var/obj/item/clothing/glasses/prism_glasses/glasses = target
@@ -78,7 +79,7 @@ Slimecrossing Armor
 	icon_icon = 'icons/obj/slimecrossing.dmi'
 	button_icon_state = "lightprism"
 
-/datum/action/item_action/place_light_prism/Trigger(trigger_flags)
+/datum/action/item_action/place_light_prism/Trigger()
 	if(!IsAvailable())
 		return
 	var/obj/item/clothing/glasses/prism_glasses/glasses = target
@@ -101,7 +102,7 @@ Slimecrossing Armor
 	slot_flags = ITEM_SLOT_HEAD
 	clothing_traits = list(TRAIT_PACIFISM)
 	body_parts_covered = NONE
-
+	dynamic_hair_suffix = ""
 	force = 0
 	throwforce = 0
 	w_class = WEIGHT_CLASS_TINY

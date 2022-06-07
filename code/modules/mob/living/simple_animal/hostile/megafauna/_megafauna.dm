@@ -10,7 +10,7 @@
 	obj_damage = 400
 	light_range = 3
 	faction = list("mining", "boss")
-	weather_immunities = list(TRAIT_LAVA_IMMUNE,TRAIT_ASHSTORM_IMMUNE)
+	weather_immunities = list(WEATHER_LAVA,WEATHER_ASH)
 	robust_searching = TRUE
 	ranged_ignores_vision = TRUE
 	stat_attack = DEAD
@@ -25,7 +25,6 @@
 	pull_force = MOVE_FORCE_OVERPOWERING
 	mob_size = MOB_SIZE_HUGE
 	layer = LARGE_MOB_LAYER //Looks weird with them slipping under mineral walls and cameras and shit otherwise
-	plane = GAME_PLANE_UPPER_FOV_HIDDEN
 	mouse_opacity = MOUSE_OPACITY_OPAQUE // Easier to click on in melee, they're giant targets anyway
 	flags_1 = PREVENT_CONTENTS_EXPLOSION_1
 	/// Crusher loot dropped when the megafauna is killed with a crusher
@@ -86,7 +85,7 @@
 /mob/living/simple_animal/hostile/megafauna/death(gibbed, list/force_grant)
 	if(health > 0)
 		return
-	var/datum/status_effect/crusher_damage/crusher_dmg = has_status_effect(/datum/status_effect/crusher_damage)
+	var/datum/status_effect/crusher_damage/crusher_dmg = has_status_effect(STATUS_EFFECT_CRUSHERDAMAGETRACKING)
 	var/crusher_kill = FALSE
 	if(crusher_dmg && crusher_loot && crusher_dmg.total_damage >= maxHealth * 0.6)
 		spawn_crusher_loot()
@@ -156,7 +155,7 @@
 
 /// Sets/adds the next time the megafauna can use a melee or ranged attack, in deciseconds. It is a list to allow using named args. Use the ignore_staggered var if youre setting the cooldown to ranged_cooldown_time.
 /mob/living/simple_animal/hostile/megafauna/proc/update_cooldowns(list/cooldown_updates, ignore_staggered = FALSE)
-	if(!ignore_staggered && has_status_effect(/datum/status_effect/stagger))
+	if(!ignore_staggered && has_status_effect(STATUS_EFFECT_STAGGER))
 		for(var/update in cooldown_updates)
 			cooldown_updates[update] *= 2
 	if(cooldown_updates[COOLDOWN_UPDATE_SET_MELEE])
@@ -178,7 +177,6 @@
 	for(var/mob/living/L in grant_achievement)
 		if(L.stat || !L.client)
 			continue
-		L?.mind.add_memory(MEMORY_MEGAFAUNA_KILL, list(DETAIL_PROTAGONIST = L, DETAIL_DEUTERAGONIST = src), STORY_VALUE_LEGENDARY, memory_flags = MEMORY_CHECK_BLIND_AND_DEAF)
 		L.client.give_award(/datum/award/achievement/boss/boss_killer, L)
 		L.client.give_award(achievement_type, L)
 		if(crusher_kill && istype(L.get_active_held_item(), /obj/item/kinetic_crusher))

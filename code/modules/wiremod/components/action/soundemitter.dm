@@ -6,7 +6,6 @@
 /obj/item/circuit_component/soundemitter
 	display_name = "Sound Emitter"
 	desc = "A component that emits a sound when it receives an input. The frequency is a multiplier which determines the speed at which the sound is played"
-	category = "Action"
 	circuit_flags = CIRCUIT_FLAG_INPUT_SIGNAL|CIRCUIT_FLAG_OUTPUT_SIGNAL
 
 	/// Sound to play
@@ -28,7 +27,8 @@
 	. += create_ui_notice("Sound Cooldown: [DisplayTimeText(sound_cooldown)]", "orange", "stopwatch")
 
 
-/obj/item/circuit_component/soundemitter/populate_ports()
+/obj/item/circuit_component/soundemitter/Initialize()
+	. = ..()
 	volume = add_input_port("Volume", PORT_TYPE_NUMBER, default = 35)
 	frequency = add_input_port("Frequency", PORT_TYPE_NUMBER, default = 0)
 
@@ -42,28 +42,18 @@
 		"Sad Trombone" = 'sound/misc/sadtrombone.ogg',
 		"Warn" = 'sound/machines/warning-buzzer.ogg',
 		"Slow Clap" = 'sound/machines/slowclap.ogg',
-		"Moth Buzz" = 'sound/voice/moth/scream_moth.ogg',
-		"Squeak" = 'sound/items/toysqueak1.ogg',
-		"Rip" = 'sound/items/poster_ripped.ogg',
-		"Coinflip" = 'sound/items/coinflip.ogg',
-		"Megaphone" = 'sound/items/megaphone.ogg',
-		"Warpwhistle" = 'sound/magic/warpwhistle.ogg',
-		"Hiss" = 'sound/voice/hiss1.ogg',
-		"Lizard" = 'sound/voice/lizard/lizard_scream_1.ogg',
-		"Flashbang" = 'sound/weapons/flashbang.ogg',
-		"Flash" = 'sound/weapons/flash.ogg',
-		"Whip" = 'sound/weapons/whip.ogg',
-		"Laugh Track" = 'sound/items/SitcomLaugh1.ogg',
-		"Gavel" = 'sound/items/gavel.ogg',
 	)
 	sound_file = add_option_port("Sound Option", component_options)
 	options_map = component_options
 
-/obj/item/circuit_component/soundemitter/pre_input_received(datum/port/input/port)
-	volume.set_value(clamp(volume.value, 0, 100))
-	frequency.set_value(clamp(frequency.value, -100, 100))
 
 /obj/item/circuit_component/soundemitter/input_received(datum/port/input/port)
+	. = ..()
+	volume.set_value(clamp(volume.value, 0, 100))
+	frequency.set_value(clamp(frequency.value, -100, 100))
+	if(.)
+		return
+
 	if(TIMER_COOLDOWN_CHECK(parent, COOLDOWN_CIRCUIT_SOUNDEMITTER))
 		return
 

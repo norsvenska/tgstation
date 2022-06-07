@@ -15,7 +15,7 @@
 	/// Countdown timer for the mass driver's delayed launch functionality.
 	COOLDOWN_DECLARE(massdriver_countdown)
 
-/obj/machinery/computer/pod/Initialize(mapload)
+/obj/machinery/computer/pod/Initialize()
 	. = ..()
 	for(var/obj/machinery/mass_driver/M in range(range, src))
 		if(M.id == id)
@@ -56,7 +56,6 @@
 			M.close()
 
 /obj/machinery/computer/pod/ui_interact(mob/user, datum/tgui/ui)
-	. = ..()
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "MassDriverControl", name)

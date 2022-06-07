@@ -1,10 +1,11 @@
 //Suits for the pink and grey skeletons! //EVA version no longer used in favor of the Jumpsuit version
 
+
 /obj/item/clothing/suit/space/eva/plasmaman
 	name = "EVA plasma envirosuit"
 	desc = "A special plasma containment suit designed to be space-worthy, as well as worn over other clothing. Like its smaller counterpart, it can automatically extinguish the wearer in a crisis, and holds twice as many charges."
 	allowed = list(/obj/item/gun, /obj/item/ammo_casing, /obj/item/ammo_casing, /obj/item/melee/baton, /obj/item/melee/energy/sword, /obj/item/restraints/handcuffs, /obj/item/tank)
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, FIRE = 100, ACID = 75)
+	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, RAD = 0, FIRE = 100, ACID = 75)
 	resistance_flags = FIRE_PROOF
 	icon_state = "plasmaman_suit"
 	inhand_icon_state = "plasmaman_suit"
@@ -22,7 +23,7 @@
 	if(!istype(H))
 		return
 
-	if(H.fire_stacks > 0)
+	if(H.fire_stacks)
 		if(extinguishes_left)
 			if(next_extinguish > world.time)
 				return
@@ -33,19 +34,18 @@
 			new /obj/effect/particle_effect/water(get_turf(H))
 
 
-//I just want the light feature of helmets
+//I just want the light feature of the hardsuit helmet
 /obj/item/clothing/head/helmet/space/plasmaman
 	name = "plasma envirosuit helmet"
 	desc = "A special containment helmet that allows plasma-based lifeforms to exist safely in an oxygenated environment. It is space-worthy, and may be worn in tandem with other EVA gear."
 	icon = 'icons/obj/clothing/head/plasmaman_hats.dmi'
 	worn_icon = 'icons/mob/clothing/head/plasmaman_head.dmi'
-	clothing_flags = STOPSPRESSUREDAMAGE | THICKMATERIAL | SNUG_FIT | PLASMAMAN_HELMET_EXEMPT | PLASMAMAN_PREVENT_IGNITION
 	icon_state = "plasmaman-helm"
 	inhand_icon_state = "plasmaman-helm"
 	strip_delay = 80
 	flash_protect = FLASH_PROTECTION_WELDER
 	tint = 2
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, FIRE = 100, ACID = 75)
+	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, RAD = 0, FIRE = 100, ACID = 75)
 	resistance_flags = FIRE_PROOF
 	light_system = MOVABLE_LIGHT_DIRECTIONAL
 	light_range = 4
@@ -55,24 +55,16 @@
 	var/smile_color = "#FF0000"
 	var/visor_icon = "envisor"
 	var/smile_state = "envirohelm_smile"
-	var/obj/item/clothing/head/attached_hat
 	actions_types = list(/datum/action/item_action/toggle_helmet_light, /datum/action/item_action/toggle_welding_screen/plasmaman)
 	visor_vars_to_toggle = VISOR_FLASHPROTECT | VISOR_TINT
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR|HIDEFACIALHAIR|HIDESNOUT
 	flags_cover = HEADCOVERSMOUTH|HEADCOVERSEYES|PEPPERPROOF
 	visor_flags_inv = HIDEEYES|HIDEFACE
 
-/obj/item/clothing/head/helmet/space/plasmaman/Initialize(mapload)
+/obj/item/clothing/head/helmet/space/plasmaman/Initialize()
 	. = ..()
 	visor_toggling()
 	update_appearance()
-
-/obj/item/clothing/head/helmet/space/plasmaman/examine()
-	. = ..()
-	if(attached_hat)
-		. += span_notice("There's [attached_hat.name] placed on the helmet. Right-click to remove it.")
-	else
-		. += span_notice("There's nothing placed on the helmet.")
 
 /obj/item/clothing/head/helmet/space/plasmaman/AltClick(mob/user)
 	if(user.canUseTopic(src, BE_CLOSE))
@@ -93,11 +85,11 @@
 	. = ..()
 	. += visor_icon
 
-/obj/item/clothing/head/helmet/space/plasmaman/attackby(obj/item/hitting_item, mob/living/user)
+/obj/item/clothing/head/helmet/space/plasmaman/attackby(obj/item/C, mob/living/user)
 	. = ..()
-	if(istype(hitting_item, /obj/item/toy/crayon))
+	if(istype(C, /obj/item/toy/crayon))
 		if(smile == FALSE)
-			var/obj/item/toy/crayon/CR = hitting_item
+			var/obj/item/toy/crayon/CR = C
 			to_chat(user, span_notice("You start drawing a smiley face on the helmet's visor.."))
 			if(do_after(user, 25, target = src))
 				smile = TRUE
@@ -106,19 +98,6 @@
 				update_appearance()
 		else
 			to_chat(user, span_warning("Seems like someone already drew something on this helmet's visor!"))
-		return
-	if(istype(hitting_item, /obj/item/clothing/head))
-		var/obj/item/clothing/hitting_clothing = hitting_item
-		if(hitting_clothing.clothing_flags & PLASMAMAN_HELMET_EXEMPT)
-			to_chat(user, span_notice("You cannot place [hitting_clothing.name] on helmet!"))
-			return
-		if(attached_hat)
-			to_chat(user, span_notice("There's already something placed on helmet!"))
-			return
-		attached_hat = hitting_clothing
-		to_chat(user, span_notice("You placed [hitting_clothing.name] on helmet!"))
-		hitting_clothing.forceMove(src)
-		update_appearance()
 
 /obj/item/clothing/head/helmet/space/plasmaman/worn_overlays(mutable_appearance/standing, isinhands)
 	. = ..()
@@ -126,8 +105,6 @@
 		var/mutable_appearance/M = mutable_appearance('icons/mob/clothing/head/plasmaman_head.dmi', smile_state)
 		M.color = smile_color
 		. += M
-	if(!isinhands && attached_hat)
-		. += attached_hat.build_worn_icon(default_layer = HEAD_LAYER, default_icon_file = 'icons/mob/clothing/head.dmi')
 	if(!isinhands && !up)
 		. += mutable_appearance('icons/mob/clothing/head/plasmaman_head.dmi', visor_icon)
 	else
@@ -157,22 +134,12 @@
 
 	update_action_buttons()
 
-/obj/item/clothing/head/helmet/space/plasmaman/attack_hand_secondary(mob/user)
-	..()
-	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
-	if(!attached_hat)
-		return
-	user.put_in_active_hand(attached_hat)
-	to_chat(user, span_notice("You removed [attached_hat.name] from helmet!"))
-	attached_hat = null
-	update_appearance()
-
 /obj/item/clothing/head/helmet/space/plasmaman/security
 	name = "security plasma envirosuit helmet"
 	desc = "A plasmaman containment helmet designed for security officers, protecting them from burning alive, alongside other undesirables."
 	icon_state = "security_envirohelm"
 	inhand_icon_state = "security_envirohelm"
-	armor = list(MELEE = 10, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, FIRE = 100, ACID = 75)
+	armor = list(MELEE = 10, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, RAD = 0, FIRE = 100, ACID = 75)
 
 /obj/item/clothing/head/helmet/space/plasmaman/security/warden
 	name = "warden's plasma envirosuit helmet"
@@ -185,7 +152,7 @@
 	desc = "A special containment helmet designed for the Head of Security. A pair of gold stripes are added to differentiate them from other members of security."
 	icon_state = "hos_envirohelm"
 	inhand_icon_state = "hos_envirohelm"
-	armor = list(MELEE = 20, BULLET = 10, LASER = 10, ENERGY = 10, BOMB = 10, BIO = 100, FIRE = 100, ACID = 75, WOUND = 10)
+	armor = list(MELEE = 20, BULLET = 10, LASER = 10, ENERGY = 10, BOMB = 10, BIO = 100, RAD = 0, FIRE = 100, ACID = 75, WOUND = 10)
 
 /obj/item/clothing/head/helmet/space/plasmaman/prisoner
 	name = "prisoner's plasma envirosuit helmet"
@@ -252,23 +219,23 @@
 	desc = "A space-worthy helmet specially designed for engineer plasmamen, the usual purple stripes being replaced by engineering's orange."
 	icon_state = "engineer_envirohelm"
 	inhand_icon_state = "engineer_envirohelm"
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, FIRE = 100, ACID = 75)
+	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, RAD = 10, FIRE = 100, ACID = 75)
 
 /obj/item/clothing/head/helmet/space/plasmaman/atmospherics
 	name = "atmospherics plasma envirosuit helmet"
 	desc = "A space-worthy helmet specially designed for atmos technician plasmamen, the usual purple stripes being replaced by atmos' blue. Has improved thermal shielding."
 	icon_state = "atmos_envirohelm"
 	inhand_icon_state = "atmos_envirohelm"
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, FIRE = 100, ACID = 75)
-	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT // Same protection as the Atmospherics Hardhat
+	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, RAD = 10, FIRE = 100, ACID = 75)
+	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT // Same protection as the Atmospherics hardsuit Helmet
 
 /obj/item/clothing/head/helmet/space/plasmaman/chief_engineer
 	name = "chief engineer's plasma envirosuit helmet"
 	desc = "A special containment helmet designed for the Chief Engineer, the usual purple stripes being replaced by the chief's green. Has improved thermal shielding."
 	icon_state = "ce_envirohelm"
 	inhand_icon_state = "ce_envirohelm"
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, FIRE = 100, ACID = 75)
-	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT // Same protection as the Atmospherics Hardhat
+	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, RAD = 10, FIRE = 100, ACID = 75)
+	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT // Same protection as the CE's hardsuit Helmet
 
 
 /obj/item/clothing/head/helmet/space/plasmaman/cargo
@@ -343,7 +310,7 @@
 	desc = "A special containment helmet designed for the Captain. Embarrassingly enough, it looks way too much like the Head of Personnel's design save for the gold stripes. I mean, come on. Gold stripes can fix anything."
 	icon_state = "captain_envirohelm"
 	inhand_icon_state = "captain_envirohelm"
-	armor = list(MELEE = 20, BULLET = 10, LASER = 10, ENERGY = 10, BOMB = 10, BIO = 100, FIRE = 100, ACID = 75, WOUND = 10)
+	armor = list(MELEE = 20, BULLET = 10, LASER = 10, ENERGY = 10, BOMB = 10, BIO = 100, RAD = 0, FIRE = 100, ACID = 75, WOUND = 10)
 
 /obj/item/clothing/head/helmet/space/plasmaman/centcom_commander
 	name = "CentCom commander plasma envirosuit helmet"

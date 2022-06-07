@@ -21,8 +21,7 @@
 /obj/effect/proc_holder/spell/targeted/genetic/cast(list/targets,mob/user = usr)
 	playMagSound()
 	for(var/mob/living/carbon/target in targets)
-		if(target.can_block_magic())
-			to_chat(user, span_warning("The spell had no effect on [target]!"))		
+		if(target.anti_magic_check())
 			continue
 		if(!target.dna)
 			continue

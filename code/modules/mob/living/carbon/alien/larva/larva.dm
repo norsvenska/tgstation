@@ -30,14 +30,14 @@
 
 
 //This is fine right now, if we're adding organ specific damage this needs to be updated
-/mob/living/carbon/alien/larva/Initialize(mapload)
+/mob/living/carbon/alien/larva/Initialize()
 
 	AddAbility(new/obj/effect/proc_holder/alien/hide(null))
 	AddAbility(new/obj/effect/proc_holder/alien/larva_evolve(null))
 	. = ..()
 
 /mob/living/carbon/alien/larva/create_internal_organs()
-	internal_organs += new /obj/item/organ/internal/alien/plasmavessel/small/tiny
+	internal_organs += new /obj/item/organ/alien/plasmavessel/small/tiny
 	..()
 
 //This needs to be fixed
@@ -69,6 +69,15 @@
 
 /mob/living/carbon/alien/larva/start_pulling(atom/movable/AM, state, force = move_force, supress_message = FALSE)
 	return
+
+/mob/living/carbon/alien/larva/stripPanelUnequip(obj/item/what, mob/who)
+	to_chat(src, span_warning("You don't have the dexterity to do this!"))
+	return
+
+/mob/living/carbon/alien/larva/stripPanelEquip(obj/item/what, mob/who)
+	to_chat(src, span_warning("You don't have the dexterity to do this!"))
+	return
+
 
 /mob/living/carbon/alien/larva/canBeHandcuffed()
 	return TRUE

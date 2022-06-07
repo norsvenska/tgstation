@@ -19,7 +19,7 @@
 	invisibility = INVISIBILITY_MAXIMUM
 	var/strength = 30
 
-/obj/effect/wind/Initialize(mapload)
+/obj/effect/wind/Initialize()
 	. = ..()
 	START_PROCESSING(SSobj,src)
 
@@ -38,7 +38,7 @@
 	var/list/blocked_types = list()
 	var/reverse = FALSE //Block if path not present
 
-/obj/effect/path_blocker/Initialize(mapload)
+/obj/effect/path_blocker/Initialize()
 	. = ..()
 	if(blocked_types.len)
 		blocked_types = typecacheof(blocked_types)
@@ -46,7 +46,7 @@
 /obj/effect/path_blocker/CanAllowThrough(atom/movable/mover, border_dir)
 	. = ..()
 	if(blocked_types.len)
-		var/list/mover_contents = mover.get_all_contents()
+		var/list/mover_contents = mover.GetAllContents()
 		for(var/atom/movable/thing in mover_contents)
 			if(blocked_types[thing.type])
 				return reverse
@@ -63,7 +63,7 @@
 	var/open = FALSE
 	var/hidden = FALSE
 
-/obj/structure/pitgrate/Initialize(mapload)
+/obj/structure/pitgrate/Initialize()
 	. = ..()
 	RegisterSignal(SSdcs,COMSIG_GLOB_BUTTON_PRESSED, .proc/OnButtonPressed)
 	if(hidden)
@@ -91,14 +91,14 @@
 	else
 		talpha = 255
 		obj_flags |= BLOCK_Z_OUT_DOWN | BLOCK_Z_IN_UP
-	plane = ABOVE_LIGHTING_PLANE //What matters it's one above openspace, so our animation is not dependant on what's there. Up to revision with 513
+	plane = BYOND_LIGHTING_PLANE //What matters it's one above openspace, so our animation is not dependant on what's there. Up to revision with 513
 	animate(src,alpha = talpha,time = 10)
 	addtimer(CALLBACK(src,.proc/reset_plane),10)
 	if(hidden)
 		update_openspace()
 	var/turf/T = get_turf(src)
 	for(var/atom/movable/AM in T)
-		if(!AM.currently_z_moving)
+		if(!AM.zfalling)
 			T.zFall(AM)
 
 /obj/structure/pitgrate/proc/reset_plane()

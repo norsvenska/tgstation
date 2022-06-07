@@ -28,7 +28,7 @@
 /mob/proc/get_item_for_held_index(i)
 	if(i > 0 && i <= held_items.len)
 		return held_items[i]
-	return null
+	return FALSE
 
 
 //Odd = left. Even = right
@@ -204,7 +204,7 @@
 //Puts the item our active hand if possible. Failing that it tries other hands. Returns TRUE on success.
 //If both fail it drops it on the floor and returns FALSE.
 //This is probably the main one you need to know :)
-/mob/proc/put_in_hands(obj/item/I, del_on_fail = FALSE, merge_stacks = TRUE, forced = FALSE, ignore_animation = TRUE)
+/mob/proc/put_in_hands(obj/item/I, del_on_fail = FALSE, merge_stacks = TRUE, forced = FALSE)
 	if(QDELETED(I))
 		return FALSE
 
@@ -228,14 +228,14 @@
 						to_chat(usr, span_notice("Your [inactive_stack.name] stack now contains [inactive_stack.get_amount()] [inactive_stack.singular_name]\s."))
 						return TRUE
 
-	if(put_in_active_hand(I, forced, ignore_animation))
+	if(put_in_active_hand(I, forced))
 		return TRUE
 
 	var/hand = get_empty_held_index_for_side(LEFT_HANDS)
 	if(!hand)
-		hand = get_empty_held_index_for_side(RIGHT_HANDS)
+		hand =  get_empty_held_index_for_side(RIGHT_HANDS)
 	if(hand)
-		if(put_in_hand(I, hand, forced, ignore_animation))
+		if(put_in_hand(I, hand, forced))
 			return TRUE
 	if(del_on_fail)
 		qdel(I)
@@ -281,17 +281,13 @@
 */
 /mob/proc/dropItemToGround(obj/item/I, force = FALSE, silent = FALSE, invdrop = TRUE)
 	. = doUnEquip(I, force, drop_location(), FALSE, invdrop = invdrop, silent = silent)
-	if(!. || !I) //ensure the item exists and that it was dropped properly.
-		return
-	if(!(I.item_flags & NO_PIXEL_RANDOM_DROP))
+	if(. && I && !(I.item_flags & NO_PIXEL_RANDOM_DROP)) //ensure the item exists and that it was dropped properly.
 		I.pixel_x = I.base_pixel_x + rand(-6, 6)
 		I.pixel_y = I.base_pixel_y + rand(-6, 6)
-	I.do_drop_animation(src)
 
 //for when the item will be immediately placed in a loc other than the ground
 /mob/proc/transferItemToLoc(obj/item/I, newloc = null, force = FALSE, silent = TRUE)
-	. = doUnEquip(I, force, newloc, FALSE, silent = silent)
-	I.do_drop_animation(src)
+	return doUnEquip(I, force, newloc, FALSE, silent = silent)
 
 //visibly unequips I but it is NOT MOVED AND REMAINS IN SRC
 //item MUST BE FORCEMOVE'D OR QDEL'D
@@ -331,7 +327,6 @@
 				I.forceMove(newloc)
 		I.dropped(src, silent)
 	SEND_SIGNAL(I, COMSIG_ITEM_POST_UNEQUIP, force, newloc, no_move, invdrop, silent)
-	SEND_SIGNAL(src, COMSIG_MOB_UNEQUIPPED_ITEM, I, force, newloc, no_move, invdrop, silent)
 	return TRUE
 
 /**
@@ -480,6 +475,7 @@
 				path = /obj/item/bodypart/r_arm
 
 			var/obj/item/bodypart/BP = new path ()
+			BP.owner = src
 			BP.held_index = i
 			add_bodypart(BP)
 			hand_bodyparts[i] = BP
@@ -488,7 +484,7 @@
 //GetAllContents that is reasonable and not stupid
 /mob/living/carbon/proc/get_all_gear()
 	var/list/processing_list = get_equipped_items(include_pockets = TRUE) + held_items
-	list_clear_nulls(processing_list) // handles empty hands
+	listclearnulls(processing_list) // handles empty hands
 	var/i = 0
 	while(i < length(processing_list) )
 		var/atom/A = processing_list[++i]

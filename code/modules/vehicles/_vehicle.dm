@@ -4,13 +4,10 @@
 	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "fuckyou"
 	max_integrity = 300
-	armor = list(MELEE = 30, BULLET = 30, LASER = 30, ENERGY = 0, BOMB = 30, BIO = 0, FIRE = 60, ACID = 60)
-	layer = VEHICLE_LAYER
-	plane = GAME_PLANE_FOV_HIDDEN
+	armor = list(MELEE = 30, BULLET = 30, LASER = 30, ENERGY = 0, BOMB = 30, BIO = 0, RAD = 0, FIRE = 60, ACID = 60)
 	density = TRUE
 	anchored = FALSE
 	blocks_emissive = EMISSIVE_BLOCK_GENERIC
-	pass_flags_self = PASSVEHICLE
 	COOLDOWN_DECLARE(cooldown_vehicle_move)
 	var/list/mob/occupants //mob = bitflags of their control level.
 	///Maximum amount of passengers plus drivers
@@ -44,21 +41,11 @@
 	occupant_actions = list()
 	generate_actions()
 
-/obj/vehicle/Destroy(force)
-	QDEL_NULL(trailer)
-	inserted_key = null
-	return ..()
-
-/obj/vehicle/Exited(atom/movable/gone, direction)
-	if(gone == inserted_key)
-		inserted_key = null
-	return ..()
-
 /obj/vehicle/examine(mob/user)
 	. = ..()
 	if(resistance_flags & ON_FIRE)
 		. += span_warning("It's on fire!")
-	var/healthpercent = atom_integrity/max_integrity * 100
+	var/healthpercent = obj_integrity/max_integrity * 100
 	switch(healthpercent)
 		if(50 to 99)
 			. += "It looks slightly damaged."

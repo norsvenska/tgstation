@@ -88,7 +88,7 @@
 	return FALSE
 
 /datum/spellbook_entry/proc/Refund(mob/living/carbon/human/user,obj/item/spellbook/book) //return point value or -1 for failure
-	var/area/centcom/wizard_station/A = GLOB.areas_by_type[/area/centcom/wizard_station]
+	var/area/wizard_station/A = GLOB.areas_by_type[/area/wizard_station]
 	if(!(user in A.contents))
 		to_chat(user, span_warning("You can only refund spells at the wizard lair!"))
 		return -1
@@ -237,10 +237,12 @@
 
 /datum/spellbook_entry/lichdom
 	name = "Bind Soul"
-	desc = "A dark necromantic pact that can forever bind your soul to an item of your choosing, \
-		turning you into an immortal Lich. So long as the item remains intact, you will revive from death, \
-		no matter the circumstances. Be wary - with each revival, your body will become weaker, and \
-		it will become easier for others to find your item of power."
+	desc = "A dark necromantic pact that can forever bind your soul to an \
+	item of your choosing. So long as both your body and the item remain \
+	intact and on the same plane you can revive from death, though the time \
+	between reincarnations grows steadily with use, along with the weakness \
+	that the new skeleton body will experience upon 'birth'. Note that \
+	becoming a lich destroys all internal organs except the brain."
 	spell_type = /obj/effect/proc_holder/spell/targeted/lichdom
 	category = "Defensive"
 
@@ -254,6 +256,14 @@
 	desc = "Fire a lightning bolt at your foes! It will jump between targets, but can't knock them down."
 	spell_type = /obj/effect/proc_holder/spell/aimed/lightningbolt
 	cost = 1
+
+/datum/spellbook_entry/lightningbolt/Buy(mob/living/carbon/human/user,obj/item/spellbook/book) //return TRUE on success
+	. = ..()
+	ADD_TRAIT(user, TRAIT_TESLA_SHOCKIMMUNE, "lightning_bolt_spell")
+
+/datum/spellbook_entry/lightningbolt/Refund(mob/living/carbon/human/user, obj/item/spellbook/book)
+	. = ..()
+	REMOVE_TRAIT(user, TRAIT_TESLA_SHOCKIMMUNE, "lightning_bolt_spell")
 
 /datum/spellbook_entry/infinite_guns
 	name = "Lesser Summon Guns"
@@ -332,14 +342,14 @@
 	name = "Buy Item"
 	refundable = FALSE
 	buy_word = "Summon"
-	var/item_path = null
+	var/item_path= null
 
 
 /datum/spellbook_entry/item/Buy(mob/living/carbon/human/user,obj/item/spellbook/book)
-	var/atom/spawned_path = new item_path(get_turf(user))
+	new item_path(get_turf(user))
 	log_spellbook("[key_name(user)] bought [src] for [cost] points")
 	SSblackbox.record_feedback("tally", "wizard_spell_learned", 1, name)
-	return spawned_path
+	return TRUE
 
 /datum/spellbook_entry/item/staffchange
 	name = "Staff of Change"
@@ -414,34 +424,16 @@
 
 /datum/spellbook_entry/item/armor
 	name = "Mastercrafted Armor Set"
-	desc = "An artefact suit of armor that allows you to cast spells while providing more protection against attacks and the void of space, also grants a battlemage shield."
-	item_path = /obj/item/mod/control/pre_equipped/enchanted
+	desc = "An artefact suit of armor that allows you to cast spells while providing more protection against attacks and the void of space."
+	item_path = /obj/item/clothing/suit/space/hardsuit/wizard
 	category = "Defensive"
 
-/datum/spellbook_entry/item/armor/Buy(mob/living/carbon/human/user, obj/item/spellbook/book)
+/datum/spellbook_entry/item/armor/Buy(mob/living/carbon/human/user,obj/item/spellbook/book)
 	. = ..()
-	if(!.)
-		return
-	var/obj/item/mod/control/mod = .
-	var/obj/item/mod/module/storage/storage = locate() in mod.modules
-	var/obj/item/back = user.back
-	if(back)
-		if(!user.dropItemToGround(back))
-			return
-		for(var/obj/item/item as anything in back.contents)
-			item.forceMove(storage)
-	if(!user.equip_to_slot_if_possible(mod, mod.slot_flags, qdel_on_fail = FALSE, disable_warning = TRUE))
-		return
-	if(!user.dropItemToGround(user.wear_suit) || !user.dropItemToGround(user.head))
-		return
-	mod.quick_activation()
-
-/datum/spellbook_entry/item/battlemage_charge
-	name = "Battlemage Armour Charges"
-	desc = "A powerful defensive rune, it will grant eight additional charges to a battlemage shield."
-	item_path = /obj/item/wizard_armour_charge
-	category = "Defensive"
-	cost = 1
+	if(.)
+		new /obj/item/tank/internals/oxygen(get_turf(user)) //i need to BREATHE
+		new /obj/item/clothing/shoes/sandal/magic(get_turf(user)) //In case they've lost them.
+		new /obj/item/clothing/gloves/combat/wizard(get_turf(user))//To complete the outfit
 
 /datum/spellbook_entry/item/contract
 	name = "Contract of Apprenticeship"
@@ -492,18 +484,32 @@
 	desc = "A hammer that creates an intensely powerful field of gravity where it strikes, pulling everything nearby to the point of impact."
 	item_path = /obj/item/singularityhammer
 
+/datum/spellbook_entry/item/battlemage
+	name = "Battlemage Armour"
+	desc = "An ensorceled suit of armour, protected by a powerful shield. The shield can completely negate sixteen attacks before being permanently depleted."
+	item_path = /obj/item/clothing/suit/space/hardsuit/shielded/wizard
+	limit = 1
+	category = "Defensive"
+
+/datum/spellbook_entry/item/battlemage/Buy(mob/living/carbon/human/user,obj/item/spellbook/book)
+	. = ..()
+	if(.)
+		new /obj/item/clothing/shoes/sandal/magic(get_turf(user)) //In case they've lost them.
+		new /obj/item/clothing/gloves/combat/wizard(get_turf(user))//To complete the outfit
+
+/datum/spellbook_entry/item/battlemage_charge
+	name = "Battlemage Armour Charges"
+	desc = "A powerful defensive rune, it will grant eight additional charges to a suit of battlemage armour."
+	item_path = /obj/item/wizard_armour_charge
+	category = "Defensive"
+	cost = 1
+
 /datum/spellbook_entry/item/warpwhistle
 	name = "Warp Whistle"
 	desc = "A strange whistle that will transport you to a distant safe place on the station. There is a window of vulnerability at the beginning of every use."
-	item_path = /obj/item/warp_whistle
+	item_path = /obj/item/warpwhistle
 	category = "Mobility"
 	cost = 1
-
-/datum/spellbook_entry/item/highfrequencyblade
-	name = "High Frequency Blade"
-	desc = "An incredibly swift enchanted blade resonating at a frequency high enough to be able to slice through anything."
-	item_path = /obj/item/highfrequencyblade/wizard
-	cost = 3
 
 /datum/spellbook_entry/duffelbag
 	name = "Bestow Cursed Duffel Bag"
@@ -534,15 +540,11 @@
 /datum/spellbook_entry/summon
 	name = "Summon Stuff"
 	category = "Rituals"
-	limit = 1
 	refundable = FALSE
 	buy_word = "Cast"
 
-/datum/spellbook_entry/summon/Buy(mob/living/carbon/human/user, obj/item/spellbook/book)
-	log_spellbook("[key_name(user)] cast [src] for [cost] points")
-	SSblackbox.record_feedback("tally", "wizard_spell_learned", 1, name)
-	times++
-	return TRUE
+/datum/spellbook_entry/summon/CanBuy(mob/living/carbon/human/user,obj/item/spellbook/book)
+	return ..() && !times
 
 /datum/spellbook_entry/summon/ghosts
 	name = "Summon Ghosts"
@@ -550,66 +552,85 @@
 	cost = 0
 
 /datum/spellbook_entry/summon/ghosts/Buy(mob/living/carbon/human/user, obj/item/spellbook/book)
-	summon_ghosts(user)
+	log_spellbook("[key_name(user)] cast [src] for [cost] points")
+	SSblackbox.record_feedback("tally", "wizard_spell_learned", 1, name)
+	new /datum/round_event/wizard/ghost()
+	times++
+	to_chat(user, span_notice("You have cast summon ghosts!"))
 	playsound(get_turf(user), 'sound/effects/ghost2.ogg', 50, TRUE)
-	return ..()
+	return TRUE
 
 /datum/spellbook_entry/summon/guns
 	name = "Summon Guns"
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill you. There is a good chance that they will shoot each other first."
 
 /datum/spellbook_entry/summon/guns/IsAvailable()
-	// Summon Guns requires 100 threat.
-	var/datum/game_mode/dynamic/mode = SSticker.mode
-	if(mode.threat_level < MINIMUM_THREAT_FOR_RITUALS)
+	if(!SSticker.mode) // In case spellbook is placed on map
 		return FALSE
-	// Also must be config enabled
+	if(istype(SSticker.mode, /datum/game_mode/dynamic)) // Disable events on dynamic
+		var/datum/game_mode/dynamic/mode = SSticker.mode
+		if(mode.threat_level < MINIMUM_THREAT_FOR_RITUALS)
+			return FALSE
 	return !CONFIG_GET(flag/no_summon_guns)
 
 /datum/spellbook_entry/summon/guns/Buy(mob/living/carbon/human/user,obj/item/spellbook/book)
-	summon_guns(user, 10)
+	log_spellbook("[key_name(user)] cast [src] for [cost] points")
+	SSblackbox.record_feedback("tally", "wizard_spell_learned", 1, name)
+	rightandwrong(SUMMON_GUNS, user, 10)
+	times++
 	playsound(get_turf(user), 'sound/magic/castsummon.ogg', 50, TRUE)
-	return ..()
+	to_chat(user, span_notice("You have cast summon guns!"))
+	return TRUE
 
 /datum/spellbook_entry/summon/magic
 	name = "Summon Magic"
 	desc = "Share the wonders of magic with the crew and show them why they aren't to be trusted with it at the same time."
 
 /datum/spellbook_entry/summon/magic/IsAvailable()
-	// Summon Magic requires 100 threat.
-	var/datum/game_mode/dynamic/mode = SSticker.mode
-	if(mode.threat_level < MINIMUM_THREAT_FOR_RITUALS)
+	if(!SSticker.mode) // In case spellbook is placed on map
 		return FALSE
-	// Also must be config enabled
+	if(istype(SSticker.mode, /datum/game_mode/dynamic)) // Disable events on dynamic
+		var/datum/game_mode/dynamic/mode = SSticker.mode
+		if(mode.threat_level < MINIMUM_THREAT_FOR_RITUALS)
+			return FALSE
 	return !CONFIG_GET(flag/no_summon_magic)
 
 /datum/spellbook_entry/summon/magic/Buy(mob/living/carbon/human/user,obj/item/spellbook/book)
-	summon_magic(user, 10)
+	log_spellbook("[key_name(user)] cast [src] for [cost] points")
+	SSblackbox.record_feedback("tally", "wizard_spell_learned", 1, name)
+	rightandwrong(SUMMON_MAGIC, user, 10)
+	times++
 	playsound(get_turf(user), 'sound/magic/castsummon.ogg', 50, TRUE)
-	return ..()
+	to_chat(user, span_notice("You have cast summon magic!"))
+	return TRUE
 
 /datum/spellbook_entry/summon/events
 	name = "Summon Events"
 	desc = "Give Murphy's law a little push and replace all events with special wizard ones that will confound and confuse everyone. Multiple castings increase the rate of these events."
 	cost = 2
-	limit = 5 // Each purchase can intensify it.
+	limit = 1
 
 /datum/spellbook_entry/summon/events/IsAvailable()
-	// Summon Events requires 100 threat.
-	var/datum/game_mode/dynamic/mode = SSticker.mode
-	if(mode.threat_level < MINIMUM_THREAT_FOR_RITUALS)
+	if(!SSticker.mode) // In case spellbook is placed on map
 		return FALSE
-	// Also, must be config enabled
+	if(istype(SSticker.mode, /datum/game_mode/dynamic)) // Disable events on dynamic
+		var/datum/game_mode/dynamic/mode = SSticker.mode
+		if(mode.threat_level < MINIMUM_THREAT_FOR_RITUALS)
+			return FALSE
 	return !CONFIG_GET(flag/no_summon_events)
 
-/datum/spellbook_entry/summon/events/Buy(mob/living/carbon/human/user, obj/item/spellbook/book)
-	summon_events(user)
+/datum/spellbook_entry/summon/events/Buy(mob/living/carbon/human/user,obj/item/spellbook/book)
+	log_spellbook("[key_name(user)] cast [src] for [cost] points")
+	SSblackbox.record_feedback("tally", "wizard_spell_learned", 1, name)
+	summonevents()
+	times++
 	playsound(get_turf(user), 'sound/magic/castsummon.ogg', 50, TRUE)
-	return ..()
+	to_chat(user, span_notice("You have cast summon events."))
+	return TRUE
 
 /datum/spellbook_entry/summon/events/GetInfo()
-	if(times > 0)
-		. += "You have cast it [times] time\s.<br>"
+	if(times>0)
+		. += "You cast it [times] times.<br>"
 	return .
 
 /datum/spellbook_entry/summon/curse_of_madness
@@ -618,12 +639,16 @@
 	cost = 4
 
 /datum/spellbook_entry/summon/curse_of_madness/Buy(mob/living/carbon/human/user, obj/item/spellbook/book)
-	var/message = tgui_input_text(user, "Whisper a secret truth to drive your victims to madness", "Whispers of Madness")
+	log_spellbook("[key_name(user)] cast [src] for [cost] points")
+	SSblackbox.record_feedback("tally", "wizard_spell_learned", 1, name)
+	times++
+	var/message = stripped_input(user, "Whisper a secret truth to drive your victims to madness.", "Whispers of Madness")
 	if(!message)
 		return FALSE
 	curse_of_madness(user, message)
+	to_chat(user, span_notice("You have cast the curse of insanity!"))
 	playsound(user, 'sound/magic/mandswap.ogg', 50, TRUE)
-	return ..()
+	return TRUE
 
 #undef MINIMUM_THREAT_FOR_RITUALS
 
@@ -657,31 +682,9 @@
 	else
 		. += "It appears to have no author."
 
-/obj/item/spellbook/Initialize(mapload)
+/obj/item/spellbook/Initialize()
 	. = ..()
 	prepare_spells()
-	RegisterSignal(src, COMSIG_ITEM_MAGICALLY_CHARGED, .proc/on_magic_charge)
-
-/**
- * Signal proc for [COMSIG_ITEM_MAGICALLY_CHARGED]
- *
- * Has no effect on charge, but gives a funny message to people who think they're clever.
- */
-/obj/item/spellbook/proc/on_magic_charge(datum/source, obj/effect/proc_holder/spell/targeted/charge/spell, mob/living/caster)
-	SIGNAL_HANDLER
-
-	var/static/list/clever_girl = list(
-		"NICE TRY BUT NO!",
-		"CLEVER BUT NOT CLEVER ENOUGH!",
-		"SUCH FLAGRANT CHEESING IS WHY WE ACCEPTED YOUR APPLICATION!",
-		"CUTE! VERY CUTE!",
-		"YOU DIDN'T THINK IT'D BE THAT EASY, DID YOU?",
-	)
-
-	to_chat(caster, span_warning("Glowing red letters appear on the front cover..."))
-	to_chat(caster, span_red(pick(clever_girl)))
-
-	return COMPONENT_ITEM_BURNT_OUT
 
 /obj/item/spellbook/attack_self(mob/user)
 	if(!owner)
@@ -787,7 +790,7 @@
 					if(entry.limit)
 						entry.limit--
 					uses -= entry.cost
-			return TRUE
+			update_static_data(wizard) //update statics!
 		if("refund")
 			var/datum/spellbook_entry/entry = locate(params["spellref"]) in entries
 			if(entry?.refundable)
@@ -796,7 +799,7 @@
 					if(!isnull(entry.limit))
 						entry.limit += result
 					uses += result
-			return TRUE
+			update_static_data(wizard) //update statics!
 	//actions that are only available if you have full spell points
 	if(uses < initial(uses))
 		to_chat(wizard, span_warning("You need to have all your spell points to do this!"))
@@ -808,8 +811,8 @@
 		if("randomize")
 			randomize(wizard, full_random_bonus)
 			update_static_data(wizard) //update statics!
-		if("purchase_loadout")
-			wizard_loadout(wizard, locate(params["id"]))
+		else //some loadout
+			wizard_loadout(wizard, action)
 
 /obj/item/spellbook/proc/wizard_loadout(mob/living/carbon/human/wizard, loadout)
 	var/list/wanted_spell_names

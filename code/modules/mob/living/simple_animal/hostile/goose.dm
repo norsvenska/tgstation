@@ -38,7 +38,7 @@
 	var/message_cooldown = 0
 	var/choking = FALSE
 
-/mob/living/simple_animal/hostile/retaliate/goose/Initialize(mapload)
+/mob/living/simple_animal/hostile/retaliate/goose/Initialize()
 	. = ..()
 	RegisterSignal(src, COMSIG_MOVABLE_MOVED, .proc/goosement)
 
@@ -50,16 +50,12 @@
 		Retaliate()
 
 /mob/living/simple_animal/hostile/retaliate/goose/handle_automated_action()
-	. = ..()
-	feed_random()
-
-/mob/living/simple_animal/hostile/retaliate/goose/proc/feed_random()
 	var/obj/item/eat_it_motherfucker = pick(locate(/obj/item) in loc)
 	if(!eat_it_motherfucker)
 		return
 	feed(eat_it_motherfucker)
 
-/mob/living/simple_animal/hostile/retaliate/goose/vomit/feed_random()
+/mob/living/simple_animal/hostile/retaliate/goose/vomit/handle_automated_action()
 	for(var/obj/item/eat_it_motherfucker in loc)
 		if(!eat_it_motherfucker.has_material_type(/datum/material/plastic))
 			continue
@@ -95,7 +91,7 @@
 	var/vomitTimeBonus = 0
 	var/datum/action/cooldown/vomit/goosevomit
 
-/mob/living/simple_animal/hostile/retaliate/goose/vomit/Initialize(mapload)
+/mob/living/simple_animal/hostile/retaliate/goose/vomit/Initialize()
 	. = ..()
 	goosevomit = new
 	goosevomit.Grant(src)
@@ -250,16 +246,14 @@
 	icon_icon = 'icons/mob/animal.dmi'
 	cooldown_time = 250
 
-/datum/action/cooldown/vomit/Activate(atom/target)
+/datum/action/cooldown/vomit/Trigger()
+	if(!..())
+		return FALSE
 	if(!istype(owner, /mob/living/simple_animal/hostile/retaliate/goose/vomit))
 		return FALSE
-
-	StartCooldown(10 SECONDS)
-	var/mob/living/simple_animal/hostile/retaliate/goose/vomit/probably_birdboat = owner
-	if(!probably_birdboat.vomiting)
-		probably_birdboat.vomit_prestart(probably_birdboat.vomitTimeBonus + 25)
-		probably_birdboat.vomitCoefficient = 1
-		probably_birdboat.vomitTimeBonus = 0
-
-	StartCooldown()
+	var/mob/living/simple_animal/hostile/retaliate/goose/vomit/vomit = owner
+	if(!vomit.vomiting)
+		vomit.vomit_prestart(vomit.vomitTimeBonus + 25)
+		vomit.vomitCoefficient = 1
+		vomit.vomitTimeBonus = 0
 	return TRUE

@@ -98,8 +98,7 @@
 		O.forceMove(C)
 	..()
 
-/// Mimics can't be made out of these objects
-GLOBAL_LIST_INIT(mimic_blacklist, list(/obj/structure/table, /obj/structure/cable, /obj/structure/window, /obj/structure/blob))
+GLOBAL_LIST_INIT(protected_objects, list(/obj/structure/table, /obj/structure/cable, /obj/structure/window))
 
 /mob/living/simple_animal/hostile/mimic/copy
 	health = 100
@@ -143,7 +142,7 @@ GLOBAL_LIST_INIT(mimic_blacklist, list(/obj/structure/table, /obj/structure/cabl
 		faction |= "[REF(owner)]"
 
 /mob/living/simple_animal/hostile/mimic/copy/proc/CheckObject(obj/O)
-	if((isitem(O) || isstructure(O)) && !is_type_in_list(O, GLOB.mimic_blacklist))
+	if((isitem(O) || isstructure(O)) && !is_type_in_list(O, GLOB.protected_objects))
 		return TRUE
 	return FALSE
 
@@ -297,7 +296,7 @@ GLOBAL_LIST_INIT(mimic_blacklist, list(/obj/structure/table, /obj/structure/cabl
 	var/locked = FALSE
 	var/datum/action/innate/mimic/lock/lock
 
-/mob/living/simple_animal/hostile/mimic/xenobio/Initialize(mapload)
+/mob/living/simple_animal/hostile/mimic/xenobio/Initialize()
 	. = ..()
 	lock = new
 	lock.Grant(src)

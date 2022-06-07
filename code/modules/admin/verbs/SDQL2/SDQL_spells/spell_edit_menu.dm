@@ -14,7 +14,7 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 	var/mob/living/target_mob
 	var/obj/effect/proc_holder/spell/target_spell
 	var/spell_type
-	var/list/saved_vars = list("query" = "", "suppress_message_admins" = FALSE)
+	var/list/saved_vars = list("query" = "")
 	var/list/list_vars = list()
 	var/list/parse_result = null
 	var/alert
@@ -33,6 +33,7 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 		"charge_type",
 		"clothes_req",
 		"cone_level",
+		"cult_req",
 		"deactive_msg",
 		"desc",
 		"drawmessage",
@@ -90,7 +91,7 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 	)
 
 	var/static/list/enum_vars = list(
-		"invocation_type" = list(INVOCATION_NONE, INVOCATION_WHISPER, INVOCATION_SHOUT, INVOCATION_EMOTE),
+		"invocation_type" = list("none", "whisper", "shout", "emote"),
 		"selection_type" = list("view", "range"),
 		"smoke_spread" = list(0, 1, 2, 3),
 		"random_target_priority" = list(0, 1),
@@ -198,8 +199,6 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 			"query_self" = "TARGETS is null.",
 			"query_targeted" = "TARGETS is replaced with a list containing a reference(s) to the targeted mob(s).",
 			"query_targeted_touch" = "TARGETS is replaced with a list containing a reference to the atom hit with the touch attack.",
-			"suppress_message_admins" = "If this is true, the spell will not print out its query to admins' chat panels.\n\
-				The query will still be output to the game log.",
 			"charge_type" = "How the spell's charge works. This affects how charge_max is used.\n\
 				When set to \"recharge\", charge_max is the time in deciseconds between casts of the spell.\n\
 				When set to \"charges\", the user can only use the spell a number of times equal to charge_max.\n\
@@ -210,13 +209,13 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 				If this is set to anything else, the variable with the appropriate name will be modified.",
 			"holder_var_amount" = "The amount of damage taken, the duration of status effect inflicted, or the change made to any other variable.",
 			"clothes_req" = "Whether the user has to be wearing wizard robes to cast the spell.",
+			"cult_req" = "Whether the user has to be wearing cult robes to cast the spell.",
 			"human_req" = "Whether the user has to be a human to cast the spell. Redundant when clothes_req is true.",
 			"nonabstract_req" = "If this is true, the spell cannot be cast by brains and pAIs.",
 			"stat_allowed" = "Whether the spell can be cast if the user is unconscious or dead.",
 			"phase_allowed" = "Whether the spell can be cast while the user is jaunting or bloodcrawling.",
 			"antimagic_allowed" = "Whether the spell can be cast while the user is affected by anti-magic effects.",
 			"invocation_type" = "How the spell is invoked.\n\
-				When set to \"none\", the user will not state anything when invocating.\n\
 				When set to \"whisper\", the user whispers the invocation, as if with the whisper verb.\n\
 				When set to \"shout\", the user says the invocation, as if with the say verb.\n\
 				When set to \"emote\", a visible message is produced.",
@@ -270,7 +269,6 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 	if(!executor)
 		CRASH("[sample]'s SDQL executor component went missing!")
 	saved_vars["query"] = executor.query
-	saved_vars["suppress_message_admins"] = executor.suppress_message_admins
 	load_list_var(executor.scratchpad, "scratchpad")
 	for(var/V in sample.vars&editable_spell_vars)
 		if(islist(sample.vars[V]))
@@ -323,14 +321,13 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 			saved_vars[params["name"]] = !saved_vars[params["name"]]
 		if("path_variable")
 			var/new_path = tgui_input_list(user, "Select type.", "Add SDQL Spell", typesof(text2path(params["root_path"])))
-			if(isnull(new_path))
-				return
-			saved_vars[params["name"]] = new_path
-			var/datum/sample = new new_path
-			var/list/overrides = list_vars[special_var_lists[params["name"]]]
-			overrides = overrides&sample.vars
-			qdel(sample)
-			icon_needs_updating(params["name"])
+			if(new_path)
+				saved_vars[params["name"]] = new_path
+				var/datum/sample = new new_path
+				var/list/overrides = list_vars[special_var_lists[params["name"]]]
+				overrides = overrides&sample.vars
+				qdel(sample)
+				icon_needs_updating(params["name"])
 		if("list_variable_add")
 			if(!list_vars[params["list"]])
 				list_vars[params["list"]] = list()
@@ -338,7 +335,7 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 				var/path = saved_vars[special_list_vars[params["list"]]]
 				var/datum/sample = new path
 				var/list/choosable_vars = map_var_list(sample.vars-list_vars[params["list"]], sample)
-				var/chosen_var = tgui_input_list(user, "Select variable to add.", "Add SDQL Spell", sort_list(choosable_vars))
+				var/chosen_var = tgui_input_list(user, "Select variable to add.", "Add SDQL Spell", sortList(choosable_vars))
 				if(chosen_var)
 					if(islist(sample.vars[choosable_vars[chosen_var]]))
 						list_vars[params["list"]][choosable_vars[chosen_var]] = list("type" = "list", "value" = null, "flags" = LIST_VAR_FLAGS_TYPED|LIST_VAR_FLAGS_NAMED)
@@ -404,7 +401,7 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 		if("confirm")
 			if(target_spell)
 				reassign_vars(target_spell)
-				target_spell.action.UpdateButtons()
+				target_spell.action.UpdateButtonIcon()
 				log_admin("[key_name(user)] edited the SDQL spell \"[target_spell]\" owned by [key_name(target_mob)].")
 			else
 				var/new_spell = give_spell()
@@ -428,7 +425,7 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 
 //Change all references in the list vars, either to null (for saving) or to their string representation (for display)
 /datum/give_sdql_spell/proc/json_sanitize_list_vars(list/list_vars, mode = SANITIZE_NULLIFY)
-	var/list/temp_list_vars = deep_copy_list(list_vars)
+	var/list/temp_list_vars = deepCopyList(list_vars)
 	for(var/V in temp_list_vars)
 		var/list/L = temp_list_vars[V]
 		for(var/W in L)
@@ -488,12 +485,6 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 				parse_errors += "The value of \"query\" must be text"
 				continue
 			result_vars[V] = temp_vars[V]
-			continue
-		if(V == "suppress_message_admins")
-			if(!isnum(temp_vars[V]))
-				parse_errors += "The value of \"suppress_message_admins\" must be a number"
-				continue
-			result_vars[V] = !!temp_vars[V]
 			continue
 		if(!(V in editable_spell_vars))
 			parse_errors += "\"[V]\" is not an editable variable"
@@ -576,9 +567,9 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 				if(!(temp_list_vars[V][W]["flags"] & LIST_VAR_FLAGS_NAMED))
 					parse_errors += "[V]/[W] did not have the LIST_VAR_FLAGS_NAMED flag set; it has been set"
 					temp_list_vars[V][W]["flags"] |= LIST_VAR_FLAGS_NAMED
-				if(temp_list_vars[V][W]["flags"] & ~(LIST_VAR_FLAGS_NAMED | LIST_VAR_FLAGS_TYPED))
+				if(temp_list_vars & ~(LIST_VAR_FLAGS_NAMED | LIST_VAR_FLAGS_NAMED))
 					parse_errors += "[V]/[W] has unused bit flags set; they have been unset"
-					temp_list_vars[V][W]["flags"] &= LIST_VAR_FLAGS_NAMED | LIST_VAR_FLAGS_TYPED
+					temp_list_vars[V][W]["flags"] &= LIST_VAR_FLAGS_NAMED | LIST_VAR_FLAGS_NAMED
 				if(!(temp_list_vars[V][W]["flags"] & LIST_VAR_FLAGS_TYPED))
 					if(isnull(sample.vars[W]))
 						continue
@@ -895,7 +886,7 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 	var/obj/effect/proc_holder/spell/new_spell = new path(null, target_mob, user.ckey)
 	GLOB.sdql_spells += new_spell
 	reassign_vars(new_spell)
-	new_spell.action.UpdateButtons()
+	new_spell.action.UpdateButtonIcon()
 	if(target_mob.mind)
 		target_mob.mind.AddSpell(new_spell)
 	else
@@ -912,8 +903,6 @@ GLOBAL_LIST_INIT_TYPED(sdql_spells, /obj/effect/proc_holder/spell, list())
 	for(var/V in saved_vars+list_vars)
 		if(V == "query")
 			executor.vv_edit_var("query", saved_vars["query"])
-		else if(V == "suppress_message_admins")
-			executor.vv_edit_var("suppress_message_admins", saved_vars["suppress_message_admins"])
 		else if(V == "scratchpad")
 			var/list/new_scratchpad = generate_list_var("scratchpad")
 			if(new_scratchpad)

@@ -1,50 +1,51 @@
 /mob/living/silicon/ai/Life(delta_time = SSMOBS_DT, times_fired)
 	if (stat == DEAD)
 		return
-	//Being dead doesn't mean your temperature never changes
+	else //I'm not removing that shitton of tabs, unneeded as they are. -- Urist
+		//Being dead doesn't mean your temperature never changes
 
-	update_gravity(has_gravity())
+		update_gravity(mob_has_gravity())
 
-	handle_status_effects(delta_time, times_fired)
+		handle_status_effects(delta_time, times_fired)
 
-	handle_traits(delta_time, times_fired)
+		handle_traits(delta_time, times_fired)
 
-	if(malfhack?.aidisabled)
-		deltimer(malfhacking)
-		// This proc handles cleanup of screen notifications and
-		// messenging the client
-		malfhacked(malfhack)
+		if(malfhack?.aidisabled)
+			deltimer(malfhacking)
+			// This proc handles cleanup of screen notifications and
+			// messenging the client
+			malfhacked(malfhack)
 
-	if(isturf(loc) && (QDELETED(eyeobj) || !eyeobj.loc))
-		view_core()
+		if(isturf(loc) && (QDELETED(eyeobj) || !eyeobj.loc))
+			view_core()
 
-	if(machine)
-		machine.check_eye(src)
+		if(machine)
+			machine.check_eye(src)
 
-	// Handle power damage (oxy)
-	if(aiRestorePowerRoutine)
-		// Lost power
-		if (!battery)
-			to_chat(src, span_warning("Your backup battery's output drops below usable levels. It takes only a moment longer for your systems to fail, corrupted and unusable."))
-			adjustOxyLoss(200)
+		// Handle power damage (oxy)
+		if(aiRestorePowerRoutine)
+			// Lost power
+			if (!battery)
+				to_chat(src, span_warning("Your backup battery's output drops below usable levels. It takes only a moment longer for your systems to fail, corrupted and unusable."))
+				adjustOxyLoss(200)
+			else
+				battery--
 		else
-			battery--
-	else
-		// Gain Power
-		if (battery < 200)
-			battery++
+			// Gain Power
+			if (battery < 200)
+				battery++
 
-	if(!lacks_power())
-		var/area/home = get_area(src)
-		if(home.powered(AREA_USAGE_EQUIP))
-			home.use_power(500 * delta_time, AREA_USAGE_EQUIP)
+		if(!lacks_power())
+			var/area/home = get_area(src)
+			if(home.powered(AREA_USAGE_EQUIP))
+				home.use_power(500 * delta_time, AREA_USAGE_EQUIP)
 
-		if(aiRestorePowerRoutine >= POWER_RESTORATION_SEARCH_APC)
-			ai_restore_power()
-			return
+			if(aiRestorePowerRoutine >= POWER_RESTORATION_SEARCH_APC)
+				ai_restore_power()
+				return
 
-	else if(!aiRestorePowerRoutine)
-		ai_lose_power()
+		else if(!aiRestorePowerRoutine)
+			ai_lose_power()
 
 /mob/living/silicon/ai/proc/lacks_power()
 	var/turf/T = get_turf(src)
@@ -117,7 +118,10 @@
 		T = get_turf(src)
 		AIarea = get_area(src)
 		if(AIarea)
-			theAPC = AIarea.apc
+			for (var/obj/machinery/power/apc/APC in AIarea)
+				if (!(APC.machine_stat & BROKEN))
+					theAPC = APC
+					break
 		if (!theAPC)
 			switch(PRP)
 				if(1)

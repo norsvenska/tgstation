@@ -34,11 +34,6 @@
 	icon_state = "ishell"
 	projectile_type = /obj/projectile/bullet/incendiary/shotgun
 
-/obj/item/ammo_casing/shotgun/incendiary/no_trail
-	name = "precision incendiary slug"
-	desc = "An incendiary-coated shotgun slug, specially treated to only ignite on impact."
-	projectile_type = /obj/projectile/bullet/incendiary/shotgun/no_trail
-
 /obj/item/ammo_casing/shotgun/dragonsbreath
 	name = "dragonsbreath shell"
 	desc = "A shotgun shell which fires a spread of incendiary pellets."
@@ -85,10 +80,10 @@
 /obj/item/ammo_casing/shotgun/rubbershot
 	name = "rubber shot"
 	desc = "A shotgun casing filled with densely-packed rubber balls, used to incapacitate crowds from a distance."
-	icon_state = "rshell"
+	icon_state = "bshell"
 	projectile_type = /obj/projectile/bullet/pellet/shotgun_rubbershot
 	pellets = 6
-	variance = 20
+	variance = 25
 	custom_materials = list(/datum/material/iron=4000)
 
 /obj/item/ammo_casing/shotgun/incapacitate
@@ -139,7 +134,7 @@
 	projectile_type = /obj/projectile/bullet/dart
 	var/reagent_amount = 30
 
-/obj/item/ammo_casing/shotgun/dart/Initialize(mapload)
+/obj/item/ammo_casing/shotgun/dart/Initialize()
 	. = ..()
 	create_reagents(reagent_amount, OPENCONTAINER)
 
@@ -149,7 +144,7 @@
 /obj/item/ammo_casing/shotgun/dart/bioterror
 	desc = "A shotgun dart filled with deadly toxins."
 
-/obj/item/ammo_casing/shotgun/dart/bioterror/Initialize(mapload)
+/obj/item/ammo_casing/shotgun/dart/bioterror/Initialize()
 	. = ..()
 	reagents.add_reagent(/datum/reagent/consumable/ethanol/neurotoxin, 6)
 	reagents.add_reagent(/datum/reagent/toxin/spore, 6)

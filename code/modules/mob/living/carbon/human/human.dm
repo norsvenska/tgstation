@@ -1,4 +1,4 @@
-/mob/living/carbon/human/Initialize(mapload)
+/mob/living/carbon/human/Initialize()
 	add_verb(src, /mob/living/proc/mob_sleep)
 	add_verb(src, /mob/living/proc/toggle_resting)
 
@@ -8,7 +8,6 @@
 	create_bodyparts()
 
 	setup_human_dna()
-	prepare_huds() //Prevents a nasty runtime on human init
 
 	if(dna.species)
 		INVOKE_ASYNC(src, .proc/set_species, dna.species.type)
@@ -49,15 +48,11 @@
 	return ..()
 
 /mob/living/carbon/human/ZImpactDamage(turf/T, levels)
-	if(stat != CONSCIOUS || levels > 1) // you're not The One
+	if(!HAS_TRAIT(src, TRAIT_FREERUNNING) || levels > 1) // falling off one level
 		return ..()
-	var/obj/item/organ/external/wings/gliders = getorgan(/obj/item/organ/external/wings)
-	if(HAS_TRAIT(src, TRAIT_FREERUNNING) || gliders?.can_soften_fall()) // the power of parkour or wings allows falling short distances unscathed
-		visible_message(span_danger("[src] makes a hard landing on [T] but remains unharmed from the fall."), \
-						span_userdanger("You brace for the fall. You make a hard landing on [T] but remain unharmed."))
-		Knockdown(levels * 40)
-		return
-	return ..()
+	visible_message(span_danger("[src] makes a hard landing on [T] but remains unharmed from the fall."), \
+					span_userdanger("You brace for the fall. You make a hard landing on [T] but remain unharmed."))
+	Knockdown(levels * 40)
 
 /mob/living/carbon/human/prepare_data_huds()
 	//Update med hud images...
@@ -92,20 +87,13 @@
 		var/datum/antagonist/changeling/changeling = mind.has_antag_datum(/datum/antagonist/changeling)
 		if(changeling)
 			. += ""
-			. += "Chemical Storage: [changeling.chem_charges]/[changeling.total_chem_storage]"
-			. += "Absorbed DNA: [changeling.absorbed_count]"
+			. += "Chemical Storage: [changeling.chem_charges]/[changeling.chem_storage]"
+			. += "Absorbed DNA: [changeling.absorbedcount]"
 
 // called when something steps onto a human
 /mob/living/carbon/human/proc/on_entered(datum/source, atom/movable/AM)
 	SIGNAL_HANDLER
 	spreadFire(AM)
-
-/mob/living/carbon/human/reset_perspective(atom/new_eye, force_reset = FALSE)
-	if(dna?.species?.prevent_perspective_change && !force_reset) // This is in case a species needs to prevent perspective changes in certain cases, like Dullahans preventing perspective changes when they're looking through their head.
-		update_fullscreen()
-		return
-	return ..()
-
 
 /mob/living/carbon/human/Topic(href, href_list)
 	if(href_list["item"]) //canUseTopic check for this is handled by mob/Topic()
@@ -249,7 +237,7 @@
 				to_chat(usr, span_warning("ERROR: Unable to locate data core entry for target."))
 				return
 			if(href_list["status"])
-				var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", R.fields["criminal"]) in list("None", "*Arrest*", "Incarcerated", "Suspected", "Paroled", "Discharged", "Cancel")
+				var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", R.fields["criminal"]) in list("None", "*Arrest*", "Incarcerated", "Paroled", "Discharged", "Cancel")
 				if(setcriminal != "Cancel")
 					if(!R)
 						return
@@ -281,27 +269,29 @@
 
 			if(href_list["add_citation"])
 				var/maxFine = CONFIG_GET(number/maxfine)
-				var/t1 = tgui_input_text(usr, "Citation crime", "Security HUD")
-				var/fine = tgui_input_number(usr, "Citation fine", "Security HUD", 50, maxFine, 5)
-				if(!fine)
-					return
-				if(!R || !t1 || !allowed_access)
+				var/t1 = stripped_input("Please input citation crime:", "Security HUD", "", null)
+				var/fine = FLOOR(input("Please input citation fine, up to [maxFine]:", "Security HUD", 50) as num|null, 1)
+				if(!R || !t1 || !fine || !allowed_access)
 					return
 				if(!H.canUseHUD())
 					return
 				if(!HAS_TRAIT(H, TRAIT_SECURITY_HUD))
 					return
+				if(fine < 0)
+					to_chat(usr, span_warning("You're pretty sure that's not how money works."))
+					return
+				fine = min(fine, maxFine)
 
 				var/datum/data/crime/crime = GLOB.data_core.createCrimeEntry(t1, "", allowed_access, station_time_timestamp(), fine)
-				for (var/obj/item/modular_computer/tablet in GLOB.TabletMessengers)
-					if(tablet.saved_identification == R.fields["name"])
+				for (var/obj/item/pda/P in GLOB.PDAs)
+					if(P.owner == R.fields["name"])
 						var/message = "You have been fined [fine] credits for '[t1]'. Fines may be paid at security."
-						var/datum/signal/subspace/messaging/tablet_msg/signal = new(src, list(
+						var/datum/signal/subspace/messaging/pda/signal = new(src, list(
 							"name" = "Security Citation",
 							"job" = "Citation Server",
 							"message" = message,
-							"targets" = list(tablet),
-							"automated" = TRUE
+							"targets" = list("[P.owner] ([P.ownjob])"),
+							"automated" = 1
 						))
 						signal.send_to_receivers()
 						usr.log_message("(PDA: Citation Server) sent \"[message]\" to [signal.format_target()]", LOG_PDA)
@@ -311,7 +301,7 @@
 				return
 
 			if(href_list["add_crime"])
-				var/t1 = tgui_input_text(usr, "Crime name", "Security HUD")
+				var/t1 = stripped_input("Please input crime name:", "Security HUD", "", null)
 				if(!R || !t1 || !allowed_access)
 					return
 				if(!H.canUseHUD())
@@ -325,7 +315,7 @@
 				return
 
 			if(href_list["add_details"])
-				var/t1 = tgui_input_text(usr, "Crime details", "Security Records", multiline = TRUE)
+				var/t1 = stripped_input(usr, "Please input crime details:", "Secure. records", "", null)
 				if(!R || !t1 || !allowed_access)
 					return
 				if(!H.canUseHUD())
@@ -352,7 +342,7 @@
 				return
 
 			if(href_list["add_comment"])
-				var/t1 = tgui_input_text(usr, "Add a comment", "Security Records", multiline = TRUE)
+				var/t1 = stripped_multiline_input("Add Comment:", "Secure. records", null, null)
 				if (!R || !t1 || !allowed_access)
 					return
 				if(!H.canUseHUD())
@@ -393,7 +383,8 @@
 /mob/living/carbon/human/try_inject(mob/user, target_zone, injection_flags)
 	. = ..()
 	if(!. && (injection_flags & INJECT_TRY_SHOW_ERROR_MESSAGE) && user)
-		var/obj/item/bodypart/the_part = get_bodypart(target_zone || check_zone(user.zone_selected))
+		var/obj/item/bodypart/the_part = get_bodypart(target_zone) || get_bodypart(BODY_ZONE_CHEST)
+
 		to_chat(user, span_alert("There is no exposed flesh or thin material on [p_their()] [the_part.name]."))
 
 /mob/living/carbon/human/assess_threat(judgement_criteria, lasercolor = "", datum/callback/weaponcheck=null)
@@ -446,13 +437,11 @@
 					threatcount += 5
 				if("Incarcerated")
 					threatcount += 2
-				if("Suspected")
-					threatcount += 2
 				if("Paroled")
 					threatcount += 2
 
 	//Check for dresscode violations
-	if(istype(head, /obj/item/clothing/head/wizard))
+	if(istype(head, /obj/item/clothing/head/wizard) || istype(head, /obj/item/clothing/head/helmet/space/hardsuit/wizard))
 		threatcount += 2
 
 	//Check for nonhuman scum
@@ -474,7 +463,8 @@
 		facial_hairstyle = "Shaved"
 	hairstyle = pick("Bedhead", "Bedhead 2", "Bedhead 3")
 	underwear = "Nude"
-	update_body(is_creating = TRUE)
+	update_body()
+	update_hair()
 
 /mob/living/carbon/human/singularity_pull(S, current_size)
 	..()
@@ -483,6 +473,7 @@
 			if(prob(current_size * 5) && hand.w_class >= ((11-current_size)/2)  && dropItemToGround(hand))
 				step_towards(hand, src)
 				to_chat(src, span_warning("\The [S] pulls \the [hand] from your grip!"))
+	rad_act(current_size * 3)
 
 #define CPR_PANIC_SPEED (0.8 SECONDS)
 
@@ -552,7 +543,7 @@
 #undef CPR_PANIC_SPEED
 
 /mob/living/carbon/human/cuff_resist(obj/item/I)
-	if(dna?.check_mutation(/datum/mutation/human/hulk))
+	if(dna?.check_mutation(HULK))
 		say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ), forced = "hulk")
 		if(..(I, cuff_break = FAST_CUFFBREAK))
 			dropItemToGround(I)
@@ -709,7 +700,8 @@
 		return
 	else
 		if(hud_used.healths)
-			if(..()) //not dead
+			var/health_amount = min(health, maxHealth - getStaminaLoss())
+			if(..(health_amount)) //not dead
 				switch(hal_screwyhud)
 					if(SCREWYHUD_CRIT)
 						hud_used.healths.icon_state = "health6"
@@ -759,6 +751,7 @@
 		regenerate_organs()
 	remove_all_embedded_objects()
 	set_heartattack(FALSE)
+	drunkenness = 0
 	for(var/datum/mutation/human/HM in dna.mutations)
 		if(HM.quality != POSITIVE)
 			dna.remove_mutation(HM.name)
@@ -766,11 +759,8 @@
 	heat_exposure_stacks = 0
 	return ..()
 
-/mob/living/carbon/human/is_nearsighted()
-	var/obj/item/clothing/glasses/eyewear = glasses
-	if(istype(eyewear) && eyewear.vision_correction)
-		return FALSE
-	return ..()
+/mob/living/carbon/human/is_literate()
+	return TRUE
 
 /mob/living/carbon/human/vomit(lost_nutrition = 10, blood = FALSE, stun = TRUE, distance = 1, message = TRUE, vomit_type = VOMIT_TOXIC, harm = TRUE, force = FALSE, purge_ratio = 0.1)
 	if(blood && (NOBLOOD in dna.species.species_traits) && !HAS_TRAIT(src, TRAIT_TOXINLOVER))
@@ -788,6 +778,10 @@
 	VV_DROPDOWN_OPTION(VV_HK_COPY_OUTFIT, "Copy Outfit")
 	VV_DROPDOWN_OPTION(VV_HK_MOD_MUTATIONS, "Add/Remove Mutation")
 	VV_DROPDOWN_OPTION(VV_HK_MOD_QUIRKS, "Add/Remove Quirks")
+	VV_DROPDOWN_OPTION(VV_HK_MAKE_MONKEY, "Make Monkey")
+	VV_DROPDOWN_OPTION(VV_HK_MAKE_CYBORG, "Make Cyborg")
+	VV_DROPDOWN_OPTION(VV_HK_MAKE_SLIME, "Make Slime")
+	VV_DROPDOWN_OPTION(VV_HK_MAKE_ALIEN, "Make Alien")
 	VV_DROPDOWN_OPTION(VV_HK_SET_SPECIES, "Set Species")
 	VV_DROPDOWN_OPTION(VV_HK_PURRBATION, "Toggle Purrbation")
 
@@ -807,7 +801,7 @@
 			var/name = initial(mut.name)
 			options[dna.check_mutation(mut) ? "[name] (Remove)" : "[name] (Add)"] = mut
 
-		var/result = input(usr, "Choose mutation to add/remove","Mutation Mod") as null|anything in sort_list(options)
+		var/result = input(usr, "Choose mutation to add/remove","Mutation Mod") as null|anything in sortList(options)
 		if(result)
 			if(result == "Clear")
 				dna.remove_all_mutations()
@@ -831,7 +825,7 @@
 			var/qname = initial(quirk_type.name)
 			options[has_quirk(quirk_type) ? "[qname] (Remove)" : "[qname] (Add)"] = quirk_type
 
-		var/result = input(usr, "Choose quirk to add/remove","Quirk Mod") as null|anything in sort_list(options)
+		var/result = input(usr, "Choose quirk to add/remove","Quirk Mod") as null|anything in sortList(options)
 		if(result)
 			if(result == "Clear")
 				for(var/datum/quirk/q in quirks)
@@ -842,6 +836,30 @@
 					remove_quirk(T)
 				else
 					add_quirk(T)
+	if(href_list[VV_HK_MAKE_MONKEY])
+		if(!check_rights(R_SPAWN))
+			return
+		if(tgui_alert(usr,"Confirm mob type change?",,list("Transform","Cancel")) != "Transform")
+			return
+		usr.client.holder.Topic("vv_override", list("monkeyone"=href_list[VV_HK_TARGET]))
+	if(href_list[VV_HK_MAKE_CYBORG])
+		if(!check_rights(R_SPAWN))
+			return
+		if(tgui_alert(usr,"Confirm mob type change?",,list("Transform","Cancel")) != "Transform")
+			return
+		usr.client.holder.Topic("vv_override", list("makerobot"=href_list[VV_HK_TARGET]))
+	if(href_list[VV_HK_MAKE_ALIEN])
+		if(!check_rights(R_SPAWN))
+			return
+		if(tgui_alert(usr,"Confirm mob type change?",,list("Transform","Cancel")) != "Transform")
+			return
+		usr.client.holder.Topic("vv_override", list("makealien"=href_list[VV_HK_TARGET]))
+	if(href_list[VV_HK_MAKE_SLIME])
+		if(!check_rights(R_SPAWN))
+			return
+		if(tgui_alert(usr,"Confirm mob type change?",,list("Transform","Cancel")) != "Transform")
+			return
+		usr.client.holder.Topic("vv_override", list("makeslime"=href_list[VV_HK_TARGET]))
 	if(href_list[VV_HK_SET_SPECIES])
 		if(!check_rights(R_SPAWN))
 			return
@@ -899,7 +917,7 @@
 	return ishuman(target) && target.body_position == LYING_DOWN
 
 /mob/living/carbon/human/proc/fireman_carry(mob/living/carbon/target)
-	if(!can_be_firemanned(target) || incapacitated(IGNORE_GRAB))
+	if(!can_be_firemanned(target) || incapacitated(FALSE, TRUE))
 		to_chat(src, span_warning("You can't fireman carry [target] while [target.p_they()] [target.p_are()] standing!"))
 		return
 
@@ -919,7 +937,7 @@
 		return
 
 	//Second check to make sure they're still valid to be carried
-	if(!can_be_firemanned(target) || incapacitated(IGNORE_GRAB) || target.buckled)
+	if(!can_be_firemanned(target) || incapacitated(FALSE, TRUE) || target.buckled)
 		visible_message(span_warning("[src] fails to fireman carry [target]!"))
 		return
 
@@ -935,7 +953,7 @@
 		visible_message(span_warning("[target] fails to climb onto [src]!"))
 		return
 
-	if(target.incapacitated(IGNORE_GRAB) || incapacitated(IGNORE_GRAB))
+	if(target.incapacitated(FALSE, TRUE) || incapacitated(FALSE, TRUE))
 		target.visible_message(span_warning("[target] can't hang onto [src]!"))
 		return
 
@@ -999,7 +1017,7 @@
 	var/race = null
 	var/use_random_name = TRUE
 
-/mob/living/carbon/human/species/Initialize(mapload)
+/mob/living/carbon/human/species/Initialize()
 	. = ..()
 	INVOKE_ASYNC(src, .proc/set_species, race)
 
@@ -1025,6 +1043,9 @@
 
 /mob/living/carbon/human/species/golem
 	race = /datum/species/golem
+
+/mob/living/carbon/human/species/golem/random
+	race = /datum/species/golem/random
 
 /mob/living/carbon/human/species/golem/adamantine
 	race = /datum/species/golem/adamantine
@@ -1146,6 +1167,12 @@
 /mob/living/carbon/human/species/snail
 	race = /datum/species/snail
 
+/mob/living/carbon/human/species/synth
+	race = /datum/species/synth
+
+/mob/living/carbon/human/species/synth/military
+	race = /datum/species/synth/military
+
 /mob/living/carbon/human/species/vampire
 	race = /datum/species/vampire
 
@@ -1154,3 +1181,6 @@
 
 /mob/living/carbon/human/species/zombie/infectious
 	race = /datum/species/zombie/infectious
+
+/mob/living/carbon/human/species/zombie/krokodil_addict
+	race = /datum/species/krokodil_addict

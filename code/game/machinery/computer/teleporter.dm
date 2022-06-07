@@ -13,7 +13,7 @@
 	///Weakref to the target atom we're pointed at currently
 	var/datum/weakref/target_ref
 
-/obj/machinery/computer/teleporter/Initialize(mapload)
+/obj/machinery/computer/teleporter/Initialize()
 	. = ..()
 	id = "[rand(1000, 9999)]"
 	link_power_station()
@@ -39,7 +39,6 @@
 	return power_station
 
 /obj/machinery/computer/teleporter/ui_interact(mob/user, datum/tgui/ui)
-	. = ..()
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "Teleporter", name)
@@ -184,20 +183,16 @@
 	var/list/targets = get_targets()
 
 	if (regime_set == "Teleporter")
-		var/desc = tgui_input_list(usr, "Select a location to lock in", "Locking Computer", sort_list(targets))
-		if(isnull(desc))
-			return
+		var/desc = input("Please select a location to lock in.", "Locking Computer") as null|anything in sortList(targets)
 		set_teleport_target(targets[desc])
 		var/turf/target_turf = get_turf(targets[desc])
 		log_game("[key_name(user)] has set the teleporter target to [targets[desc]] at [AREACOORD(target_turf)]")
 	else
-		if (!length(targets))
+		if (targets.len == 0)
 			to_chat(user, span_alert("No active connected stations located."))
 			return
 
-		var/desc = tgui_input_list(usr, "Select a station to lock in", "Locking Computer", sort_list(targets))
-		if(isnull(desc))
-			return
+		var/desc = input("Please select a station to lock in.", "Locking Computer") as null|anything in sortList(targets)
 		var/obj/machinery/teleport/station/target_station = targets[desc]
 		if(!target_station || !target_station.teleporter_hub)
 			return
@@ -232,31 +227,37 @@
 
 	var/obj/machinery/computer/teleporter/attached_console
 
-/obj/item/circuit_component/teleporter_control_console/populate_ports()
+/obj/item/circuit_component/teleporter_control_console/Initialize()
+	. = ..()
 
 	new_target = add_input_port("New Target", PORT_TYPE_STRING)
 	set_target_trigger = add_input_port("Set Target", PORT_TYPE_SIGNAL)
 	update_trigger = add_input_port("Update Targets", PORT_TYPE_SIGNAL)
 
 	current_target = add_output_port("Current Target", PORT_TYPE_STRING)
-	possible_targets = add_output_port("Possible Targets", PORT_TYPE_LIST(PORT_TYPE_ANY))
+	possible_targets = add_output_port("Possible Targets", PORT_TYPE_LIST)
 	on_fail = add_output_port("Failed", PORT_TYPE_SIGNAL)
 
-/obj/item/circuit_component/teleporter_control_console/register_usb_parent(atom/movable/shell)
+/obj/item/circuit_component/teleporter_control_console/register_usb_parent(atom/movable/parent)
 	. = ..()
 
-	if (istype(shell, /obj/machinery/computer/teleporter))
-		attached_console = shell
+	if (istype(parent, /obj/machinery/computer/teleporter))
+		attached_console = parent
 
 		RegisterSignal(attached_console, COMSIG_TELEPORTER_NEW_TARGET, .proc/on_teleporter_new_target)
 		update_targets()
 
-/obj/item/circuit_component/teleporter_control_console/unregister_usb_parent(atom/movable/shell)
+/obj/item/circuit_component/teleporter_control_console/unregister_usb_parent(atom/movable/parent)
 	UnregisterSignal(attached_console, COMSIG_TELEPORTER_NEW_TARGET)
 	attached_console = null
 	return attached_console
 
 /obj/item/circuit_component/teleporter_control_console/input_received(datum/port/input/port)
+	. = ..()
+
+	if (.)
+		return .
+
 	var/list/targets = attached_console.get_targets()
 
 	if (COMPONENT_TRIGGERED_BY(set_target_trigger, port))

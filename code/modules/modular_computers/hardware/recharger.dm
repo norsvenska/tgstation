@@ -1,8 +1,8 @@
 /obj/item/computer_hardware/recharger
-	critical = TRUE
-	enabled = TRUE
-	device_type = MC_CHARGE
+	critical = 1
+	enabled = 1
 	var/charge_rate = 100
+	device_type = MC_CHARGE
 
 /obj/item/computer_hardware/recharger/proc/use_power(amount, charging=0)
 	if(charging)
@@ -52,8 +52,8 @@
 	icon_state = "charger_wire"
 	w_class = WEIGHT_CLASS_NORMAL
 
-/obj/item/computer_hardware/recharger/wired/can_install(obj/item/modular_computer/install_into, mob/living/user = null)
-	if(ismachinery(install_into.physical) && install_into.physical.anchored)
+/obj/item/computer_hardware/recharger/wired/can_install(obj/item/modular_computer/M, mob/living/user = null)
+	if(ismachinery(M.physical) && M.physical.anchored)
 		return ..()
 	to_chat(user, span_warning("\The [src] is incompatible with portable computers!"))
 	return FALSE

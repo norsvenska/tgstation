@@ -18,7 +18,7 @@
 	for(var/i in reserved_turfs)
 		reserved_turfs -= i
 		SSmapping.used_turfs -= i
-	INVOKE_ASYNC(SSmapping, /datum/controller/subsystem/mapping/proc/reserve_turfs, v)
+	SSmapping.reserve_turfs(v)
 
 /datum/turf_reservation/proc/Reserve(width, height, zlevel)
 	if(width > world.maxx || height > world.maxy || width < 1 || height < 1)

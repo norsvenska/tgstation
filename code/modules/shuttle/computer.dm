@@ -26,7 +26,6 @@
 		connect_to_shuttle(SSshuttle.get_containing_shuttle(src))
 
 /obj/machinery/computer/shuttle/ui_interact(mob/user, datum/tgui/ui)
-	. = ..()
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "ShuttleConsole", name)
@@ -59,7 +58,7 @@
 				data["status"] = "Recharging"
 			else
 				data["status"] = "In Transit"
-	for(var/obj/docking_port/stationary/S in SSshuttle.stationary_docking_ports)
+	for(var/obj/docking_port/stationary/S in SSshuttle.stationary)
 		if(!options.Find(S.port_destinations))
 			continue
 		if(!M.check_dock(S, silent = TRUE))

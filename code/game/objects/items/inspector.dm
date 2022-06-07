@@ -5,7 +5,8 @@
  */
 /obj/item/inspector
 	name = "\improper N-spect scanner"
-	desc = "Central Command-issued inspection device. Performs inspections according to Nanotrasen protocols when activated, then prints an encrypted report regarding the maintenance of the station. Definitely not giving you cancer."
+	desc = "Central Command-issued inspection device. Performs inspections according to Nanotrasen protocols when activated, then \
+			prints an encrypted report regarding the maintenance of the station. Hard to replace."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "inspector"
 	worn_icon_state = "salestagger"
@@ -29,14 +30,14 @@
 	///Power used to say an error message
 	var/power_to_speak = 1
 
-/obj/item/inspector/Initialize(mapload)
+/obj/item/inspector/Initialize()
 	. = ..()
 	if(ispath(cell))
 		cell = new cell(src)
 
 // Clean up the cell on destroy
 /obj/item/clothing/suit/space/Destroy()
-	if(isatom(cell))
+	if(cell)
 		QDEL_NULL(cell)
 	return ..()
 
@@ -159,7 +160,7 @@
 		. += span_notice("\The [src] contains data on [scanned_area.name].")
 	else if(scanned_area)
 		. += span_notice("\The [src] contains data on a vague area on station, you should throw it away.")
-	else if(get_info_length())
+	else if(info)
 		icon_state = "slipfull"
 		. += span_notice("Wait a minute, this isn't an encrypted inspection report! You should throw it away.")
 	else
@@ -282,7 +283,7 @@
 		paper_charges = min(paper_charges + charges_per_paper, max_paper_charges)
 		qdel(I)
 
-/obj/item/inspector/clown/bananium/Initialize(mapload)
+/obj/item/inspector/clown/bananium/Initialize()
 	. = ..()
 	playsound(src, 'sound/effects/angryboat.ogg', 150, FALSE)
 
@@ -357,7 +358,7 @@
 		. += span_notice("\The [src] contains no data on [scanned_area.name].")
 	else if(scanned_area)
 		. += span_notice("\The [src] contains no data on a vague area on station, you should throw it away.")
-	else if(get_info_length())
+	else if(info)
 		. += span_notice("Wait a minute, this isn't an encrypted inspection report! You should throw it away.")
 	else
 		. += span_notice("Wait a minute, this thing's blank! You should throw it away.")

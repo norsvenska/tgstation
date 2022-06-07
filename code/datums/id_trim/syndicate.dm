@@ -2,7 +2,6 @@
 /datum/id_trim/syndicom
 	assignment = "Syndicate Overlord"
 	trim_state = "trim_syndicate"
-	sechud_icon_state = SECHUD_SYNDICATE
 	access = list(ACCESS_SYNDICATE)
 
 /// Trim for Syndicate mobs, outfits and corpses.
@@ -13,7 +12,7 @@
 /// Trim for Syndicate mobs, outfits and corpses.
 /datum/id_trim/syndicom/captain
 	assignment = "Syndicate Ship Captain"
-	access = list(ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER, ACCESS_ROBOTICS)
+	access = list(ACCESS_SYNDICATE, ACCESS_ROBOTICS)
 
 /// Trim for Syndicate mobs, outfits and corpses.
 /datum/id_trim/battlecruiser
@@ -24,7 +23,7 @@
 /// Trim for Syndicate mobs, outfits and corpses.
 /datum/id_trim/battlecruiser/captain
 	assignment = "Syndicate Battlecruiser Captain"
-	access = list(ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER)
+	access = SYNDICATE_ACCESS
 
 /// Trim for Chameleon ID cards. Many outfits, nuke ops and some corpses hold Chameleon ID cards.
 /datum/id_trim/chameleon

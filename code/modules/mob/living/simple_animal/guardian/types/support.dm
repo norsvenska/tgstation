@@ -17,10 +17,10 @@
 	var/beacon_cooldown = 0
 	var/toggle = FALSE
 
-/mob/living/simple_animal/hostile/guardian/healer/Initialize(mapload)
+/mob/living/simple_animal/hostile/guardian/healer/Initialize()
 	. = ..()
 	var/datum/atom_hud/medsensor = GLOB.huds[DATA_HUD_MEDICAL_ADVANCED]
-	medsensor.show_to(src)
+	medsensor.add_hud_to(src)
 
 /mob/living/simple_animal/hostile/guardian/healer/get_status_tab_items()
 	. = ..()

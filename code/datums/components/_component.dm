@@ -123,24 +123,20 @@
  * Internal proc to handle behaviour when being removed from a parent
  */
 /datum/component/proc/_RemoveFromParent()
-	var/datum/parent = src.parent
-	var/list/parents_components = parent.datum_components
+	var/datum/P = parent
+	var/list/dc = P.datum_components
 	for(var/I in _GetInverseTypeList())
-		var/list/components_of_type = parents_components[I]
-
+		var/list/components_of_type = dc[I]
 		if(length(components_of_type)) //
 			var/list/subtracted = components_of_type - src
-
 			if(subtracted.len == 1) //only 1 guy left
-				parents_components[I] = subtracted[1] //make him special
+				dc[I] = subtracted[1] //make him special
 			else
-				parents_components[I] = subtracted
-
+				dc[I] = subtracted
 		else //just us
-			parents_components -= I
-
-	if(!parents_components.len)
-		parent.datum_components = null
+			dc -= I
+	if(!dc.len)
+		P.datum_components = null
 
 	UnregisterFromParent()
 
@@ -381,10 +377,12 @@
  * * c_type The component type path
  */
 /datum/proc/GetComponents(c_type)
-	var/list/components = datum_components?[c_type]
-	if(!components)
-		return list()
-	return islist(components) ? components : list(components)
+	var/list/dc = datum_components
+	if(!dc)
+		return null
+	. = dc[c_type]
+	if(!length(.))
+		return list(.)
 
 /**
  * Creates an instance of `new_type` in the datum and attaches to it as parent

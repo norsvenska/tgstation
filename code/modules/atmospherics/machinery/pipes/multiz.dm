@@ -15,11 +15,8 @@
 	construction_type = /obj/item/pipe/directional
 	pipe_state = "multiz"
 
-	///Our central icon
 	var/mutable_appearance/center = null
-	///The pipe icon
 	var/mutable_appearance/pipe = null
-	///Reference to the node
 	var/obj/machinery/atmospherics/front_node = null
 
 /* We use New() instead of Initialize() because these values are used in update_icon()
@@ -32,7 +29,7 @@
 	pipe = mutable_appearance(icon, "pipe-[piping_layer]")
 	return ..()
 
-/obj/machinery/atmospherics/pipe/multiz/set_init_directions()
+/obj/machinery/atmospherics/pipe/multiz/SetInitDirections()
 	initialize_directions = dir
 
 /obj/machinery/atmospherics/pipe/multiz/update_layer()
@@ -48,14 +45,12 @@
 
 ///Attempts to locate a multiz pipe that's above us, if it finds one it merges us into its pipenet
 /obj/machinery/atmospherics/pipe/multiz/pipeline_expansion()
-	var/turf/local_turf = get_turf(src)
-	for(var/obj/machinery/atmospherics/pipe/multiz/above in SSmapping.get_turf_above(local_turf))
-		if(!is_connectable(above, piping_layer))
-			continue
-		nodes += above
-		above.nodes += src //Two way travel :)
-	for(var/obj/machinery/atmospherics/pipe/multiz/below in SSmapping.get_turf_below(local_turf))
-		if(!is_connectable(below, piping_layer))
-			continue
-		below.pipeline_expansion() //If we've got one below us, force it to add us on facebook
+	var/turf/T = get_turf(src)
+	for(var/obj/machinery/atmospherics/pipe/multiz/above in SSmapping.get_turf_above(T))
+		if(isConnectable(above, piping_layer))
+			nodes += above
+			above.nodes += src //Two way travel :)
+	for(var/obj/machinery/atmospherics/pipe/multiz/below in SSmapping.get_turf_below(T))
+		if(isConnectable(below, piping_layer))
+			below.pipeline_expansion() //If we've got one below us, force it to add us on facebook
 	return ..()

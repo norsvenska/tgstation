@@ -1,13 +1,13 @@
 /obj/item/food/drug
 	name = "generic drug"
-	desc = "I am error"
+	desc =  "I am error"
 	icon = 'icons/obj/drugs.dmi'
 	foodtypes = GROSS
 	food_flags = FOOD_FINGER_FOOD
 	max_volume = 50
 	eat_time = 1 SECONDS
 	tastes = list("drugs" = 2, "chemicals" = 1)
-	eatverbs = list("gnaw" = 1)
+	eatverbs = list("gnaws" = 1)
 	bite_consumption = 10
 	w_class = WEIGHT_CLASS_TINY
 	preserved_food = TRUE
@@ -24,10 +24,9 @@
 	icon_state = "moon_rock1"
 	food_reagents = list(/datum/reagent/drug/kronkaine = 10)
 
-/obj/item/food/drug/moon_rock/Initialize(mapload)
+/obj/item/food/drug/moon_rock/Initialize()
 	. = ..()
 	icon_state = pick("moon_rock1", "moon_rock2", "moon_rock3")
-	AddElement(/datum/element/swabable, CELL_LINE_TABLE_MOONICORN, CELL_VIRUS_TABLE_GENERIC_MOB, 1, 5)
 
 /obj/item/reagent_containers/glass/blastoff_ampoule
 	name = "bLaSToFF ampoule" //stylized name
@@ -64,7 +63,7 @@
 	if(QDELING(src) || !hit_atom)	//Invalid loc
 		return
 	var/obj/item/shard/ampoule_shard = new(drop_location())
-	playsound(src, SFX_SHATTER, 40, TRUE)
+	playsound(src, "shatter", 40, TRUE)
 	transfer_fingerprints_to(ampoule_shard)
 	spillable = TRUE
 	SplashReagents(hit_atom, TRUE)

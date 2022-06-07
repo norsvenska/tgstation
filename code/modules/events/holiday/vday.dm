@@ -23,8 +23,7 @@
 
 	var/list/valentines = list()
 	for(var/mob/living/M in GLOB.player_list)
-		var/turf/current_turf = get_turf(M.mind.current)
-		if(!M.stat && M.mind && !current_turf.onCentCom())
+		if(!M.stat && M.mind)
 			valentines |= M
 
 
@@ -55,23 +54,24 @@
 /obj/item/valentine
 	name = "valentine"
 	desc = "A Valentine's card! Wonder what it says..."
-	icon = 'icons/obj/playing_cards.dmi'
-	icon_state = "sc_Ace of Hearts_syndicate" // shut up // bye felicia 
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "sc_Ace of Hearts_syndicate" // shut up
 	var/message = "A generic message of love or whatever."
 	resistance_flags = FLAMMABLE
 	w_class = WEIGHT_CLASS_TINY
 
-/obj/item/valentine/Initialize(mapload)
+/obj/item/valentine/Initialize()
 	. = ..()
 	message = pick(strings(VALENTINE_FILE, "valentines"))
 
 /obj/item/valentine/attackby(obj/item/W, mob/user, params)
 	..()
 	if(istype(W, /obj/item/pen) || istype(W, /obj/item/toy/crayon))
-		if(!user.can_write(W))
+		if(!user.is_literate())
+			to_chat(user, span_notice("You scribble illegibly on [src]!"))
 			return
-		var/recipient = tgui_input_text(user, "Who is receiving this valentine?", "To:", max_length = MAX_NAME_LEN)
-		var/sender = tgui_input_text(user, "Who is sending this valentine?", "From:", max_length = MAX_NAME_LEN)
+		var/recipient = stripped_input(user, "Who is receiving this valentine?", "To:", null , 20)
+		var/sender = stripped_input(user, "Who is sending this valentine?", "From:", null , 20)
 		if(!user.canUseTopic(src, BE_CLOSE))
 			return
 		if(recipient && sender)
@@ -100,7 +100,7 @@
 	food_reagents = list(/datum/reagent/consumable/sugar = 2)
 	junkiness = 5
 
-/obj/item/food/candyheart/Initialize(mapload)
+/obj/item/food/candyheart/Initialize()
 	. = ..()
 	desc = pick(strings(VALENTINE_FILE, "candyhearts"))
 	icon_state = pick("candyheart", "candyheart2", "candyheart3", "candyheart4")

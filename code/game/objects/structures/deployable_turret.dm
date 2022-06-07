@@ -12,7 +12,6 @@
 	max_integrity = 100
 	buckle_lying = 0
 	layer = ABOVE_MOB_LAYER
-	plane = GAME_PLANE_UPPER
 	var/view_range = 2.5
 	var/cooldown = 0
 	/// The projectile that the turret fires
@@ -61,7 +60,7 @@
 
 //BUCKLE HOOKS
 
-/obj/machinery/deployable_turret/unbuckle_mob(mob/living/buckled_mob, force = FALSE, can_fall = TRUE)
+/obj/machinery/deployable_turret/unbuckle_mob(mob/living/buckled_mob,force = FALSE)
 	playsound(src,'sound/mecha/mechmove01.ogg', 50, TRUE)
 	for(var/obj/item/I in buckled_mob.held_items)
 		if(istype(I, /obj/item/gun_control))
@@ -93,7 +92,6 @@
 			M.put_in_hands(TC)
 	M.pixel_y = 14
 	layer = ABOVE_MOB_LAYER
-	plane = GAME_PLANE_UPPER
 	setDir(SOUTH)
 	playsound(src,'sound/mecha/mechmove01.ogg', 50, TRUE)
 	set_anchored(TRUE)
@@ -114,11 +112,11 @@
 	var/client/controlling_client = controller.client
 	if(controlling_client)
 		var/modifiers = params2list(controlling_client.mouseParams)
-		var/atom/target_atom = controlling_client.mouse_object_ref?.resolve()
+		var/atom/target_atom = controlling_client.mouseObject
 		var/turf/target_turf = get_turf(target_atom)
 		if(istype(target_turf)) //They're hovering over something in the map.
 			direction_track(controller, target_turf)
-			calculated_projectile_vars = calculate_projectile_angle_and_pixel_offsets(controller, target_turf, modifiers)
+			calculated_projectile_vars = calculate_projectile_angle_and_pixel_offsets(controller, modifiers)
 
 /obj/machinery/deployable_turret/proc/direction_track(mob/user, atom/targeted)
 	if(user.incapacitated())
@@ -128,42 +126,34 @@
 	switch(dir)
 		if(NORTH)
 			layer = BELOW_MOB_LAYER
-			plane = GAME_PLANE
 			user.pixel_x = 0
 			user.pixel_y = -14
 		if(NORTHEAST)
 			layer = BELOW_MOB_LAYER
-			plane = GAME_PLANE
 			user.pixel_x = -8
 			user.pixel_y = -4
 		if(EAST)
 			layer = ABOVE_MOB_LAYER
-			plane = GAME_PLANE_UPPER
 			user.pixel_x = -14
 			user.pixel_y = 0
 		if(SOUTHEAST)
 			layer = BELOW_MOB_LAYER
-			plane = GAME_PLANE
 			user.pixel_x = -8
 			user.pixel_y = 4
 		if(SOUTH)
 			layer = ABOVE_MOB_LAYER
-			plane = GAME_PLANE_UPPER
 			user.pixel_x = 0
 			user.pixel_y = 14
 		if(SOUTHWEST)
 			layer = BELOW_MOB_LAYER
-			plane = GAME_PLANE
 			user.pixel_x = 8
 			user.pixel_y = 4
 		if(WEST)
 			layer = ABOVE_MOB_LAYER
-			plane = GAME_PLANE_UPPER
 			user.pixel_x = 14
 			user.pixel_y = 0
 		if(NORTHWEST)
 			layer = BELOW_MOB_LAYER
-			plane = GAME_PLANE
 			user.pixel_x = 8
 			user.pixel_y = -4
 
@@ -233,7 +223,7 @@
 	resistance_flags = FIRE_PROOF | UNACIDABLE | ACID_PROOF
 	var/obj/machinery/deployable_turret/turret
 
-/obj/item/gun_control/Initialize(mapload)
+/obj/item/gun_control/Initialize()
 	. = ..()
 	ADD_TRAIT(src, TRAIT_NODROP, ABSTRACT_ITEM_TRAIT)
 	turret = loc
@@ -247,7 +237,7 @@
 /obj/item/gun_control/CanItemAutoclick()
 	return TRUE
 
-/obj/item/gun_control/attack_atom(obj/O, mob/living/user, params)
+/obj/item/gun_control/attack_obj(obj/O, mob/living/user, params)
 	user.changeNext_move(CLICK_CD_MELEE)
 	O.attacked_by(src, user)
 
@@ -261,6 +251,6 @@
 	. = ..()
 	var/modifiers = params2list(params)
 	var/obj/machinery/deployable_turret/E = user.buckled
-	E.calculated_projectile_vars = calculate_projectile_angle_and_pixel_offsets(user, targeted_atom, modifiers)
+	E.calculated_projectile_vars = calculate_projectile_angle_and_pixel_offsets(user, modifiers)
 	E.direction_track(user, targeted_atom)
 	E.checkfire(targeted_atom, user)

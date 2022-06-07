@@ -13,11 +13,6 @@
 	var/obj/item/assembly_holder/bombassembly = null   //The first part of the bomb is an assembly holder, holding an igniter+some device
 	var/obj/item/tank/bombtank = null //the second part of the bomb is a plasma tank
 
-/obj/item/onetankbomb/Destroy()
-	bombassembly = null
-	bombtank = null
-	return ..()
-
 /obj/item/onetankbomb/IsSpecialAssembly()
 	return TRUE
 
@@ -64,7 +59,7 @@
 	if(I.use_tool(src, user, 0, volume=40))
 		status = TRUE
 		var/datum/gas_mixture/bomb_mix = bombtank.return_air()
-		log_bomber(user, "welded a single tank bomb,", src, "| Temp: [bomb_mix.temperature]")
+		log_bomber(user, "welded a single tank bomb,", src, "| Temp: [bomb_mix.temperature-T0C]")
 		to_chat(user, span_notice("A pressure hole has been bored to [bombtank] valve. \The [bombtank] can now be ignited."))
 		add_fingerprint(user)
 		return TRUE
@@ -115,11 +110,7 @@
 //Bomb assembly proc. This turns assembly+tank into a bomb
 /obj/item/tank/proc/bomb_assemble(obj/item/assembly_holder/assembly, mob/living/user)
 	//Check if either part of the assembly has an igniter, but if both parts are igniters, then fuck it
-	var/igniter_count = 0
-	for(var/obj/item/assembly/attached_assembly as anything in assembly.assemblies)
-		if(isigniter(attached_assembly))
-			igniter_count += 1
-	if(LAZYLEN(assembly.assemblies) == igniter_count)
+	if(isigniter(assembly.a_left) == isigniter(assembly.a_right))
 		return
 
 	if((src in user.get_equipped_items(TRUE)) && !user.canUnEquip(src))
@@ -163,13 +154,13 @@
 		strength = (fuel_moles/15)
 
 		if(strength >=2)
-			explosion(ground_zero, devastation_range = round(strength,1), heavy_impact_range = round(strength*2,1), light_impact_range = round(strength*3,1), flash_range = round(strength*4,1), explosion_cause = src)
+			explosion(ground_zero, devastation_range = round(strength,1), heavy_impact_range = round(strength*2,1), light_impact_range = round(strength*3,1), flash_range = round(strength*4,1))
 		else if(strength >=1)
-			explosion(ground_zero, devastation_range = round(strength,1), heavy_impact_range = round(strength*2,1), light_impact_range = round(strength*2,1), flash_range = round(strength*3,1), explosion_cause = src)
+			explosion(ground_zero, devastation_range = round(strength,1), heavy_impact_range = round(strength*2,1), light_impact_range = round(strength*2,1), flash_range = round(strength*3,1))
 		else if(strength >=0.5)
-			explosion(ground_zero, heavy_impact_range = 1, light_impact_range = 2, flash_range = 4, explosion_cause = src)
+			explosion(ground_zero, heavy_impact_range = 1, light_impact_range = 2, flash_range = 4)
 		else if(strength >=0.2)
-			explosion(ground_zero, devastation_range = -1, light_impact_range = 1, flash_range = 2, explosion_cause = src)
+			explosion(ground_zero, devastation_range = -1, light_impact_range = 1, flash_range = 2)
 		else
 			ground_zero.assume_air(bomb_mixture)
 			ground_zero.hotspot_expose(1000, 125)
@@ -178,9 +169,9 @@
 		strength = (fuel_moles/20)
 
 		if(strength >=1)
-			explosion(ground_zero, heavy_impact_range = round(strength,1), light_impact_range = round(strength*2,1), flash_range = round(strength*3,1), explosion_cause = src)
+			explosion(ground_zero, heavy_impact_range = round(strength,1), light_impact_range = round(strength*2,1), flash_range = round(strength*3,1))
 		else if(strength >=0.5)
-			explosion(ground_zero, devastation_range = -1, light_impact_range = 1, flash_range = 2, explosion_cause = src)
+			explosion(ground_zero, devastation_range = -1, light_impact_range = 1, flash_range = 2)
 		else
 			ground_zero.assume_air(bomb_mixture)
 			ground_zero.hotspot_expose(1000, 125)
@@ -189,7 +180,7 @@
 		strength = (fuel_moles/25)
 
 		if(strength >=1)
-			explosion(ground_zero, devastation_range = -1, light_impact_range = round(strength,1), flash_range = round(strength*3,1), explosion_cause = src)
+			explosion(ground_zero, devastation_range = -1, light_impact_range = round(strength,1), flash_range = round(strength*3,1))
 		else
 			ground_zero.assume_air(bomb_mixture)
 			ground_zero.hotspot_expose(1000, 125)

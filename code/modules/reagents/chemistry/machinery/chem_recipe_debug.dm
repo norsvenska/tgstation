@@ -7,7 +7,8 @@
 	density = TRUE
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "HPLC_debug"
-	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.4
+	use_power = IDLE_POWER_USE
+	idle_power_usage = 40
 	resistance_flags = FIRE_PROOF | ACID_PROOF | INDESTRUCTIBLE
 	///List of every reaction in the game kept locally for easy access
 	var/list/cached_reactions = list()
@@ -51,7 +52,7 @@
 	var/datum/chemical_reaction/edit_recipe
 
 ///Create reagents datum
-/obj/machinery/chem_recipe_debug/Initialize(mapload)
+/obj/machinery/chem_recipe_debug/Initialize()
 	. = ..()
 	create_reagents(9000)//I want to make sure everything fits
 	end_processing()
@@ -111,9 +112,9 @@
 
 /obj/machinery/chem_recipe_debug/proc/relay_all_reactions()
 	say("Completed testing, missing reactions products (may have exploded) are:")
-	say("[problem_string]", sanitize=FALSE)
+	say("[problem_string]")
 	say("Problem with results are:")
-	say("[impure_string]", sanitize=FALSE)
+	say("[impure_string]")
 	say("Reactions with minor impurity: [minorImpurity], reactions with major impurity: [majorImpurity]")
 	processing = FALSE
 	problem_string = null
@@ -128,7 +129,7 @@
 		say("Reaction completed for [cached_reactions[index]] final temperature = [reagents.chem_temp], ph = [reagents.ph], time taken = [react_time]s.")
 		var/datum/chemical_reaction/reaction = cached_reactions[index]
 		for(var/reagent_type in reaction.results)
-			var/datum/reagent/reagent = reagents.get_reagent(reagent_type)
+			var/datum/reagent/reagent =  reagents.get_reagent(reagent_type)
 			if(!reagent)
 				say(span_warning("Unable to find product [reagent_type] in holder after reaction! reagents found are:"))
 				for(var/other_reagent in reagents.reagent_list)
@@ -320,7 +321,7 @@
 			beaker_spawn = !beaker_spawn
 			return TRUE
 		if("setTargetList")
-			var/text = tgui_input_text(usr, "Enter a list of Recipe product names separated by commas", "Recipe List", multiline = TRUE)
+			var/text = stripped_input(usr,"List","Enter a list of Recipe product names separated by commas", "Recipe", MAX_MESSAGE_LEN)
 			reaction_names = list()
 			if(!text)
 				say("Could not find reaction")

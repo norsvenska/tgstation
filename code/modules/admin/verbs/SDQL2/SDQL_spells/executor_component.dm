@@ -1,7 +1,6 @@
 /datum/component/sdql_executor
 	var/query = "CALL visible_message(\"<span class='warning'>The spell fizzles!</span>\") ON * IN TARGETS"
 	var/giver //The ckey of the user that gave this spell
-	var/suppress_message_admins
 	var/list/scratchpad = list() //Use this to store vars in between queries and casts.
 	var/list/saved_overrides = list()
 
@@ -36,7 +35,7 @@
 	if(!usr) //We need to set AdminProcCaller manually because it won't be set automatically by WrapAdminProcCall if usr is null
 		GLOB.AdminProcCaller = "SDQL_SPELL_OF_[user.ckey]"
 	GLOB.AdminProcCallCount++
-	world.SDQL2_query(query_text, "[key_name(user, TRUE)] (via an SDQL spell given by [giver])", "[key_name(user)] (via an SDQL spell given by [giver])", silent = suppress_message_admins)
+	world.SDQL2_query(query_text, "[key_name(user, TRUE)] (via an SDQL spell given by [giver])", "[key_name(user)] (via an SDQL spell given by [giver])")
 	GLOB.AdminProcCallCount--
 	GLOB.AdminProcCaller = null
 

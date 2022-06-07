@@ -45,7 +45,7 @@
 					span_userdanger("You are kicked square in the chest by [A], sending you flying!"), span_hear("You hear a sickening sound of flesh hitting flesh!"), COMBAT_MESSAGE_RANGE, A)
 	playsound(get_turf(A), 'sound/effects/hit_kick.ogg', 50, TRUE, -1)
 	var/atom/throw_target = get_edge_target_turf(D, A.dir)
-	D.throw_at(throw_target, 7, 4, A)
+	D.throw_at(throw_target, 7, 14, A)
 	D.apply_damage(15, A.get_attack_type(), BODY_ZONE_CHEST, wound_bonus = CANT_WOUND)
 	log_combat(A, D, "launchkicked (Sleeping Carp)")
 	return
@@ -100,12 +100,12 @@
 
 /datum/martial_art/the_sleeping_carp/on_projectile_hit(mob/living/A, obj/projectile/P, def_zone)
 	. = ..()
-	if(A.incapacitated(IGNORE_GRAB)) //NO STUN
+	if(A.incapacitated(FALSE, TRUE)) //NO STUN
 		return BULLET_ACT_HIT
 	if(!(A.mobility_flags & MOBILITY_USE)) //NO UNABLE TO USE
 		return BULLET_ACT_HIT
 	var/datum/dna/dna = A.has_dna()
-	if(dna?.check_mutation(/datum/mutation/human/hulk)) //NO HULK
+	if(dna?.check_mutation(HULK)) //NO HULK
 		return BULLET_ACT_HIT
 	if(!isturf(A.loc)) //NO MOTHERFLIPPIN MECHS!
 		return BULLET_ACT_HIT
@@ -167,10 +167,28 @@
 	lefthand_file = 'icons/mob/inhands/weapons/staves_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/staves_righthand.dmi'
 	block_chance = 50
+	var/wielded = FALSE // track wielded status on item
+
+/obj/item/staff/bostaff/Initialize()
+	. = ..()
+	RegisterSignal(src, COMSIG_TWOHANDED_WIELD, .proc/on_wield)
+	RegisterSignal(src, COMSIG_TWOHANDED_UNWIELD, .proc/on_unwield)
 
 /obj/item/staff/bostaff/ComponentInitialize()
 	. = ..()
 	AddComponent(/datum/component/two_handed, force_unwielded=10, force_wielded=24, icon_wielded="[base_icon_state]1")
+
+/// triggered on wield of two handed item
+/obj/item/staff/bostaff/proc/on_wield(obj/item/source, mob/user)
+	SIGNAL_HANDLER
+
+	wielded = TRUE
+
+/// triggered on unwield of two handed item
+/obj/item/staff/bostaff/proc/on_unwield(obj/item/source, mob/user)
+	SIGNAL_HANDLER
+
+	wielded = FALSE
 
 /obj/item/staff/bostaff/update_icon_state()
 	icon_state = "[base_icon_state]0"
@@ -197,7 +215,7 @@
 		return
 	var/list/modifiers = params2list(params)
 	if(LAZYACCESS(modifiers, RIGHT_CLICK))
-		if(!HAS_TRAIT(src, TRAIT_WIELDED))
+		if(!wielded)
 			return ..()
 		if(!ishuman(target))
 			return ..()
@@ -224,6 +242,6 @@
 		return ..()
 
 /obj/item/staff/bostaff/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
-	if(!HAS_TRAIT(src, TRAIT_WIELDED))
+	if(!wielded)
 		return ..()
 	return FALSE

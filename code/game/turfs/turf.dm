@@ -8,11 +8,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
 
 	/// Turf bitflags, see code/__DEFINES/flags.dm
 	var/turf_flags = NONE
-
-	/// If there's a tile over a basic floor that can be ripped out
-	var/overfloor_placed = FALSE
-	/// How accessible underfloor pieces such as wires, pipes, etc are on this turf. Can be HIDDEN, VISIBLE, or INTERACTABLE.
-	var/underfloor_accessibility = UNDERFLOOR_HIDDEN
+	var/intact = 1
 
 	// baseturfs can be either a list or a single turf type.
 	// In class definition like here it should always be a single type.
@@ -22,10 +18,8 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	var/list/baseturfs = /turf/baseturf_bottom
 
 	var/temperature = T20C
-	///Used for fire, if a melting temperature was reached, it will be destroyed
-	var/to_be_destroyed = 0
-	///The max temperature of the fire which it was subjected to
-	var/max_fire_temperature_sustained = 0
+	var/to_be_destroyed = 0 //Used for fire, if a melting temperature was reached, it will be destroyed
+	var/max_fire_temperature_sustained = 0 //The max temperature of the fire which it was subjected to
 
 	var/blocks_air = FALSE
 
@@ -75,12 +69,8 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	/// See __DEFINES/construction.dm for RCD_MEMORY_*.
 	var/rcd_memory
 
-	/// How pathing algorithm will check if this turf is passable by itself (not including content checks). By default it's just density check.
-	/// WARNING: Currently to use a density shortcircuiting this does not support dense turfs with special allow through function
-	var/pathing_pass_method = TURF_PATHING_PASS_DENSITY
-
 /turf/vv_edit_var(var_name, new_value)
-	var/static/list/banned_edits = list(NAMEOF(src, x), NAMEOF(src, y), NAMEOF(src, z))
+	var/static/list/banned_edits = list("x", "y", "z")
 	if(var_name in banned_edits)
 		return FALSE
 	. = ..()
@@ -89,10 +79,6 @@ GLOBAL_LIST_EMPTY(station_turfs)
  * Turf Initialize
  *
  * Doesn't call parent, see [/atom/proc/Initialize]
- * Please note, space tiles do not run this code.
- * This is done because it's called so often that any extra code just slows things down too much
- * If you add something relevant here add it there too
- * [/turf/open/space/Initialize]
  */
 /turf/Initialize(mapload)
 	SHOULD_CALL_PARENT(FALSE)
@@ -123,8 +109,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	for(var/atom/movable/content as anything in src)
 		Entered(content, null)
 
-	var/area/our_area = loc
-	if(our_area.area_has_base_lighting && always_lit) //Only provide your own lighting if the area doesn't for you
+	if(always_lit)
 		add_overlay(GLOB.fullbright_overlay)
 
 	if(requires_activation)
@@ -147,14 +132,6 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	set_custom_materials(custom_materials)
 
 	ComponentInitialize()
-
-	if(uses_integrity)
-		atom_integrity = max_integrity
-
-		if (islist(armor))
-			armor = getArmor(arglist(armor))
-		else if (!armor)
-			armor = getArmor()
 
 	return INITIALIZE_HINT_NORMAL
 
@@ -266,59 +243,38 @@ GLOBAL_LIST_EMPTY(station_turfs)
 /turf/proc/zAirOut(direction, turf/source)
 	return FALSE
 
-/// Precipitates a movable (plus whatever buckled to it) to lower z levels if possible and then calls zImpact()
-/turf/proc/zFall(atom/movable/falling, levels = 1, force = FALSE, falling_from_move = FALSE)
-	var/direction = DOWN
-	if(falling.has_gravity() == NEGATIVE_GRAVITY)
-		direction = UP
-	var/turf/target = get_step_multiz(src, direction)
-	if(!target)
-		return FALSE
-	var/isliving = isliving(falling)
-	if(!isliving && !isobj(falling))
-		return
-	if(isliving)
-		var/mob/living/falling_living = falling
-		//relay this mess to whatever the mob is buckled to.
-		if(falling_living.buckled)
-			falling = falling_living.buckled
-	if(!falling_from_move && falling.currently_z_moving)
-		return
-	if(!force && !falling.can_z_move(direction, src, target, ZMOVE_FALL_FLAGS))
-		falling.set_currently_z_moving(FALSE, TRUE)
-		return FALSE
-
-	// So it doesn't trigger other zFall calls. Cleared on zMove.
-	falling.set_currently_z_moving(CURRENTLY_Z_FALLING)
-
-	falling.zMove(null, target, ZMOVE_CHECK_PULLEDBY)
-	target.zImpact(falling, levels, src)
-	return TRUE
-
-///Called each time the target falls down a z level possibly making their trajectory come to a halt. see __DEFINES/movement.dm.
-/turf/proc/zImpact(atom/movable/falling, levels = 1, turf/prev_turf)
+/turf/proc/zImpact(atom/movable/A, levels = 1, turf/prev_turf)
 	var/flags = NONE
-	var/list/falling_movables = falling.get_z_move_affected()
-	var/list/falling_mov_names
-	for(var/atom/movable/falling_mov as anything in falling_movables)
-		falling_mov_names += falling_mov.name
+	var/mov_name = A.name
 	for(var/i in contents)
 		var/atom/thing = i
-		flags |= thing.intercept_zImpact(falling_movables, levels)
+		flags |= thing.intercept_zImpact(A, levels)
 		if(flags & FALL_STOP_INTERCEPTING)
 			break
 	if(prev_turf && !(flags & FALL_NO_MESSAGE))
-		for(var/mov_name in falling_mov_names)
-			prev_turf.visible_message(span_danger("[mov_name] falls through [prev_turf]!"))
-	if(!(flags & FALL_INTERCEPTED) && zFall(falling, levels + 1))
+		prev_turf.visible_message(span_danger("[mov_name] falls through [prev_turf]!"))
+	if(flags & FALL_INTERCEPTED)
+		return
+	if(zFall(A, levels + 1))
 		return FALSE
-	for(var/atom/movable/falling_mov as anything in falling_movables)
-		if(!(flags & FALL_RETAIN_PULL))
-			falling_mov.stop_pulling()
-		if(!(flags & FALL_INTERCEPTED))
-			falling_mov.onZImpact(src, levels)
-		if(falling_mov.pulledby && (falling_mov.z != falling_mov.pulledby.z || get_dist(falling_mov, falling_mov.pulledby) > 1))
-			falling_mov.pulledby.stop_pulling()
+	A.visible_message(span_danger("[A] crashes into [src]!"))
+	A.onZImpact(src, levels)
+	return TRUE
+
+/turf/proc/can_zFall(atom/movable/A, levels = 1, turf/target)
+	SHOULD_BE_PURE(TRUE)
+	return zPassOut(A, DOWN, target) && target.zPassIn(A, DOWN, src)
+
+/turf/proc/zFall(atom/movable/A, levels = 1, force = FALSE)
+	var/turf/target = get_step_multiz(src, DOWN)
+	if(!target || (!isobj(A) && !ismob(A)))
+		return FALSE
+	if(!force && (!can_zFall(A, levels, target) || !A.can_zFall(src, levels, target, DOWN)))
+		return FALSE
+	A.zfalling = TRUE
+	A.forceMove(target)
+	A.zfalling = FALSE
+	target.zImpact(A, levels, src)
 	return TRUE
 
 /turf/proc/handleRCL(obj/item/rcl/C, mob/user)
@@ -362,11 +318,12 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	var/atom/firstbump
 	var/canPassSelf = CanPass(mover, get_dir(src, mover))
 	if(canPassSelf || (mover.movement_type & PHASING))
-		for(var/atom/movable/thing as anything in contents)
+		for(var/i in contents)
 			if(QDELETED(mover))
 				return FALSE //We were deleted, do not attempt to proceed with movement.
-			if(thing == mover || thing == mover.loc) // Multi tile objects and moving out of other objects
+			if(i == mover || i == mover.loc) // Multi tile objects and moving out of other objects
 				continue
+			var/atom/movable/thing = i
 			if(!thing.Cross(mover))
 				if(QDELETED(mover)) //Mover deleted from Cross/CanPass, do not proceed.
 					return FALSE
@@ -385,13 +342,16 @@ GLOBAL_LIST_EMPTY(station_turfs)
 		return (mover.movement_type & PHASING)
 	return TRUE
 
+
 /turf/open/Entered(atom/movable/arrived, atom/old_loc, list/atom/old_locs)
-	. = ..()
+	..()
 	//melting
 	if(isobj(arrived) && air && air.temperature > T0C)
 		var/obj/O = arrived
 		if(O.obj_flags & FROZEN)
 			O.make_unfrozen()
+	if(!arrived.zfalling)
+		zFall(arrived)
 
 // A proc in case it needs to be recreated or badmins want to change the baseturfs
 /turf/proc/assemble_baseturfs(turf/fake_baseturf_type)
@@ -445,7 +405,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
 /turf/proc/levelupdate()
 	for(var/obj/O in src)
 		if(O.flags_1 & INITIALIZED_1)
-			SEND_SIGNAL(O, COMSIG_OBJ_HIDE, underfloor_accessibility < UNDERFLOOR_VISIBLE)
+			SEND_SIGNAL(O, COMSIG_OBJ_HIDE, intact)
 
 // override for space turfs, since they should never hide anything
 /turf/open/space/levelupdate()
@@ -496,7 +456,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
 ////////////////////////////////////////////////////
 
 /turf/singularity_act()
-	if(underfloor_accessibility < UNDERFLOOR_INTERACTABLE)
+	if(intact)
 		for(var/obj/O in contents) //this is for deleting things like wires contained in the turf
 			if(HAS_TRAIT(O, TRAIT_T_RAY_VISIBLE))
 				O.singularity_act()
@@ -507,19 +467,23 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	return TRUE
 
 /turf/proc/can_lay_cable()
-	return can_have_cabling() && underfloor_accessibility >= UNDERFLOOR_INTERACTABLE
+	return can_have_cabling() & !intact
 
 /turf/proc/visibilityChanged()
 	GLOB.cameranet.updateVisibility(src)
+	// The cameranet usually handles this for us, but if we've just been
+	// recreated we should make sure we have the cameranet vis_contents.
+	var/datum/camerachunk/C = GLOB.cameranet.chunkGenerated(x, y, z)
+	if(C)
+		if(C.obscuredTurfs[src])
+			vis_contents += GLOB.cameranet.vis_contents_opaque
+		else
+			vis_contents -= GLOB.cameranet.vis_contents_opaque
 
 /turf/proc/burn_tile()
-	return
-
-/turf/proc/break_tile()
-	return
 
 /turf/proc/is_shielded()
-	return
+
 
 /turf/contents_explosion(severity, target)
 	for(var/thing in contents)
@@ -552,8 +516,6 @@ GLOBAL_LIST_EMPTY(station_turfs)
 
 /turf/proc/add_blueprints(atom/movable/AM)
 	var/image/I = new
-	I.plane = GAME_PLANE
-	I.layer = OBJ_LAYER
 	I.appearance = AM.appearance
 	I.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 	I.loc = src
@@ -578,7 +540,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
 
 	AddComponent(/datum/component/acid, acidpwr, acid_volume)
 	for(var/obj/O in src)
-		if(underfloor_accessibility < UNDERFLOOR_INTERACTABLE && HAS_TRAIT(O, TRAIT_T_RAY_VISIBLE))
+		if(intact && HAS_TRAIT(O, TRAIT_T_RAY_VISIBLE))
 			continue
 
 		O.acid_act(acidpwr, acid_volume)
@@ -588,17 +550,9 @@ GLOBAL_LIST_EMPTY(station_turfs)
 /turf/proc/acid_melt()
 	return
 
-/turf/rust_heretic_act()
-	if(turf_flags & NO_RUST)
-		return
-	if(HAS_TRAIT(src, TRAIT_RUSTY))
-		return
-
-	AddElement(/datum/element/rust)
-
 /turf/handle_fall(mob/faller)
 	if(has_gravity(src))
-		playsound(src, SFX_BODYFALL, 50, TRUE)
+		playsound(src, "bodyfall", 50, TRUE)
 	faller.drop_all_held_items()
 
 /turf/proc/photograph(limit=20)
@@ -636,7 +590,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
 		clear_reagents_to_vomit_pool(M, V, purge_ratio)
 
 /proc/clear_reagents_to_vomit_pool(mob/living/carbon/M, obj/effect/decal/cleanable/vomit/V, purge_ratio = 0.1)
-	var/obj/item/organ/internal/stomach/belly = M.getorganslot(ORGAN_SLOT_STOMACH)
+	var/obj/item/organ/stomach/belly = M.getorganslot(ORGAN_SLOT_STOMACH)
 	if(!belly?.reagents.total_volume)
 		return
 	var/chemicals_lost = belly.reagents.total_volume * purge_ratio
@@ -688,9 +642,8 @@ GLOBAL_LIST_EMPTY(station_turfs)
  * * caller: The movable, if one exists, being used for mobility checks to see what tiles it can reach
  * * ID: An ID card that decides if we can gain access to doors that would otherwise block a turf
  * * simulated_only: Do we only worry about turfs with simulated atmos, most notably things that aren't space?
- * * no_id: When true, doors with public access will count as impassible
 */
-/turf/proc/reachableAdjacentTurfs(caller, ID, simulated_only, no_id = FALSE)
+/turf/proc/reachableAdjacentTurfs(caller, ID, simulated_only)
 	var/static/space_type_cache = typecacheof(/turf/open/space)
 	. = list()
 
@@ -698,7 +651,7 @@ GLOBAL_LIST_EMPTY(station_turfs)
 		var/turf/turf_to_check = get_step(src,iter_dir)
 		if(!turf_to_check || (simulated_only && space_type_cache[turf_to_check.type]))
 			continue
-		if(turf_to_check.density || LinkBlockedWithAccess(turf_to_check, caller, ID, no_id = no_id))
+		if(turf_to_check.density || LinkBlockedWithAccess(turf_to_check, caller, ID))
 			continue
 		. += turf_to_check
 

@@ -1,8 +1,6 @@
 /datum/job/chaplain
-	title = JOB_CHAPLAIN
-	description = "Hold services and funerals, cremate people, preach your \
-		religion, protect the crew against cults."
-	department_head = list(JOB_HEAD_OF_PERSONNEL)
+	title = "Chaplain"
+	department_head = list("Head of Personnel")
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
@@ -13,7 +11,7 @@
 	outfit = /datum/outfit/job/chaplain
 	plasmaman_outfit = /datum/outfit/plasmaman/chaplain
 
-	paycheck = PAYCHECK_CREW
+	paycheck = PAYCHECK_EASY
 	paycheck_department = ACCOUNT_SRV
 
 	display_order = JOB_DISPLAY_ORDER_CHAPLAIN
@@ -30,8 +28,8 @@
 		/obj/item/toy/plush/narplush = 2,
 		/obj/item/toy/plush/ratplush = 1
 	)
-	rpg_title = "Paladin"
-	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN | JOB_CAN_BE_INTERN
+
+	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS
 
 	voice_of_god_power = 2 //Chaplains are very good at speaking with the voice of god
 
@@ -64,11 +62,19 @@
 	if(H.mind)
 		H.mind.holy_role = HOLY_ROLE_HIGHPRIEST
 
-	var/new_religion = player_client?.prefs?.read_preference(/datum/preference/name/religion) || DEFAULT_RELIGION
-	var/new_deity = player_client?.prefs?.read_preference(/datum/preference/name/deity) || DEFAULT_DEITY
-	var/new_bible = player_client?.prefs?.read_preference(/datum/preference/name/bible) || DEFAULT_BIBLE
+	var/new_religion = DEFAULT_RELIGION
+	if(player_client?.prefs.custom_names["religion"])
+		new_religion = player_client.prefs.custom_names["religion"]
+
+	var/new_deity = DEFAULT_DEITY
+	if(player_client?.prefs.custom_names["deity"])
+		new_deity = player_client.prefs.custom_names["deity"]
 
 	B.deity_name = new_deity
+
+	var/new_bible = DEFAULT_BIBLE
+	if(player_client?.prefs.custom_names["bible"])
+		new_bible = player_client.prefs.custom_names["bible"]
 
 	switch(lowertext(new_religion))
 		if("homosexuality", "gay", "penis", "ass", "cock", "cocks")
@@ -96,7 +102,7 @@
 			B.deity_name = "Anime"
 		else
 			if(new_bible == DEFAULT_BIBLE)
-				new_bible = DEFAULT_BIBLE_REPLACE(new_bible)
+				new_bible = "The Holy Book of [new_religion]"
 
 	B.name = new_bible
 
@@ -114,17 +120,19 @@
 	name = "Chaplain"
 	jobtype = /datum/job/chaplain
 
-	id_trim = /datum/id_trim/job/chaplain
+	belt = /obj/item/pda/chaplain
+	ears = /obj/item/radio/headset/headset_srv
 	uniform = /obj/item/clothing/under/rank/civilian/chaplain
 	backpack_contents = list(
-		/obj/item/camera/spooky = 1,
 		/obj/item/stamp/chap = 1,
+		/obj/item/camera/spooky = 1
 		)
-	belt = /obj/item/modular_computer/tablet/pda/chaplain
-	ears = /obj/item/radio/headset/headset_srv
+
+	skillchips = list(/obj/item/skillchip/entrails_reader)
 
 	backpack = /obj/item/storage/backpack/cultpack
 	satchel = /obj/item/storage/backpack/cultpack
 
 	chameleon_extras = /obj/item/stamp/chap
-	skillchips = list(/obj/item/skillchip/entrails_reader)
+
+	id_trim = /datum/id_trim/job/chaplain

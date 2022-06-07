@@ -34,7 +34,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	if(world.time < next_hallucination)
 		return
 
-	var/halpick = pick_weight(GLOB.hallucination_list)
+	var/halpick = pickweight(GLOB.hallucination_list)
 	new halpick(src, FALSE)
 
 	next_hallucination = world.time + rand(100, 600)
@@ -103,7 +103,6 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	var/col_mod = null
 	var/image/current_image = null
 	var/image_layer = MOB_LAYER
-	var/image_plane = GAME_PLANE
 	var/active = TRUE //qdelery
 
 /obj/effect/hallucination/singularity_pull()
@@ -124,7 +123,6 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 
 /obj/effect/hallucination/simple/proc/GetImage()
 	var/image/I = image(image_icon,src,image_state,image_layer,dir=src.dir)
-	I.plane = image_plane
 	I.pixel_x = px
 	I.pixel_y = py
 	if(col_mod)
@@ -170,7 +168,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	icon_state = "nothing"
 	anchored = TRUE
 	layer = FLY_LAYER
-	plane = ABOVE_GAME_PLANE
+	plane = GAME_PLANE
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 /datum/hallucination/fake_flood
@@ -197,7 +195,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	var/obj/effect/plasma_image_holder/pih = new(center)
 	var/image/plasma_image = image(image_icon, pih, image_state, FLY_LAYER)
 	plasma_image.alpha = 50
-	plasma_image.plane = ABOVE_GAME_PLANE
+	plasma_image.plane = GAME_PLANE
 	flood_images += plasma_image
 	flood_image_holders += pih
 	flood_turfs += center
@@ -214,7 +212,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 			return
 		Expand()
 		if((get_turf(target) in flood_turfs) && !target.internal)
-			new /datum/hallucination/fake_alert(target, TRUE, ALERT_TOO_MUCH_PLASMA)
+			new /datum/hallucination/fake_alert(target, TRUE, "too_much_plas")
 		next_expand = world.time + FAKE_FLOOD_EXPAND_TIME
 
 /datum/hallucination/fake_flood/proc/Expand()
@@ -228,7 +226,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 			var/obj/effect/plasma_image_holder/pih = new(T)
 			var/image/new_plasma = image(image_icon, pih, image_state, FLY_LAYER)
 			new_plasma.alpha = 50
-			new_plasma.plane = ABOVE_GAME_PLANE
+			new_plasma.plane = GAME_PLANE
 			flood_images += new_plasma
 			flood_image_holders += pih
 			flood_turfs += T
@@ -440,12 +438,12 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 		if("stunprod") //Stunprod + cablecuff
 			process = FALSE
 			target.playsound_local(source, 'sound/weapons/egloves.ogg', 40, 1)
-			target.playsound_local(source, get_sfx(SFX_BODYFALL), 25, 1)
+			target.playsound_local(source, get_sfx("bodyfall"), 25, 1)
 			addtimer(CALLBACK(target, /mob/.proc/playsound_local, source, 'sound/weapons/cablecuff.ogg', 15, 1), 20)
 		if("harmbaton") //zap n slap
 			iterations_left = rand(5, 12)
 			target.playsound_local(source, 'sound/weapons/egloves.ogg', 40, 1)
-			target.playsound_local(source, get_sfx(SFX_BODYFALL), 25, 1)
+			target.playsound_local(source, get_sfx("bodyfall"), 25, 1)
 			next_action = 2 SECONDS
 		if("bomb") // Tick Tock
 			iterations_left = rand(3, 11)
@@ -485,7 +483,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 				if ("gun")
 					fire_sound = 'sound/weapons/gun/shotgun/shot.ogg'
 					hit_person_sound = 'sound/weapons/pierce.ogg'
-					hit_wall_sound = SFX_RICOCHET
+					hit_wall_sound = "ricochet"
 					number_of_hits = 2
 					chance_to_fall = 80
 
@@ -500,14 +498,14 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 			next_action = rand(CLICK_CD_RANGE, CLICK_CD_RANGE + 6)
 
 			if(hits >= number_of_hits && prob(chance_to_fall))
-				addtimer(CALLBACK(target, /mob/.proc/playsound_local, source, get_sfx(SFX_BODYFALL), 25, 1), next_action)
+				addtimer(CALLBACK(target, /mob/.proc/playsound_local, source, get_sfx("bodyfall"), 25, 1), next_action)
 				qdel(src)
 				return
 		if ("esword")
 			target.playsound_local(source, 'sound/weapons/blade1.ogg', 50, 1)
 
 			if (hits == 4)
-				target.playsound_local(source, get_sfx(SFX_BODYFALL), 25, 1)
+				target.playsound_local(source, get_sfx("bodyfall"), 25, 1)
 
 			next_action = rand(CLICK_CD_MELEE, CLICK_CD_MELEE + 6)
 			hits += 1
@@ -515,7 +513,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 			if (iterations_left == 1)
 				target.playsound_local(source, 'sound/weapons/saberoff.ogg', 15, 1)
 		if ("harmbaton")
-			target.playsound_local(source, SFX_SWING_HIT, 50, 1)
+			target.playsound_local(source, "swing_hit", 50, 1)
 			next_action = rand(CLICK_CD_MELEE, CLICK_CD_MELEE + 4)
 		if ("bomb")
 			target.playsound_local(source, 'sound/items/timer.ogg', 25, 0)
@@ -571,7 +569,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 				else
 					image_file = 'icons/mob/inhands/weapons/swords_lefthand.dmi'
 				target.playsound_local(H, 'sound/weapons/saberon.ogg',35,1)
-				A = image(image_file,H,"e_sword_on_red", layer=ABOVE_MOB_LAYER)
+				A = image(image_file,H,"swordred", layer=ABOVE_MOB_LAYER)
 			if("dual_esword")
 				if(side == "right")
 					image_file = 'icons/mob/inhands/weapons/swords_righthand.dmi'
@@ -596,7 +594,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 					image_file = 'icons/mob/inhands/equipment/security_righthand.dmi'
 				else
 					image_file = 'icons/mob/inhands/equipment/security_lefthand.dmi'
-				target.playsound_local(H, SFX_SPARKS,75,1,-1)
+				target.playsound_local(H, "sparks",75,1,-1)
 				A = image(image_file,H,"baton", layer=ABOVE_MOB_LAYER)
 			if("ttv")
 				if(side == "right")
@@ -656,7 +654,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 				A = image('icons/effects/effects.dmi',H,"nothing")
 				A.name = "..."
 			if("monkey")//Monkey
-				A = image('icons/mob/human.dmi',H,"monkey")
+				A = image('icons/mob/monkey.dmi',H,"monkey1")
 				A.name = "Monkey ([rand(1,999)])"
 			if("carp")//Carp
 				A = image('icons/mob/carp.dmi',H,"carp")
@@ -700,7 +698,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	feedback_details += "Type: [kind]"
 	switch(kind)
 		if("monkey")//Monkey
-			A = image('icons/mob/human.dmi',target,"monkey")
+			A = image('icons/mob/monkey.dmi',target,"monkey1")
 		if("carp")//Carp
 			A = image('icons/mob/animal.dmi',target,"carp")
 		if("corgi")//Corgi
@@ -792,7 +790,6 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 
 /obj/effect/hallucination/fake_door_lock
 	layer = CLOSED_DOOR_LAYER + 1 //for Bump priority
-	plane = GAME_PLANE
 	var/image/bolt_light
 	var/obj/machinery/door/airlock/airlock
 
@@ -865,10 +862,10 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	feedback_details += "Type: [is_radio ? "Radio" : "Talk"], Source: [person.real_name], Message: [message]"
 
 	// Display message
-	if (!is_radio && !target.client?.prefs.read_preference(/datum/preference/toggle/enable_runechat))
+	if (!is_radio && !target.client?.prefs.chat_on_map)
 		var/image/speech_overlay = image('icons/mob/talk.dmi', person, "default0", layer = ABOVE_MOB_LAYER)
 		INVOKE_ASYNC(GLOBAL_PROC, /proc/flick_overlay, speech_overlay, list(target.client), 30)
-	if (target.client?.prefs.read_preference(/datum/preference/toggle/enable_runechat))
+	if (target.client?.prefs.chat_on_map)
 		target.create_chat_message(person, understood_language, chosen, spans)
 	to_chat(target, message)
 	qdel(src)
@@ -1112,69 +1109,51 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 /datum/hallucination/fake_alert/New(mob/living/carbon/C, forced = TRUE, specific, duration = 150)
 	set waitfor = FALSE
 	..()
-	alert_type = pick(
-		ALERT_NOT_ENOUGH_OXYGEN,
-		ALERT_NOT_ENOUGH_PLASMA,
-		ALERT_NOT_ENOUGH_CO2,
-		ALERT_TOO_MUCH_OXYGEN,
-		ALERT_TOO_MUCH_CO2,
-		ALERT_TOO_MUCH_PLASMA,
-		ALERT_NUTRITION,
-		ALERT_GRAVITY,
-		ALERT_FIRE,
-		ALERT_TEMPERATURE_HOT,
-		ALERT_TEMPERATURE_COLD,
-		ALERT_PRESSURE,
-		ALERT_NEW_LAW,
-		ALERT_LOCKED,
-		ALERT_HACKED,
-		ALERT_CHARGE,
-	)
-
+	alert_type = pick("not_enough_oxy","not_enough_plas","not_enough_co2","too_much_oxy","too_much_co2","too_much_plas","newlaw","nutrition","charge","gravity","fire","locked","hacked","temphot","tempcold","pressure")
 	if(specific)
 		alert_type = specific
 	feedback_details += "Type: [alert_type]"
 	switch(alert_type)
-		if(ALERT_NOT_ENOUGH_OXYGEN)
+		if("not_enough_oxy")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/not_enough_oxy, override = TRUE)
-		if(ALERT_NOT_ENOUGH_PLASMA)
+		if("not_enough_plas")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/not_enough_plas, override = TRUE)
-		if(ALERT_NOT_ENOUGH_CO2)
+		if("not_enough_co2")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/not_enough_co2, override = TRUE)
-		if(ALERT_TOO_MUCH_OXYGEN)
+		if("too_much_oxy")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/too_much_oxy, override = TRUE)
-		if(ALERT_TOO_MUCH_CO2)
+		if("too_much_co2")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/too_much_co2, override = TRUE)
-		if(ALERT_TOO_MUCH_PLASMA)
+		if("too_much_plas")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/too_much_plas, override = TRUE)
-		if(ALERT_NUTRITION)
+		if("nutrition")
 			if(prob(50))
 				target.throw_alert(alert_type, /atom/movable/screen/alert/fat, override = TRUE)
 			else
 				target.throw_alert(alert_type, /atom/movable/screen/alert/starving, override = TRUE)
-		if(ALERT_GRAVITY)
+		if("gravity")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/weightless, override = TRUE)
-		if(ALERT_FIRE)
+		if("fire")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/fire, override = TRUE)
-		if(ALERT_TEMPERATURE_HOT)
+		if("temphot")
 			alert_type = "temp"
 			target.throw_alert(alert_type, /atom/movable/screen/alert/hot, 3, override = TRUE)
-		if(ALERT_TEMPERATURE_COLD)
+		if("tempcold")
 			alert_type = "temp"
 			target.throw_alert(alert_type, /atom/movable/screen/alert/cold, 3, override = TRUE)
-		if(ALERT_PRESSURE)
+		if("pressure")
 			if(prob(50))
 				target.throw_alert(alert_type, /atom/movable/screen/alert/highpressure, 2, override = TRUE)
 			else
 				target.throw_alert(alert_type, /atom/movable/screen/alert/lowpressure, 2, override = TRUE)
 		//BEEP BOOP I AM A ROBOT
-		if(ALERT_NEW_LAW)
+		if("newlaw")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/newlaw, override = TRUE)
-		if(ALERT_LOCKED)
+		if("locked")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/locked, override = TRUE)
-		if(ALERT_HACKED)
+		if("hacked")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/hacked, override = TRUE)
-		if(ALERT_CHARGE)
+		if("charge")
 			target.throw_alert(alert_type, /atom/movable/screen/alert/emptycell, override = TRUE)
 
 	addtimer(CALLBACK(src, .proc/cleanup), duration)
@@ -1280,8 +1259,8 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 					halitem.icon_state = "plasticx40"
 			if(3) //sword
 				halitem.icon = 'icons/obj/transforming_energy.dmi'
-				halitem.icon_state = "e_sword"
-				halitem.name = "energy sword"
+				halitem.icon_state = "sword0"
+				halitem.name = "Energy Sword"
 			if(4) //stun baton
 				halitem.icon = 'icons/obj/items_and_weapons.dmi'
 				halitem.icon_state = "stunbaton"
@@ -1396,7 +1375,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 /obj/effect/hallucination/danger/anomaly
 	name = "flux wave anomaly"
 
-/obj/effect/hallucination/danger/anomaly/Initialize(mapload)
+/obj/effect/hallucination/danger/anomaly/Initialize()
 	. = ..()
 	START_PROCESSING(SSobj, src)
 	var/static/list/loc_connections = list(
@@ -1475,11 +1454,11 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	set waitfor = FALSE
 	..()
 	target.set_fire_stacks(max(target.fire_stacks, 0.1)) //Placebo flammability
-	fire_overlay = image('icons/mob/onfire.dmi', target, "human_burning", ABOVE_MOB_LAYER)
+	fire_overlay = image('icons/mob/OnFire.dmi', target, "Standing", ABOVE_MOB_LAYER)
 	if(target.client)
 		target.client.images += fire_overlay
 	to_chat(target, span_userdanger("You're set on fire!"))
-	target.throw_alert(ALERT_FIRE, /atom/movable/screen/alert/fire, override = TRUE)
+	target.throw_alert("fire", /atom/movable/screen/alert/fire, override = TRUE)
 	times_to_lower_stamina = rand(5, 10)
 	addtimer(CALLBACK(src, .proc/start_expanding), 20)
 
@@ -1528,16 +1507,16 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 
 /datum/hallucination/fire/proc/update_temp()
 	if(stage <= 0)
-		target.clear_alert(ALERT_TEMPERATURE, clear_override = TRUE)
+		target.clear_alert("temp", clear_override = TRUE)
 	else
-		target.clear_alert(ALERT_TEMPERATURE, clear_override = TRUE)
-		target.throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/hot, stage, override = TRUE)
+		target.clear_alert("temp", clear_override = TRUE)
+		target.throw_alert("temp", /atom/movable/screen/alert/hot, stage, override = TRUE)
 
 /datum/hallucination/fire/proc/clear_fire()
 	if(!active)
 		return
 	active = FALSE
-	target.clear_alert(ALERT_FIRE, clear_override = TRUE)
+	target.clear_alert("fire", clear_override = TRUE)
 	if(target.client)
 		target.client.images -= fire_overlay
 	QDEL_NULL(fire_overlay)
@@ -1565,19 +1544,21 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 		target.client.images |= shock_image
 		target.client.images |= electrocution_skeleton_anim
 	addtimer(CALLBACK(src, .proc/reset_shock_animation), 40)
-	target.playsound_local(get_turf(src), SFX_SPARKS, 100, 1)
+	target.playsound_local(get_turf(src), "sparks", 100, 1)
 	target.staminaloss += 50
-	target.Stun(4 SECONDS)
-	target.do_jitter_animation(300) // Maximum jitter
-	target.adjust_timed_status_effect(20 SECONDS, /datum/status_effect/jitter)
-	addtimer(CALLBACK(src, .proc/shock_drop), 2 SECONDS)
+	target.Stun(40)
+	target.jitteriness += 1000
+	target.do_jitter_animation(target.jitteriness)
+	addtimer(CALLBACK(src, .proc/shock_drop), 20)
 
 /datum/hallucination/shock/proc/reset_shock_animation()
-	target.client?.images.Remove(shock_image)
-	target.client?.images.Remove(electrocution_skeleton_anim)
+	if(target.client)
+		target.client.images.Remove(shock_image)
+		target.client.images.Remove(electrocution_skeleton_anim)
 
 /datum/hallucination/shock/proc/shock_drop()
-	target.Paralyze(6 SECONDS)
+	target.jitteriness = max(target.jitteriness - 990, 10) //Still jittery, but vastly less
+	target.Paralyze(60)
 
 /datum/hallucination/husks
 	var/image/halbody

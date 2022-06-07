@@ -13,10 +13,7 @@
 			ui.close()
 		return
 
-	if(!user.can_read(src, check_for_light = FALSE))
-		return
-
-	if(HAS_TRAIT(user, TRAIT_CHUNKYFINGERS) && !allow_chunky)
+	if(HAS_TRAIT(user, TRAIT_CHUNKYFINGERS))
 		to_chat(user, span_warning("Your fingers are too big to use this right now!"))
 		return
 
@@ -40,10 +37,6 @@
 		to_chat(user, span_danger("\The [src] beeps three times, it's screen displaying a \"DISK ERROR\" warning."))
 		return // No HDD, No HDD files list or no stored files. Something is very broken.
 
-	if(honkamnt > 0) // EXTRA annoying, huh!
-		honkamnt--
-		playsound(src, 'sound/items/bikehorn.ogg', 30, TRUE)
-
 	ui = SStgui.try_update_ui(user, src, ui)
 	if (!ui)
 		ui = new(user, src, "NtosMain")
@@ -51,47 +44,32 @@
 		if(ui.open())
 			ui.send_asset(get_asset_datum(/datum/asset/simple/headers))
 
-/obj/item/modular_computer/ui_static_data(mob/user)
-	. = ..()
-	var/list/data = list()
-
-	data["show_imprint"] = istype(src, /obj/item/modular_computer/tablet/)
-
-	return data
-
-
 
 /obj/item/modular_computer/ui_data(mob/user)
 	var/list/data = get_header_data()
 	data["device_theme"] = device_theme
+
 	data["login"] = list()
-
-	data["disk"] = null
-
 	var/obj/item/computer_hardware/card_slot/cardholder = all_components[MC_CARD]
 	data["cardholder"] = FALSE
-
 	if(cardholder)
 		data["cardholder"] = TRUE
-
-		var/stored_name = saved_identification
-		var/stored_title = saved_job
-		if(!stored_name)
-			stored_name = "Unknown"
-		if(!stored_title)
-			stored_title = "Unknown"
-		data["login"] = list(
-			IDName = saved_identification,
-			IDJob = saved_job,
-		)
-		data["proposed_login"] = list(
-			IDName = cardholder.current_identification,
-			IDJob = cardholder.current_job,
-		)
+		var/obj/item/card/id/stored_card = cardholder.GetID()
+		if(stored_card)
+			var/stored_name = stored_card.registered_name
+			var/stored_title = stored_card.assignment
+			if(!stored_name)
+				stored_name = "Unknown"
+			if(!stored_title)
+				stored_title = "Unknown"
+			data["login"] = list(
+				IDName = stored_name,
+				IDJob = stored_title,
+			)
 
 	data["removable_media"] = list()
 	if(all_components[MC_SDD])
-		data["removable_media"] += "Eject Disk"
+		data["removable_media"] += "removable storage disk"
 	var/obj/item/computer_hardware/ai_slot/intelliholder = all_components[MC_AI]
 	if(intelliholder?.stored_card)
 		data["removable_media"] += "intelliCard"
@@ -111,7 +89,6 @@
 	data["has_light"] = has_light
 	data["light_on"] = light_on
 	data["comp_light_color"] = comp_light_color
-	data["pai"] = inserted_pai
 	return data
 
 
@@ -131,7 +108,7 @@
 			return TRUE
 		if("PC_minimize")
 			var/mob/user = usr
-			if(!active_program)
+			if(!active_program || !all_components[MC_CPU])
 				return
 
 			idle_threads.Add(active_program)
@@ -157,11 +134,9 @@
 
 		if("PC_runprogram")
 			var/prog = params["name"]
-			var/is_disk = params["is_disk"]
 			var/datum/computer_file/program/P = null
 			var/mob/user = usr
-
-			if(hard_drive && !is_disk)
+			if(hard_drive)
 				P = hard_drive.find_file_by_name(prog)
 
 			if(!P || !istype(P)) // Program not found or it's not executable program.
@@ -182,7 +157,9 @@
 				update_appearance()
 				return
 
-			if(idle_threads.len > max_idle_programs)
+			var/obj/item/computer_hardware/processor_unit/PU = all_components[MC_CPU]
+
+			if(idle_threads.len > PU.max_idle_programs)
 				to_chat(user, span_danger("\The [src] displays a \"Maximal CPU load reached. Unable to run another program.\" error."))
 				return
 
@@ -205,7 +182,7 @@
 				new_color = input(user, "Choose a new color for [src]'s flashlight.", "Light Color",light_color) as color|null
 				if(!new_color)
 					return
-				if(is_color_dark(new_color, 50) ) //Colors too dark are rejected
+				if(color_hex2num(new_color) < 200) //Colors too dark are rejected
 					to_chat(user, span_warning("That color is too dark! Choose a lighter one."))
 					new_color = null
 			return set_flashlight_color(new_color)
@@ -214,7 +191,7 @@
 			var/param = params["name"]
 			var/mob/user = usr
 			switch(param)
-				if("Eject Disk")
+				if("removable storage disk")
 					var/obj/item/computer_hardware/hard_drive/portable/portable_drive = all_components[MC_SDD]
 					if(!portable_drive)
 						return
@@ -231,35 +208,14 @@
 					var/obj/item/computer_hardware/card_slot/cardholder = all_components[MC_CARD]
 					if(!cardholder)
 						return
-					if(cardholder.try_eject(user))
-						playsound(src, 'sound/machines/card_slide.ogg', 50)
+					cardholder.try_eject(user)
 				if("secondary RFID card")
 					var/obj/item/computer_hardware/card_slot/cardholder = all_components[MC_CARD2]
 					if(!cardholder)
 						return
-					if(cardholder.try_eject(user))
-						playsound(src, 'sound/machines/card_slide.ogg', 50)
-		if("PC_Imprint_ID")
-			var/obj/item/computer_hardware/card_slot/cardholder = all_components[MC_CARD]
-			if(!cardholder)
-				return
+					cardholder.try_eject(user)
 
-			saved_identification = cardholder.current_identification
-			saved_job = cardholder.current_job
 
-			UpdateDisplay()
-
-			playsound(src, 'sound/machines/terminal_processing.ogg', 15, TRUE)
-		if("PC_Pai_Interact")
-			switch(params["option"])
-				if("eject")
-					usr.put_in_hands(inserted_pai)
-					to_chat(usr, span_notice("You remove [inserted_pai] from the [name]."))
-					inserted_pai.slotted = FALSE
-					inserted_pai = null
-				if("interact")
-					inserted_pai.attack_self(usr)
-			return UI_UPDATE
 		else
 			return
 

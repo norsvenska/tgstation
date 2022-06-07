@@ -30,6 +30,6 @@
 	maxbodytemp = 500
 	gold_core_spawnable = HOSTILE_SPAWN
 
-/mob/living/simple_animal/hostile/killertomato/Initialize(mapload)
+/mob/living/simple_animal/hostile/killertomato/Initialize()
 	. = ..()
 	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)

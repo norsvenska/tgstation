@@ -3,14 +3,14 @@
 	icon = 'icons/obj/clothing/under/default.dmi'
 	worn_icon = 'icons/mob/clothing/under/default.dmi'
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
+	permeability_coefficient = 0.9
 	slot_flags = ITEM_SLOT_ICLOTHING
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0,ENERGY = 0, BOMB = 0, BIO = 10, FIRE = 0, ACID = 0, WOUND = 5)
+	armor = list(MELEE = 0, BULLET = 0, LASER = 0,ENERGY = 0, BOMB = 0, BIO = 0, RAD = 0, FIRE = 0, ACID = 0, WOUND = 5)
 	equip_sound = 'sound/items/equip/jumpsuit_equip.ogg'
 	drop_sound = 'sound/items/handling/cloth_drop.ogg'
-	pickup_sound = 'sound/items/handling/cloth_pickup.ogg'
+	pickup_sound =  'sound/items/handling/cloth_pickup.ogg'
 	limb_integrity = 30
-	/// The variable containing the flags for how the woman uniform cropping is supposed to interact with the sprite.
-	var/female_sprite_flags = FEMALE_UNIFORM_FULL
+	var/fitted = FEMALE_UNIFORM_FULL // For use in alternate clothing styles for women
 	var/has_sensor = HAS_SENSORS // For the crew computer
 	var/random_sensor = TRUE
 	var/sensor_mode = NO_SENSORS
@@ -19,13 +19,8 @@
 	var/alt_covers_chest = FALSE // for adjusted/rolled-down jumpsuits, FALSE = exposes chest and arms, TRUE = exposes arms only
 	var/obj/item/clothing/accessory/attached_accessory
 	var/mutable_appearance/accessory_overlay
+	var/mutantrace_variation = NO_MUTANTRACE_VARIATION //Are there special sprites for specific situations? Don't use this unless you need to.
 	var/freshly_laundered = FALSE
-
-/obj/item/clothing/under/Initialize(mapload)
-	. = ..()
-	if(random_sensor)
-		//make the sensor mode favor higher levels, except coords.
-		sensor_mode = pick(SENSOR_VITALS, SENSOR_VITALS, SENSOR_VITALS, SENSOR_LIVING, SENSOR_LIVING, SENSOR_COORDS, SENSOR_COORDS, SENSOR_OFF)
 
 /obj/item/clothing/under/worn_overlays(mutable_appearance/standing, isinhands = FALSE)
 	. = ..()
@@ -34,7 +29,7 @@
 
 	if(damaged_clothes)
 		. += mutable_appearance('icons/effects/item_damage.dmi', "damageduniform")
-	if(GET_ATOM_BLOOD_DNA_LENGTH(src))
+	if(HAS_BLOOD_DNA(src))
 		. += mutable_appearance('icons/effects/blood.dmi', "uniformblood")
 	if(accessory_overlay)
 		. += accessory_overlay
@@ -67,38 +62,31 @@
 	else if(damaged_state == CLOTHING_PRISTINE && has_sensor == BROKEN_SENSORS)
 		has_sensor = HAS_SENSORS
 
-/obj/item/clothing/under/emp_act(severity)
+/obj/item/clothing/under/Initialize()
 	. = ..()
-	if(. & EMP_PROTECT_SELF)
-		return
-	if(has_sensor > NO_SENSORS)
-		if(severity <= EMP_HEAVY)
-			has_sensor = BROKEN_SENSORS
-			if(ismob(loc))
-				var/mob/M = loc
-				to_chat(M,span_warning("[src]'s sensors short out!"))
-		else
-			sensor_mode = pick(SENSOR_OFF, SENSOR_OFF, SENSOR_OFF, SENSOR_LIVING, SENSOR_LIVING, SENSOR_VITALS, SENSOR_VITALS, SENSOR_COORDS)
-			if(ismob(loc))
-				var/mob/M = loc
-				to_chat(M,span_warning("The sensors on the [src] change rapidly!"))
-		if(ishuman(loc))
-			var/mob/living/carbon/human/ooman = loc
-			if(ooman.w_uniform == src)
-				ooman.update_suit_sensors()
+	if(random_sensor)
+		//make the sensor mode favor higher levels, except coords.
+		sensor_mode = pick(SENSOR_OFF, SENSOR_LIVING, SENSOR_LIVING, SENSOR_VITALS, SENSOR_VITALS, SENSOR_VITALS, SENSOR_COORDS, SENSOR_COORDS)
 
+/obj/item/clothing/under/emp_act()
+	. = ..()
+	if(has_sensor > NO_SENSORS)
+		sensor_mode = pick(SENSOR_OFF, SENSOR_OFF, SENSOR_OFF, SENSOR_LIVING, SENSOR_LIVING, SENSOR_VITALS, SENSOR_VITALS, SENSOR_COORDS)
+		if(ismob(loc))
+			var/mob/M = loc
+			to_chat(M,span_warning("The sensors on the [src] change rapidly!"))
 
 /obj/item/clothing/under/visual_equipped(mob/user, slot)
 	..()
 	if(adjusted)
 		adjusted = NORMAL_STYLE
-		female_sprite_flags = initial(female_sprite_flags)
+		fitted = initial(fitted)
 		if(!alt_covers_chest)
 			body_parts_covered |= CHEST
 
-	if((supports_variations_flags & CLOTHING_DIGITIGRADE_VARIATION) && ishuman(user))
+	if(mutantrace_variation && ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.dna.species.bodytype & BODYTYPE_DIGITIGRADE)
+		if(DIGITIGRADE in H.dna.species.species_traits)
 			adjusted = DIGITIGRADE_STYLE
 		H.update_inv_w_uniform()
 
@@ -161,7 +149,7 @@
 		to_chat(user, span_notice("You attach [accessory] to [src]."))
 
 	var/accessory_color = attached_accessory.icon_state
-	accessory_overlay = mutable_appearance(attached_accessory.worn_icon, "[accessory_color]")
+	accessory_overlay = mutable_appearance('icons/mob/clothing/accessories.dmi', "[accessory_color]")
 	accessory_overlay.alpha = attached_accessory.alpha
 	accessory_overlay.color = attached_accessory.color
 
@@ -246,9 +234,7 @@
 		return
 
 	var/list/modes = list("Off", "Binary vitals", "Exact vitals", "Tracking beacon")
-	var/switchMode = tgui_input_list(M, "Select a sensor mode", "Suit Sensors", modes, modes[sensor_mode + 1])
-	if(isnull(switchMode))
-		return
+	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[sensor_mode + 1]) in modes
 	if(get_dist(usr, src) > 1)
 		to_chat(usr, span_warning("You have moved too far away!"))
 		return
@@ -307,13 +293,13 @@
 		return
 	adjusted = !adjusted
 	if(adjusted)
-		if(female_sprite_flags != FEMALE_UNIFORM_TOP_ONLY)
-			female_sprite_flags = NO_FEMALE_UNIFORM
+		if(fitted != FEMALE_UNIFORM_TOP)
+			fitted = NO_FEMALE_UNIFORM
 		if(!alt_covers_chest) // for the special snowflake suits that expose the chest when adjusted (and also the arms, realistically)
 			body_parts_covered &= ~CHEST
 			body_parts_covered &= ~ARMS
 	else
-		female_sprite_flags = initial(female_sprite_flags)
+		fitted = initial(fitted)
 		if(!alt_covers_chest)
 			body_parts_covered |= CHEST
 			body_parts_covered |= ARMS
@@ -321,7 +307,7 @@
 				return adjusted
 			for(var/zone in list(BODY_ZONE_CHEST, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM)) // ugly check to make sure we don't reenable protection on a disabled part
 				if(damage_by_parts[zone] > limb_integrity)
-					for(var/part in body_zone2cover_flags(zone))
+					for(var/part in zone2body_parts_covered(zone))
 						body_parts_covered &= part
 	return adjusted
 
@@ -342,6 +328,6 @@
 	accessory_overlay = null
 	update_appearance()
 
-/obj/item/clothing/under/rank/atom_destruction(damage_flag)
+/obj/item/clothing/under/rank/obj_destruction(damage_flag)
 	dump_attachment()
 	return ..()

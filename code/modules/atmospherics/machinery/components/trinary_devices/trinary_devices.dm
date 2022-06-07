@@ -3,16 +3,14 @@
 	dir = SOUTH
 	initialize_directions = SOUTH|NORTH|WEST
 	use_power = IDLE_POWER_USE
-	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION
 	device_type = TRINARY
 	layer = GAS_FILTER_LAYER
 	pipe_flags = PIPING_ONE_PER_TURF
 	vent_movement = NONE
 
-	///Flips the node connections so that the first and third ports are swapped
 	var/flipped = FALSE
 
-/obj/machinery/atmospherics/components/trinary/set_init_directions()
+/obj/machinery/atmospherics/components/trinary/SetInitDirections()
 	switch(dir)
 		if(NORTH)
 			initialize_directions = EAST|NORTH|SOUTH
@@ -27,7 +25,7 @@
 Housekeeping and pipe network stuff
 */
 
-/obj/machinery/atmospherics/components/trinary/get_node_connects()
+/obj/machinery/atmospherics/components/trinary/getNodeConnects()
 
 	//Mixer:
 	//1 and 2 is input

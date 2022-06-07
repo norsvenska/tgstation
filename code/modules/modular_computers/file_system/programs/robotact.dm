@@ -1,11 +1,12 @@
 /datum/computer_file/program/robotact
 	filename = "robotact"
 	filedesc = "RoboTact"
-	category = PROGRAM_CATEGORY_SCI
+	category = PROGRAM_CATEGORY_ROBO
 	extended_desc = "A built-in app for cyborg self-management and diagnostics."
 	ui_header = "robotact.gif" //DEBUG -- new icon before PR
 	program_icon_state = "command"
 	requires_ntnet = FALSE
+	transfer_access = null
 	available_on_ntnet = FALSE
 	unsendable = TRUE
 	undeletable = TRUE
@@ -13,6 +14,12 @@
 	size = 5
 	tgui_id = "NtosRobotact"
 	program_icon = "terminal"
+	///A typed reference to the computer, specifying the borg tablet type
+	var/obj/item/modular_computer/tablet/integrated/tablet
+
+/datum/computer_file/program/robotact/Destroy()
+	tablet = null
+	return ..()
 
 /datum/computer_file/program/robotact/run_program(mob/living/user)
 	if(!istype(computer, /obj/item/modular_computer/tablet/integrated))
@@ -20,7 +27,7 @@
 		return FALSE
 	. = ..()
 	if(.)
-		var/obj/item/modular_computer/tablet/integrated/tablet = computer
+		tablet = computer
 		if(tablet.device_theme == "syndicate")
 			program_icon_state = "command-syndicate"
 		return TRUE
@@ -30,10 +37,6 @@
 	var/list/data = get_header_data()
 	if(!iscyborg(user))
 		return data
-
-	//Implied, since we can't run on non tablets
-	var/obj/item/modular_computer/tablet/integrated/tablet = computer
-
 	var/mob/living/silicon/robot/borgo = tablet.borgo
 
 	data["name"] = borgo.name
@@ -50,14 +53,13 @@
 	data["integrity"] = ((borgo.health + 100) / 2) //Borgo health, as percentage
 	data["lampIntensity"] = borgo.lamp_intensity //Borgo lamp power setting
 	data["sensors"] = "[borgo.sensors_on?"ACTIVE":"DISABLED"]"
-	data["printerPictures"] = borgo.connected_ai? borgo.connected_ai.aicamera.stored.len : borgo.aicamera.stored.len //Number of pictures taken, synced to AI if available
+	data["printerPictures"] =  borgo.connected_ai? borgo.connected_ai.aicamera.stored.len : borgo.aicamera.stored.len //Number of pictures taken, synced to AI if available
 	data["printerToner"] = borgo.toner //amount of toner
 	data["printerTonerMax"] = borgo.tonermax //It's a variable, might as well use it
 	data["thrustersInstalled"] = borgo.ionpulse //If we have a thruster uprade
 	data["thrustersStatus"] = "[borgo.ionpulse_on?"ACTIVE":"DISABLED"]" //Feedback for thruster status
-	data["selfDestructAble"] = (borgo.emagged || istype(borgo, /mob/living/silicon/robot/model/syndicate/))
 
-	//Cover, TRUE for locked
+	//DEBUG -- Cover, TRUE for locked
 	data["cover"] = "[borgo.locked? "LOCKED":"UNLOCKED"]"
 	//Ability to move. FAULT if lockdown wire is cut, DISABLED if borg locked, ENABLED otherwise
 	data["locomotion"] = "[borgo.wires.is_cut(WIRE_LOCKDOWN)?"FAULT":"[borgo.lockcharge?"DISABLED":"ENABLED"]"]"
@@ -77,8 +79,6 @@
 	if(!iscyborg(user))
 		return data
 	var/mob/living/silicon/robot/borgo = user
-	//Implied
-	var/obj/item/modular_computer/tablet/integrated/tablet = computer
 
 	data["Laws"] = borgo.laws.get_law_list(TRUE, TRUE, FALSE)
 	data["borgLog"] = tablet.borglog
@@ -89,8 +89,7 @@
 	. = ..()
 	if(.)
 		return
-	//Implied type, memes
-	var/obj/item/modular_computer/tablet/integrated/tablet = computer
+
 	var/mob/living/silicon/robot/borgo = tablet.borgo
 
 	switch(action)
@@ -136,12 +135,6 @@
 			borgo.lamp_intensity = params["ref"]
 			borgo.toggle_headlamp(FALSE, TRUE)
 
-		if("selfDestruct")
-			if(borgo.stat || borgo.lockcharge) //No detonation while stunned or locked down
-				return
-			if(borgo.emagged || istype(borgo, /mob/living/silicon/robot/model/syndicate/)) //This option shouldn't even be showing otherwise
-				borgo.self_destruct(borgo)
-
 /**
  * Forces a full update of the UI, if currently open.
  *
@@ -149,9 +142,7 @@
  * law changes and borg log additions.
  */
 /datum/computer_file/program/robotact/proc/force_full_update()
-	if(!istype(computer, /obj/item/modular_computer/tablet/integrated))
-		return
-	var/obj/item/modular_computer/tablet/integrated/tablet = computer
-	var/datum/tgui/active_ui = SStgui.get_open_ui(tablet.borgo, src)
-	if(active_ui)
-		active_ui.send_full_update()
+	if(tablet)
+		var/datum/tgui/active_ui = SStgui.get_open_ui(tablet.borgo, src)
+		if(active_ui)
+			active_ui.send_full_update()

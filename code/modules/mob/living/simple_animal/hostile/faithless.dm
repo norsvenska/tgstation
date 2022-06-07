@@ -35,7 +35,7 @@
 
 	footstep_type = FOOTSTEP_MOB_SHOE
 
-/mob/living/simple_animal/hostile/faithless/Initialize(mapload)
+/mob/living/simple_animal/hostile/faithless/Initialize()
 	. = ..()
 	ADD_TRAIT(src, TRAIT_SPACEWALK, INNATE_TRAIT)
 

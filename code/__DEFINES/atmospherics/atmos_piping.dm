@@ -31,33 +31,19 @@
 #define QUATERNARY 4
 
 //TANKS
-/// The volume of the standard handheld gas tanks on the station.
-#define TANK_STANDARD_VOLUME 70
-/// The minimum pressure an gas tanks release valve can be set to.
-#define TANK_MIN_RELEASE_PRESSURE 0
-/// The maximum pressure an gas tanks release valve can be set to.
-#define TANK_MAX_RELEASE_PRESSURE (ONE_ATMOSPHERE*3)
-/// The default initial value gas tanks release valves are set to. (At least the ones containing pure plasma/oxygen.)
-#define TANK_DEFAULT_RELEASE_PRESSURE 16
-/// The default initial value gas plasmamen tanks releases valves are set to.
-#define TANK_PLASMAMAN_RELEASE_PRESSURE 4
-/// The internal temperature in kelvins at which a handheld gas tank begins to take damage.
+/// temperature in kelvins at which a tank will start to melt
 #define TANK_MELT_TEMPERATURE 1000000
-/// The internal pressure in kPa at which a handheld gas tank begins to take damage.
+/// Tank starts leaking
 #define TANK_LEAK_PRESSURE (30.*ONE_ATMOSPHERE)
-/// The internal pressure in kPa at which a handheld gas tank almost immediately ruptures.
+/// Tank spills all contents into atmosphere
 #define TANK_RUPTURE_PRESSURE (35.*ONE_ATMOSPHERE)
-/// The internal pressure in kPa at which an gas tank that breaks will cause an explosion.
+/// Boom 3x3 base explosion
 #define TANK_FRAGMENT_PRESSURE (40.*ONE_ATMOSPHERE)
-/// Range scaling constant for tank explosions. Calibrated so that a TTV assembled using two 70L tanks will hit the maxcap at at least 160atm.
-#define TANK_FRAGMENT_SCALE (84.*ONE_ATMOSPHERE)
-/// Denotes that our tank is overpressurized simply from gas merging.
-#define TANK_MERGE_OVERPRESSURE "tank_overpressure"
-// Indices for the reaction_results returned by explosion_information()
-/// Reactions that have happened in the tank.
-#define TANK_RESULTS_REACTION 1
-/// Additional information of the tank.
-#define TANK_RESULTS_MISC 2
+/// +1 for each SCALE kPa aboe threshold
+#define TANK_FRAGMENT_SCALE (6.*ONE_ATMOSPHERE)
+#define TANK_MAX_RELEASE_PRESSURE (ONE_ATMOSPHERE*3)
+#define TANK_MIN_RELEASE_PRESSURE 0
+#define TANK_DEFAULT_RELEASE_PRESSURE 16
 
 //MULTIPIPES
 //IF YOU EVER CHANGE THESE CHANGE SPRITES TO MATCH.
@@ -67,7 +53,7 @@
 #define PIPING_LAYER_DEFAULT 3
 #define PIPING_LAYER_P_X 5
 #define PIPING_LAYER_P_Y 5
-#define PIPING_LAYER_LCHANGE 0.005
+#define PIPING_LAYER_LCHANGE 0.05
 
 /// intended to connect with all layers, check for all instead of just one.
 #define PIPING_ALL_LAYER (1<<0)

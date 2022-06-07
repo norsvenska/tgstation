@@ -49,7 +49,7 @@
 	admin_popup = new
 
 	var/client/parent_client = parent
-	admin_popup.maptext_width = view_to_pixels(parent_client.view_size.getView())[1]
+	admin_popup.maptext_width = getviewsize(parent_client.view_size.getView())[1] * world.icon_size
 	parent_client.screen += admin_popup
 
 /datum/component/admin_popup/proc/delete_self()
@@ -83,7 +83,7 @@
 	/// The `world.time` when the last color update occurred.
 	var/last_update_time = 0
 
-/atom/movable/screen/admin_popup/Initialize(mapload, ...)
+/atom/movable/screen/admin_popup/New(loc, ...)
 	. = ..()
 
 	START_PROCESSING(SSobj, src)

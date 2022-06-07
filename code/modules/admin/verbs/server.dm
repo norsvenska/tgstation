@@ -6,7 +6,12 @@
 	set desc = "Toggles random events such as meteors, black holes, blob (but not space dust) on/off"
 	var/new_are = !CONFIG_GET(flag/allow_random_events)
 	CONFIG_SET(flag/allow_random_events, new_are)
-	message_admins("[key_name_admin(usr)] has [new_are ? "enabled" : "disabled"] random events.")
+	if(new_are)
+		to_chat(usr, "Random events enabled", confidential = TRUE)
+		message_admins("Admin [key_name_admin(usr)] has enabled random events.")
+	else
+		to_chat(usr, "Random events disabled", confidential = TRUE)
+		message_admins("Admin [key_name_admin(usr)] has disabled random events.")
 	SSblackbox.record_feedback("nested tally", "admin_toggle", 1, list("Toggle Random Events", "[new_are ? "Enabled" : "Disabled"]")) //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/toggle_hub()
@@ -35,7 +40,7 @@
 		options += "Server Restart (Kill and restart DD)";
 
 	if(SSticker.admin_delay_notice)
-		if(alert(usr, "Are you sure? An admin has already delayed the round end for the following reason: [SSticker.admin_delay_notice]", "Confirmation", "Yes", "No") != "Yes")
+		if(tgui_alert(usr, "Are you sure? An admin has already delayed the round end for the following reason: [SSticker.admin_delay_notice]", "Confirmation", list("Yes", "No")) != "Yes")
 			return FALSE
 
 	var/result = input(usr, "Select reboot method", "World Reboot", options[1]) as null|anything in options
@@ -45,7 +50,7 @@
 		switch(result)
 			if("Regular Restart")
 				if(!(isnull(usr.client.address) || (usr.client.address in localhost_addresses)))
-					if(alert(usr, "Are you sure you want to restart the server?","This server is live", "Restart", "Cancel") != "Restart")
+					if(tgui_alert(usr, "Are you sure you want to restart the server?","This server is live",list("Restart","Cancel")) != "Restart")
 						return FALSE
 				SSticker.Reboot(init_by, "admin reboot - by [usr.key] [usr.client.holder.fakekey ? "(stealth)" : ""]", 10)
 			if("Regular Restart (with delay)")
@@ -53,7 +58,7 @@
 				if(!delay)
 					return FALSE
 				if(!(isnull(usr.client.address) || (usr.client.address in localhost_addresses)))
-					if(alert(usr,"Are you sure you want to restart the server?","This server is live", "Restart", "Cancel") != "Restart")
+					if(tgui_alert(usr,"Are you sure you want to restart the server?","This server is live",list("Restart","Cancel")) != "Restart")
 						return FALSE
 				SSticker.Reboot(init_by, "admin reboot - by [usr.key] [usr.client.holder.fakekey ? "(stealth)" : ""]", delay * 10)
 			if("Hard Restart (No Delay, No Feeback Reason)")

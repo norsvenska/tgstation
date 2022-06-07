@@ -44,7 +44,7 @@
 	unique_name = 1
 	gold_core_spawnable = HOSTILE_SPAWN
 	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
-	see_in_dark = NIGHTVISION_FOV_RANGE
+	see_in_dark = 8
 	footstep_type = FOOTSTEP_MOB_CLAW
 	///How much of a reagent the mob injects on attack
 	var/poison_per_bite = 0
@@ -61,16 +61,14 @@
 	///The message that the mother spider left for this spider when the egg was layed.
 	var/directive = ""
 	/// Short description of what this mob is capable of, for radial menu uses
-	var/menu_description = "Versatile spider variant for frontline combat with high health and damage."
+	var/menu_description = "Versatile spider variant for frontline combat with high health and damage. Does not inject toxin."
 
-/mob/living/simple_animal/hostile/giant_spider/Initialize(mapload)
+/mob/living/simple_animal/hostile/giant_spider/Initialize()
 	. = ..()
 	lay_web = new
 	lay_web.Grant(src)
 	if(poison_per_bite)
 		AddElement(/datum/element/venomous, poison_type, poison_per_bite)
-	AddElement(/datum/element/nerfed_pulling, GLOB.typecache_general_bad_things_to_easily_move)
-	AddElement(/datum/element/prevent_attacking_of_types, GLOB.typecache_general_bad_hostile_attack_targets, "this tastes awful!")
 
 /mob/living/simple_animal/hostile/giant_spider/Login()
 	. = ..()
@@ -79,6 +77,8 @@
 	if(directive)
 		to_chat(src, span_spider("Your mother left you a directive! Follow it at all costs."))
 		to_chat(src, span_spider("<b>[directive]</b>"))
+		if(mind)
+			mind.store_memory(span_spider("<b>[directive]</b>"))
 	GLOB.spidermobs[src] = TRUE
 
 /mob/living/simple_animal/hostile/giant_spider/Destroy()
@@ -86,9 +86,7 @@
 	return ..()
 
 /mob/living/simple_animal/hostile/giant_spider/mob_negates_gravity()
-	if(locate(/obj/structure/spider/stickyweb) in loc)
-		return TRUE
-	return ..()
+	return ..() || (locate(/obj/structure/spider/stickyweb) in loc)
 
 /**
  * # Spider Hunter
@@ -107,10 +105,10 @@
 	health = 50
 	melee_damage_lower = 15
 	melee_damage_upper = 20
-	poison_per_bite = 5
+	poison_per_bite = 10
 	move_to_delay = 5
 	speed = -0.1
-	menu_description = "Fast spider variant specializing in catching running prey and toxin injection, but has less health and damage."
+	menu_description = "Fast spider variant specializing in catching running prey and toxin injection, but has less health and damage. Toxin injection of 10u per bite."
 
 /**
  * # Spider Nurse
@@ -135,14 +133,14 @@
 	poison_per_bite = 3
 	web_speed = 0.25
 	web_sealer = TRUE
-	menu_description = "Support spider variant specializing in healing their brethren and placing webbings very swiftly, but has very low amount of health and deals low damage."
+	menu_description = "Support spider variant specializing in healing their brethren and placing webbings very swiftly, but has very low amount of health and deals low damage. Toxin injection of 3u per bite."
 	///The health HUD applied to the mob.
 	var/health_hud = DATA_HUD_MEDICAL_ADVANCED
 
-/mob/living/simple_animal/hostile/giant_spider/nurse/Initialize(mapload)
+/mob/living/simple_animal/hostile/giant_spider/nurse/Initialize()
 	. = ..()
 	var/datum/atom_hud/datahud = GLOB.huds[health_hud]
-	datahud.show_to(src)
+	datahud.add_hud_to(src)
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/AttackingTarget()
 	if(is_busy)
@@ -193,25 +191,17 @@
 	status_flags = NONE
 	mob_size = MOB_SIZE_LARGE
 	gold_core_spawnable = NO_SPAWN
-	menu_description = "Tank spider variant with an enormous amount of health and damage, but is very slow when not on webbing. It also has a charge ability to close distance with a target after a small windup."
-	/// Whether or not the tarantula is currently walking on webbing.
+	charger = TRUE
+	charge_distance = 4
+	menu_description = "Tank spider variant with an enormous amount of health and damage, but is very slow when not on webbing. It also has a charge ability to close distance with a target after a small windup. Does not inject toxin."
+	///Whether or not the tarantula is currently walking on webbing.
 	var/silk_walking = TRUE
-	/// Charging ability
-	var/datum/action/cooldown/mob_cooldown/charge/basic_charge/charge
 
-/mob/living/simple_animal/hostile/giant_spider/tarantula/Initialize(mapload)
-	. = ..()
-	charge = new /datum/action/cooldown/mob_cooldown/charge/basic_charge()
-	charge.Grant(src)
-
-/mob/living/simple_animal/hostile/giant_spider/tarantula/Destroy()
-	QDEL_NULL(charge)
-	return ..()
-
-/mob/living/simple_animal/hostile/giant_spider/tarantula/OpenFire()
-	if(client)
-		return
-	charge.Trigger(target = target)
+/mob/living/simple_animal/hostile/giant_spider/tarantula/ranged_secondary_attack(atom/target, modifiers)
+	if(COOLDOWN_FINISHED(src, charge_cooldown))
+		INVOKE_ASYNC(src, /mob/living/simple_animal/hostile/.proc/enter_charge, target)
+	else
+		to_chat(src, span_notice("Your charge is still on cooldown!"))
 
 /mob/living/simple_animal/hostile/giant_spider/tarantula/Moved(atom/oldloc, dir)
 	. = ..()
@@ -241,12 +231,12 @@
 	health = 40
 	melee_damage_lower = 5
 	melee_damage_upper = 5
-	poison_per_bite = 5
+	poison_per_bite = 6
 	move_to_delay = 4
 	poison_type = /datum/reagent/toxin/venom
 	speed = -0.5
 	gold_core_spawnable = NO_SPAWN
-	menu_description = "Assassin spider variant with an unmatched speed and very deadly poison, but has very low amount of health and damage."
+	menu_description = "Assassin spider variant with an unmatched speed and very deadly poison, but has very low amount of health and damage. Venom injection of 6u per bite."
 
 /**
  * # Spider Broodmother
@@ -272,7 +262,7 @@
 	poison_per_bite = 3
 	gold_core_spawnable = NO_SPAWN
 	web_sealer = TRUE
-	menu_description = "Royal spider variant specializing in reproduction and leadership, but has very low amount of health and deals low damage."
+	menu_description = "Royal spider variant specializing in reproduction and leadership, but has very low amount of health and deals low damage. Toxin injection of 3u per bite."
 	///If the spider is trying to cocoon something, what that something is.
 	var/atom/movable/cocoon_target
 	///How many humans this spider has drained but not layed enriched eggs for.
@@ -292,7 +282,7 @@
 	///The ability for the spider to send a message to all currently living spiders.
 	var/datum/action/innate/spider/comm/letmetalkpls
 
-/mob/living/simple_animal/hostile/giant_spider/midwife/Initialize(mapload)
+/mob/living/simple_animal/hostile/giant_spider/midwife/Initialize()
 	. = ..()
 	wrap = new
 	AddAbility(wrap)
@@ -337,7 +327,7 @@
 				if(ishuman(living_target) && (living_target.stat != DEAD || !consumed_mobs[living_target.tag])) //if they're not dead, you can consume them anyway
 					consumed_mobs[living_target.tag] = TRUE
 					fed++
-					lay_eggs_enriched.UpdateButtons(TRUE)
+					lay_eggs_enriched.UpdateButtonIcon(TRUE)
 					visible_message(span_danger("[src] sticks a proboscis into [living_target] and sucks a viscous substance out."),span_notice("You suck the nutriment out of [living_target], feeding you enough to lay a cluster of eggs."))
 					living_target.death() //you just ate them, they're dead.
 				else
@@ -403,7 +393,7 @@
 
 /obj/effect/proc_holder/wrap/update_icon()
 	action.button_icon_state = "wrap_[active]"
-	action.UpdateButtons()
+	action.UpdateButtonIcon()
 	return ..()
 
 /obj/effect/proc_holder/wrap/Click()
@@ -480,13 +470,13 @@
 			if(spider.is_busy)
 				eggs = locate() in get_turf(spider)
 				if(!eggs || !isturf(spider.loc))
-					var/egg_choice = enriched ? /obj/effect/mob_spawn/ghost_role/spider/enriched : /obj/effect/mob_spawn/ghost_role/spider
-					var/obj/effect/mob_spawn/ghost_role/spider/new_eggs = new egg_choice(get_turf(spider))
+					var/egg_choice = enriched ? /obj/effect/mob_spawn/spider/enriched : /obj/effect/mob_spawn/spider
+					var/obj/effect/mob_spawn/spider/new_eggs = new egg_choice(get_turf(spider))
 					new_eggs.directive = spider.directive
 					new_eggs.faction = spider.faction
 					if(enriched)
 						spider.fed--
-					UpdateButtons(TRUE)
+					UpdateButtonIcon(TRUE)
 		spider.is_busy = FALSE
 		spider.stop_automated_movement = FALSE
 
@@ -512,9 +502,7 @@
 	if(!istype(owner, /mob/living/simple_animal/hostile/giant_spider/midwife))
 		return
 	var/mob/living/simple_animal/hostile/giant_spider/midwife/spider = owner
-	spider.directive = tgui_input_text(spider, "Enter the new directive", "Create directive", "[spider.directive]")
-	if(isnull(spider.directive))
-		return
+	spider.directive = stripped_input(spider, "Enter the new directive", "Create directive", "[spider.directive]")
 	message_admins("[ADMIN_LOOKUPFLW(owner)] set its directive to: '[spider.directive]'.")
 	log_game("[key_name(owner)] set its directive to: '[spider.directive]'.")
 
@@ -530,8 +518,8 @@
 			return FALSE
 		return TRUE
 
-/datum/action/innate/spider/comm/Trigger(trigger_flags)
-	var/input = tgui_input_text(owner, "Input a command for your legions to follow.", "Command")
+/datum/action/innate/spider/comm/Trigger()
+	var/input = stripped_input(owner, "Input a command for your legions to follow.", "Command", "")
 	if(QDELETED(src) || !input || !IsAvailable())
 		return FALSE
 	spider_command(owner, input)
@@ -573,7 +561,7 @@
 	poison_type = /datum/reagent/consumable/frostoil
 	color = rgb(114,228,250)
 	gold_core_spawnable = NO_SPAWN
-	menu_description = "Versatile ice spider variant for frontline combat with high health and damage. Immune to temperature damage."
+	menu_description = "Versatile ice spider variant for frontline combat with high health and damage. Immune to temperature damage. Does not inject frost oil."
 
 /**
  * # Ice Nurse Spider
@@ -589,7 +577,7 @@
 	maxbodytemp = 1500
 	poison_type = /datum/reagent/consumable/frostoil
 	color = rgb(114,228,250)
-	menu_description = "Support ice spider variant specializing in healing their brethren and placing webbings very swiftly, but has very low amount of health and deals low damage. Immune to temperature damage."
+	menu_description = "Support ice spider variant specializing in healing their brethren and placing webbings very swiftly, but has very low amount of health and deals low damage. Immune to temperature damage. Frost oil injection of 3u per bite."
 
 /**
  * # Ice Hunter Spider
@@ -606,7 +594,7 @@
 	poison_type = /datum/reagent/consumable/frostoil
 	color = rgb(114,228,250)
 	gold_core_spawnable = NO_SPAWN
-	menu_description = "Fast ice spider variant specializing in catching running prey and frost oil injection, but has less health and damage. Immune to temperature damage."
+	menu_description = "Fast ice spider variant specializing in catching running prey and frost oil injection, but has less health and damage. Immune to temperature damage. Frost oil injection of 10u per bite."
 
 /**
  * # Scrawny Hunter Spider
@@ -623,7 +611,7 @@
 	melee_damage_lower = 5
 	melee_damage_upper = 10
 	desc = "Furry and black, it makes you shudder to look at it. This one has sparkling purple eyes, and looks abnormally thin and frail."
-	menu_description = "Fast spider variant specializing in catching running prey and toxin injection, but has less damage than a normal hunter spider at the cost of a little more health."
+	menu_description = "Fast spider variant specializing in catching running prey and toxin injection, but has less damage than a normal hunter spider at the cost of a little more health. Toxin injection of 10u per bite."
 
 /**
  * # Scrawny Tarantula
@@ -640,7 +628,7 @@
 	melee_damage_lower = 20
 	melee_damage_upper = 25
 	desc = "Furry and black, it makes you shudder to look at it. This one has abyssal red eyes, and looks abnormally thin and frail."
-	menu_description = "A weaker variant of the tarantula with reduced amount of health and damage, very slow when not on webbing. It also has a charge ability to close distance with a target after a small windup."
+	menu_description = "A weaker variant of the tarantula with reduced amount of health and damage, very slow when not on webbing. It also has a charge ability to close distance with a target after a small windup. Does not inject toxin."
 
 /**
  * # Scrawny Nurse Spider
@@ -655,7 +643,7 @@
 	health = 30
 	maxHealth = 30
 	desc = "Furry and black, it makes you shudder to look at it. This one has brilliant green eyes, and looks abnormally thin and frail."
-	menu_description = "Weaker version of the nurse spider, specializing in healing their brethren and placing webbings very swiftly, but has very low amount of health and deals low damage."
+	menu_description = "Weaker version of the nurse spider, specializing in healing their brethren and placing webbings very swiftly, but has very low amount of health and deals low damage. Toxin injection of 3u per bite."
 
 /**
  * # Flesh Spider
@@ -671,11 +659,12 @@
 	icon_living = "flesh_spider"
 	icon_dead = "flesh_spider_dead"
 	web_speed = 0.7
-	menu_description = "Self-sufficient spider variant capable of healing themselves and producing webbbing fast, but has less health and damage."
+	menu_description = "Self-sufficient spider variant capable of healing themselves and producing webbbing fast, but has less health and damage. Toxin injection of 10u per bite."
 
-/mob/living/simple_animal/hostile/giant_spider/hunter/flesh/Initialize(mapload)
+/mob/living/simple_animal/hostile/giant_spider/hunter/flesh/Moved(atom/oldloc, dir)
 	. = ..()
-	AddElement(/datum/element/blood_walk, /obj/effect/decal/cleanable/blood/bubblegum, blood_spawn_chance = 5)
+	if(prob(5))
+		new /obj/effect/decal/cleanable/blood/bubblegum(loc)
 
 /mob/living/simple_animal/hostile/giant_spider/hunter/flesh/AttackingTarget()
 	if(is_busy)
@@ -704,8 +693,8 @@
 /mob/living/simple_animal/hostile/giant_spider/viper/wizard
 	maxHealth = 80
 	health = 80
-	menu_description = "Stronger assassin spider variant with an unmatched speed, high amount of health and very deadly poison, but deals very low amount of damage. It also has ability to ventcrawl."
+	menu_description = "Stronger assassin spider variant with an unmatched speed, high amount of health and very deadly poison, but deals very low amount of damage. It also has ability to ventcrawl. Venom injection of 6u per bite."
 
-/mob/living/simple_animal/hostile/giant_spider/viper/wizard/Initialize(mapload)
+/mob/living/simple_animal/hostile/giant_spider/viper/wizard/Initialize()
 	. = ..()
 	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)

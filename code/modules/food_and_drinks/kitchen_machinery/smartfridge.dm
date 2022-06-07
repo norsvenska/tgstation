@@ -8,6 +8,9 @@
 	icon_state = "smartfridge"
 	layer = BELOW_OBJ_LAYER
 	density = TRUE
+	use_power = IDLE_POWER_USE
+	idle_power_usage = 5
+	active_power_usage = 100
 	circuit = /obj/item/circuitboard/machine/smartfridge
 	/// What path boards used to construct it should build into when dropped. Needed so we don't accidentally have them build variants with items preloaded in them.
 	var/base_build_path = /obj/machinery/smartfridge
@@ -20,7 +23,7 @@
 	/// If the machine shows an approximate number of its contents on its sprite
 	var/visible_contents = TRUE
 
-/obj/machinery/smartfridge/Initialize(mapload)
+/obj/machinery/smartfridge/Initialize()
 	. = ..()
 	create_reagents(100, NO_REACT)
 
@@ -33,7 +36,6 @@
 				load(new typekey(src))
 
 /obj/machinery/smartfridge/RefreshParts()
-	. = ..()
 	for(var/obj/item/stock_parts/matter_bin/B in component_parts)
 		max_n_of_items = 1500 * B.rating
 
@@ -66,13 +68,7 @@
 /obj/machinery/smartfridge/update_overlays()
 	. = ..()
 	if(!machine_stat)
-		. += emissive_appearance(icon, "[initial(icon_state)]-light-mask", alpha = src.alpha)
-
-/obj/machinery/smartfridge/wrench_act(mob/living/user, obj/item/tool)
-	. = ..()
-	if(default_unfasten_wrench(user, tool))
-		power_change()
-	return TOOL_ACT_TOOLTYPE_SUCCESS
+		. += emissive_appearance(icon, "smartfridge-light-mask", alpha = src.alpha)
 
 /*******************
 *   Item Adding
@@ -87,6 +83,10 @@
 		return
 
 	if(default_pry_open(O))
+		return
+
+	if(default_unfasten_wrench(user, O))
+		power_change()
 		return
 
 	if(default_deconstruction_crowbar(O))
@@ -166,7 +166,6 @@
 	if(!M.put_in_hands(O))
 		O.forceMove(drop_location())
 		adjust_item_drop_location(O)
-	use_power(active_power_usage)
 
 /obj/machinery/smartfridge/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
@@ -191,7 +190,7 @@
 				listofitems[md5name]["amount"]++ // The good news is, #30519 made smartfridge UIs non-auto-updating
 			else
 				listofitems[md5name] = list("name" = O.name, "type" = O.type, "amount" = 1)
-	sort_list(listofitems)
+	sortList(listofitems)
 
 	.["contents"] = listofitems
 	.["name"] = name
@@ -215,11 +214,11 @@
 			if (params["amount"])
 				desired = text2num(params["amount"])
 			else
-				desired = tgui_input_number(usr, "How many items would you like to take out?", "Release", max_value = 50)
+				desired = input("How many items?", "How many items would you like to take out?", 1) as null|num
 				if(!desired)
 					return FALSE
 
-			if(QDELETED(src) || QDELETED(usr) || !usr.canUseTopic(src, BE_CLOSE, FALSE, NO_TK)) // Sanity checkin' in case stupid stuff happens while we wait for input()
+			if(QDELETED(src) || QDELETED(usr) || !usr.Adjacent(src)) // Sanity checkin' in case stupid stuff happens while we wait for input()
 				return FALSE
 
 			for(var/obj/item/dispensed_item in src)
@@ -240,23 +239,7 @@
 
 	return FALSE
 
-/obj/machinery/smartfridge/welder_act(mob/living/user, obj/item/I)
-	. = ..()
-	if(machine_stat & BROKEN)
-		if(!I.tool_start_check(user, amount=0))
-			return
-		user.visible_message("<span class='notice'>[user] is repairing [src].</span>", \
-						"<span class='notice'>You begin repairing [src]...</span>", \
-						"<span class='hear'>You hear welding.</span>")
-		if(I.use_tool(src, user, 40, volume=50))
-			if(!(machine_stat & BROKEN))
-				return
-			to_chat(user, "<span class='notice'>You repair [src].</span>")
-			atom_integrity = max_integrity
-			set_machine_stat(machine_stat & ~BROKEN)
-			update_icon()
-	else
-		to_chat(user, "<span class='notice'>[src] does not need repairs.</span>")
+
 // ----------------------------
 //  Drying Rack 'smartfridge'
 // ----------------------------
@@ -265,11 +248,14 @@
 	desc = "A wooden contraption, used to dry plant products, food and hide."
 	icon = 'icons/obj/hydroponics/equipment.dmi'
 	icon_state = "drying_rack"
+	use_power = IDLE_POWER_USE
+	idle_power_usage = 5
+	active_power_usage = 200
 	visible_contents = FALSE
 	base_build_path = /obj/machinery/smartfridge/drying_rack //should really be seeing this without admin fuckery.
 	var/drying = FALSE
 
-/obj/machinery/smartfridge/drying_rack/Initialize(mapload)
+/obj/machinery/smartfridge/drying_rack/Initialize()
 	. = ..()
 
 	// Cache the old_parts first, we'll delete it after we've changed component_parts to a new list.
@@ -286,6 +272,7 @@
 	new /obj/item/stack/sheet/mineral/wood(drop_location(), 10)
 	..()
 
+/obj/machinery/smartfridge/drying_rack/RefreshParts()
 /obj/machinery/smartfridge/drying_rack/default_deconstruction_screwdriver()
 /obj/machinery/smartfridge/drying_rack/exchange_parts()
 /obj/machinery/smartfridge/drying_rack/spawn_frame()
@@ -321,7 +308,7 @@
 	if(!powered())
 		toggle_drying(TRUE)
 
-/obj/machinery/smartfridge/drying_rack/load(obj/item/dried_object) //For updating the filled overlay
+/obj/machinery/smartfridge/drying_rack/load(/obj/item/dried_object) //For updating the filled overlay
 	. = ..()
 	update_appearance()
 
@@ -343,7 +330,6 @@
 
 		SStgui.update_uis(src)
 		update_appearance()
-		use_power(active_power_usage)
 
 /obj/machinery/smartfridge/drying_rack/accept_check(obj/item/O)
 	if(HAS_TRAIT(O, TRAIT_DRYABLE)) //set on dryable element
@@ -353,10 +339,10 @@
 /obj/machinery/smartfridge/drying_rack/proc/toggle_drying(forceoff)
 	if(drying || forceoff)
 		drying = FALSE
-		update_use_power(IDLE_POWER_USE)
+		use_power = IDLE_POWER_USE
 	else
 		drying = TRUE
-		update_use_power(ACTIVE_POWER_USE)
+		use_power = ACTIVE_POWER_USE
 	update_appearance()
 
 /obj/machinery/smartfridge/drying_rack/proc/rack_dry(obj/item/target)
@@ -453,7 +439,6 @@
 		organ.organ_flags |= ORGAN_FROZEN
 
 /obj/machinery/smartfridge/organ/RefreshParts()
-	. = ..()
 	for(var/obj/item/stock_parts/matter_bin/B in component_parts)
 		max_n_of_items = 20 * B.rating
 		repair_rate = max(0, STANDARD_ORGAN_HEALING * (B.rating - 1) * 0.5)

@@ -19,7 +19,7 @@
 /datum/movespeed_modifier/reagent/methamphetamine
 	multiplicative_slowdown = -0.65
 
-/datum/movespeed_modifier/reagent/nitrium
+/datum/movespeed_modifier/reagent/nitryl
 	multiplicative_slowdown = -0.65
 
 /datum/movespeed_modifier/reagent/cannabis

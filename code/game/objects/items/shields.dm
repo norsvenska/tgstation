@@ -2,7 +2,7 @@
 	name = "shield"
 	icon = 'icons/obj/shields.dmi'
 	block_chance = 50
-	armor = list(MELEE = 50, BULLET = 50, LASER = 50, ENERGY = 0, BOMB = 30, BIO = 0, FIRE = 80, ACID = 70)
+	armor = list(MELEE = 50, BULLET = 50, LASER = 50, ENERGY = 0, BOMB = 30, BIO = 0, RAD = 0, FIRE = 80, ACID = 70)
 	var/transparent = FALSE // makes beam projectiles pass through the shield
 
 /obj/item/shield/proc/on_shield_block(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", damage = 0, attack_type = MELEE_ATTACK)
@@ -26,6 +26,7 @@
 	var/cooldown = 0 //shield bash cooldown. based on world.time
 	transparent = TRUE
 	max_integrity = 75
+	material_flags = MATERIAL_NO_EFFECTS
 
 /obj/item/shield/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK)
 	if(transparent && (hitby.pass_flags & PASSGLASS))
@@ -45,19 +46,19 @@
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, TRUE)
 			cooldown = world.time
 	else if(istype(W, /obj/item/stack/sheet/mineral/titanium))
-		if (atom_integrity >= max_integrity)
+		if (obj_integrity >= max_integrity)
 			to_chat(user, span_warning("[src] is already in perfect condition."))
 		else
 			var/obj/item/stack/sheet/mineral/titanium/T = W
 			T.use(1)
-			atom_integrity = max_integrity
+			obj_integrity = max_integrity
 			to_chat(user, span_notice("You repair [src] with [T]."))
 	else
 		return ..()
 
 /obj/item/shield/riot/examine(mob/user)
 	. = ..()
-	var/healthpercent = round((atom_integrity/max_integrity) * 100, 1)
+	var/healthpercent = round((obj_integrity/max_integrity) * 100, 1)
 	switch(healthpercent)
 		if(50 to 99)
 			. += span_info("It looks slightly damaged.")
@@ -71,7 +72,7 @@
 	new /obj/item/shard((get_turf(src)))
 
 /obj/item/shield/riot/on_shield_block(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", damage = 0, attack_type = MELEE_ATTACK)
-	if (atom_integrity <= damage)
+	if (obj_integrity <= damage)
 		var/turf/T = get_turf(owner)
 		T.visible_message(span_warning("[hitby] destroys [src]!"))
 		shatter(owner)
@@ -94,7 +95,7 @@
 /obj/item/shield/riot/roman/fake
 	desc = "Bears an inscription on the inside: <i>\"Romanes venio domus\"</i>. It appears to be a bit flimsy."
 	block_chance = 0
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 0, ACID = 0)
+	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, RAD = 0, FIRE = 0, ACID = 0)
 	max_integrity = 30
 
 /obj/item/shield/riot/roman/shatter(mob/living/carbon/human/owner)
@@ -126,7 +127,7 @@
 	inhand_icon_state = "flashshield"
 	var/obj/item/assembly/flash/handheld/embedded_flash
 
-/obj/item/shield/riot/flash/Initialize(mapload)
+/obj/item/shield/riot/flash/Initialize()
 	. = ..()
 	embedded_flash = new(src)
 
@@ -135,7 +136,7 @@
 	AddElement(/datum/element/update_icon_updates_onmob)
 
 /obj/item/shield/riot/flash/attack(mob/living/M, mob/user)
-	. = embedded_flash.attack(M, user)
+	. =  embedded_flash.attack(M, user)
 	update_appearance()
 
 /obj/item/shield/riot/flash/attack_self(mob/living/carbon/user)
@@ -212,7 +213,7 @@
 	/// Whether clumsy people can transform this without side effects.
 	var/can_clumsy_use = FALSE
 
-/obj/item/shield/energy/Initialize(mapload)
+/obj/item/shield/energy/Initialize()
 	. = ..()
 	AddComponent(/datum/component/transforming, \
 		force_on = active_force, \
@@ -236,7 +237,7 @@
 
 	enabled = active
 
-	balloon_alert(user, "[active ? "activated":"deactivated"]")
+	balloon_alert(user, "[name] [active ? "activated":"deactivated"]")
 	playsound(user ? user : src, active ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 35, TRUE)
 	return COMPONENT_NO_DEFAULT_MESSAGE
 
@@ -257,14 +258,14 @@
 	/// Whether the shield is extended and protecting the user..
 	var/extended = FALSE
 
-/obj/item/shield/riot/tele/Initialize(mapload)
+/obj/item/shield/riot/tele/Initialize()
 	. = ..()
 	AddComponent(/datum/component/transforming, \
 		force_on = 8, \
 		throwforce_on = 5, \
 		throw_speed_on = 2, \
 		hitsound_on = hitsound, \
-		w_class_on = WEIGHT_CLASS_BULKY, \
+		w_class_on = WEIGHT_CLASS_NORMAL, \
 		attack_verb_continuous_on = list("smacks", "strikes", "cracks", "beats"), \
 		attack_verb_simple_on = list("smack", "strike", "crack", "beat"))
 	RegisterSignal(src, COMSIG_TRANSFORMING_ON_TRANSFORM, .proc/on_transform)
@@ -285,5 +286,5 @@
 	extended = active
 	slot_flags = active ? ITEM_SLOT_BACK : null
 	playsound(user ? user : src, 'sound/weapons/batonextend.ogg', 50, TRUE)
-	balloon_alert(user, "[active ? "extended" : "collapsed"]")
+	balloon_alert(user, "[active ? "extended" : "collapsed"] [src]")
 	return COMPONENT_NO_DEFAULT_MESSAGE

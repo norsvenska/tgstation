@@ -43,7 +43,6 @@
 	var/notice
 
 /obj/machinery/computer/sat_control/ui_interact(mob/user, datum/tgui/ui)
-	. = ..()
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "SatelliteControl", name)
@@ -93,13 +92,13 @@
 	base_icon_state = "sat"
 	anchored = FALSE
 	density = TRUE
-	use_power = NO_POWER_USE
+	use_power = FALSE
 	var/mode = "NTPROBEV0.8"
 	var/active = FALSE
 	var/static/gid = 0
 	var/id = 0
 
-/obj/machinery/satellite/Initialize(mapload)
+/obj/machinery/satellite/Initialize()
 	. = ..()
 	id = gid++
 
@@ -147,7 +146,7 @@
 	var/kill_range = 14
 
 /obj/machinery/satellite/meteor_shield/proc/space_los(meteor)
-	for(var/turf/T in get_line(src,meteor))
+	for(var/turf/T in getline(src,meteor))
 		if(!isspaceturf(T))
 			return FALSE
 	return TRUE

@@ -17,7 +17,21 @@
 	var/last_flash = 0 //Don't want it getting spammed like regular flashes
 	var/strength = 100 //How knocked down targets are when flashed.
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/flasher, 26)
+/obj/machinery/flasher/directional/north
+	dir = SOUTH
+	pixel_y = 26
+
+/obj/machinery/flasher/directional/south
+	dir = NORTH
+	pixel_y = -26
+
+/obj/machinery/flasher/directional/east
+	dir = WEST
+	pixel_x = 26
+
+/obj/machinery/flasher/directional/west
+	dir = EAST
+	pixel_x = -26
 
 /obj/machinery/flasher/portable //Portable version of the flasher. Only flashes when anchored
 	name = "portable flasher"
@@ -30,12 +44,14 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/flasher, 26)
 	light_system = MOVABLE_LIGHT //Used as a flash here.
 	light_range = FLASH_LIGHT_RANGE
 	light_on = FALSE
-	///Proximity monitor associated with this atom, needed for proximity checks.
-	var/datum/proximity_monitor/proximity_monitor
 
 /obj/machinery/flasher/Initialize(mapload, ndir = 0, built = 0)
 	. = ..() // ..() is EXTREMELY IMPORTANT, never forget to add it
-	if(!built)
+	if(built)
+		setDir(ndir)
+		pixel_x = (dir & 3)? 0 : (dir == 4 ? -28 : 28)
+		pixel_y = (dir & 3)? (dir ==1 ? -28 : 28) : 0
+	else
 		bulb = new(src)
 
 
@@ -140,7 +156,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/flasher, 26)
 			bulb.burn_out()
 			power_change()
 
-/obj/machinery/flasher/atom_break(damage_flag)
+/obj/machinery/flasher/obj_break(damage_flag)
 	. = ..()
 	if(. && bulb)
 		bulb.burn_out()
@@ -160,7 +176,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/flasher, 26)
 			new /obj/item/stack/sheet/iron (loc, 2)
 	qdel(src)
 
-/obj/machinery/flasher/portable/Initialize(mapload)
+/obj/machinery/flasher/portable/Initialize()
 	. = ..()
 	proximity_monitor = new(src, 0)
 
@@ -182,13 +198,13 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/flasher, 26)
 			add_overlay("[base_icon_state]-s")
 			set_anchored(TRUE)
 			power_change()
-			proximity_monitor.set_range(range)
+			proximity_monitor.SetRange(range)
 		else
 			to_chat(user, span_notice("[src] can now be moved."))
 			cut_overlays()
 			set_anchored(FALSE)
 			power_change()
-			proximity_monitor.set_range(0)
+			proximity_monitor.SetRange(0)
 
 	else
 		return ..()
@@ -200,7 +216,6 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/flasher, 26)
 	icon_state = "mflash_frame"
 	result_path = /obj/machinery/flasher
 	var/id = null
-	pixel_shift = 28
 
 /obj/item/wallframe/flasher/examine(mob/user)
 	. = ..()

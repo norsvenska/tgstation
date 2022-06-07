@@ -1,8 +1,6 @@
 /datum/job/quartermaster
-	title = JOB_QUARTERMASTER
-	description = "Coordinate cargo technicians and shaft miners, assist with \
-		economical purchasing."
-	department_head = list(JOB_HEAD_OF_PERSONNEL)
+	title = "Quartermaster"
+	department_head = list("Head of Personnel")
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
@@ -14,7 +12,7 @@
 	outfit = /datum/outfit/job/quartermaster
 	plasmaman_outfit = /datum/outfit/plasmaman/cargo
 
-	paycheck = PAYCHECK_CREW
+	paycheck = PAYCHECK_MEDIUM
 	paycheck_department = ACCOUNT_CAR
 
 	liver_traits = list(TRAIT_PRETENDER_ROYAL_METABOLISM)
@@ -28,20 +26,22 @@
 	mail_goodies = list(
 		/obj/item/circuitboard/machine/emitter = 3
 	)
-	rpg_title = "Steward"
-	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_BOLD_SELECT_TEXT | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
+
+	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_BOLD_SELECT_TEXT | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS
 
 
 /datum/outfit/job/quartermaster
 	name = "Quartermaster"
 	jobtype = /datum/job/quartermaster
 
-	id_trim = /datum/id_trim/job/quartermaster
-	uniform = /obj/item/clothing/under/rank/cargo/qm
-	belt = /obj/item/modular_computer/tablet/pda/quartermaster
+	belt = /obj/item/pda/quartermaster
 	ears = /obj/item/radio/headset/headset_cargo
-	glasses = /obj/item/clothing/glasses/sunglasses
+	uniform = /obj/item/clothing/under/rank/cargo/qm
 	shoes = /obj/item/clothing/shoes/sneakers/brown
+	glasses = /obj/item/clothing/glasses/sunglasses
 	l_hand = /obj/item/clipboard
+	backpack_contents = list(/obj/item/modular_computer/tablet/preset/cargo/quartermaster = 1)
 
 	chameleon_extras = /obj/item/stamp/qm
+
+	id_trim = /datum/id_trim/job/quartermaster

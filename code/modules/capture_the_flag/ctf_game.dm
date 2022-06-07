@@ -6,6 +6,7 @@
 #define FLAG_RETURN_TIME 200 // 20 seconds
 #define INSTAGIB_RESPAWN 50 //5 seconds
 #define DEFAULT_RESPAWN 150 //15 seconds
+#define CTF_REQUIRED_PLAYERS 4
 
 /obj/item/ctf
 	name = "banner"
@@ -29,13 +30,13 @@
 	var/obj/effect/ctf/flag_reset/reset
 	var/reset_path = /obj/effect/ctf/flag_reset
 	/// Which area we announce updates on the flag to. Should just generally be the area of the arena.
-	var/game_area = /area/centcom/ctf
+	var/game_area = /area/ctf
 
 /obj/item/ctf/Destroy()
 	QDEL_NULL(reset)
 	return ..()
 
-/obj/item/ctf/Initialize(mapload)
+/obj/item/ctf/Initialize()
 	. = ..()
 	if(!reset)
 		reset = new reset_path(get_turf(src))
@@ -228,14 +229,14 @@
 
 	var/static/arena_reset = FALSE
 	var/static/list/people_who_want_to_play = list()
-	var/game_area = /area/centcom/ctf
+	var/game_area = /area/ctf
 
 	/// This variable is needed because of ctf shitcode + we need to make sure we're deleting the current ctf landmark that spawned us in and not a new one.
 	var/obj/effect/landmark/ctf/ctf_landmark
 
-/obj/machinery/capture_the_flag/Initialize(mapload)
+/obj/machinery/capture_the_flag/Initialize()
 	. = ..()
-	SSpoints_of_interest.make_point_of_interest(src)
+	AddElement(/datum/element/point_of_interest)
 	ctf_landmark = GLOB.ctf_spawner
 
 /obj/machinery/capture_the_flag/Destroy()
@@ -380,7 +381,7 @@
 			option.info = "<span class='boldnotice'>[initial(class.class_description)]</span>"
 			display_classes[key] = option
 
-		sort_list(display_classes)
+		sortList(display_classes)
 		var/choice = show_radial_menu(new_team_member.mob, src, display_classes, radius = 38)
 		if(!choice || !(GLOB.ghost_role_flags & GHOSTROLE_MINIGAME) || (new_team_member.ckey in recently_dead_ckeys) || !isobserver(new_team_member.mob) || src.ctf_enabled == FALSE || !(new_team_member.ckey in src.team_members))
 			return //picked nothing, admin disabled it, cheating to respawn faster, cheating to respawn... while in game?,
@@ -389,8 +390,7 @@
 
 	var/mob/living/carbon/human/M = new /mob/living/carbon/human(get_turf(src))
 	new_team_member.prefs.safe_transfer_prefs_to(M, is_antag = TRUE)
-	if(M.dna.species.outfit_important_for_life)
-		M.set_species(/datum/species/human)
+	M.set_species(/datum/species/synth)
 	M.key = new_team_member.key
 	M.faction += team
 	M.equipOutfit(chosen_class)
@@ -589,9 +589,8 @@
 	resistance_flags = INDESTRUCTIBLE
 	var/obj/machinery/capture_the_flag/controlling
 	var/team = "none"
-	///This is how many points are gained a second while controlling this point
-	var/point_rate = 1
-	var/game_area = /area/centcom/ctf
+	var/point_rate = 0.5
+	var/game_area = /area/ctf
 
 /obj/machinery/control_point/process(delta_time)
 	if(controlling)
@@ -639,3 +638,4 @@
 #undef FLAG_RETURN_TIME
 #undef INSTAGIB_RESPAWN
 #undef DEFAULT_RESPAWN
+#undef CTF_REQUIRED_PLAYERS

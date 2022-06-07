@@ -45,10 +45,6 @@
 	name = "white floor"
 	icon_state = "white"
 
-/turf/open/floor/holofloor/pure_white
-	name = "white floor"
-	icon_state = "pure_white"
-
 /turf/open/floor/holofloor/plating/burnmix
 	name = "burn-mix floor"
 	initial_gas_mix = BURNMIX_ATMOS
@@ -60,7 +56,7 @@
 	bullet_bounce_sound = null
 	tiled_dirt = FALSE
 
-/turf/open/floor/holofloor/grass/Initialize(mapload)
+/turf/open/floor/holofloor/grass/Initialize()
 	. = ..()
 	icon_state = "grass[rand(0,3)]"
 
@@ -93,7 +89,7 @@
 	icon_state = "asteroid"
 	tiled_dirt = FALSE
 
-/turf/open/floor/holofloor/asteroid/Initialize(mapload)
+/turf/open/floor/holofloor/asteroid/Initialize()
 	icon_state = "asteroid[rand(0, 12)]"
 	. = ..()
 
@@ -103,7 +99,7 @@
 	icon_state = "basalt0"
 	tiled_dirt = FALSE
 
-/turf/open/floor/holofloor/basalt/Initialize(mapload)
+/turf/open/floor/holofloor/basalt/Initialize()
 	. = ..()
 	if(prob(15))
 		icon_state = "basalt[rand(0, 12)]"
@@ -114,7 +110,7 @@
 	icon = 'icons/turf/space.dmi'
 	icon_state = "0"
 
-/turf/open/floor/holofloor/space/Initialize(mapload)
+/turf/open/floor/holofloor/space/Initialize()
 	icon_state = SPACE_ICON_STATE // so realistic
 	. = ..()
 
@@ -125,11 +121,11 @@
 	bullet_bounce_sound = null
 	tiled_dirt = FALSE
 
-/turf/open/floor/holofloor/hyperspace/Initialize(mapload)
+/turf/open/floor/holofloor/hyperspace/Initialize()
 	icon_state = "speedspace_ns_[(x + 5*y + (y%2+1)*7)%15+1]"
 	. = ..()
 
-/turf/open/floor/holofloor/hyperspace/ns/Initialize(mapload)
+/turf/open/floor/holofloor/hyperspace/ns/Initialize()
 	. = ..()
 	icon_state = "speedspace_ns_[(x + 5*y + (y%2+1)*7)%15+1]"
 
@@ -146,13 +142,13 @@
 	bullet_bounce_sound = null
 	tiled_dirt = FALSE
 
-/turf/open/floor/holofloor/carpet/Initialize(mapload)
+/turf/open/floor/holofloor/carpet/Initialize()
 	. = ..()
 	addtimer(CALLBACK(src, /atom/.proc/update_appearance), 1)
 
 /turf/open/floor/holofloor/carpet/update_icon(updates=ALL)
 	. = ..()
-	if((updates & UPDATE_SMOOTHING) && overfloor_placed && smoothing_flags & (SMOOTH_CORNERS|SMOOTH_BITMASK))
+	if((updates & UPDATE_SMOOTHING) && intact && smoothing_flags & (SMOOTH_CORNERS|SMOOTH_BITMASK))
 		QUEUE_SMOOTH(src)
 
 /turf/open/floor/holofloor/wood

@@ -10,13 +10,12 @@
 	icon = null
 	icon_state = null
 
-	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.05
+	use_power = IDLE_POWER_USE
+	idle_power_usage = 5
 	///A flag that describes this device type
 	var/hardware_flag = 0
 	///Power usage during last tick
 	var/last_power_usage = 0
-	/// Amount of programs that can be ran at once
-	var/max_idle_programs = 4
 
 
 	///Icon state when the computer is turned off.
@@ -41,7 +40,7 @@
 	///CPU that handles most logic while this type only handles power and other specific things.
 	var/obj/item/modular_computer/processor/cpu = null
 
-/obj/machinery/modular_computer/Initialize(mapload)
+/obj/machinery/modular_computer/Initialize()
 	. = ..()
 	cpu = new(src)
 	cpu.physical = src
@@ -93,9 +92,6 @@
 	return update_icon(updates)
 
 /obj/machinery/modular_computer/AltClick(mob/user)
-	. = ..()
-	if(!can_interact(user))
-		return
 	if(cpu)
 		cpu.AltClick(user)
 
@@ -126,7 +122,7 @@
 
 // Modular computers can have battery in them, we handle power in previous proc, so prevent this from messing it up for us.
 /obj/machinery/modular_computer/power_change()
-	if(cpu?.use_power()) // If it still has a power source, PC wouldn't go offline.
+	if(cpu?.use_power()) // If MC_CPU still has a power source, PC wouldn't go offline.
 		set_machine_stat(machine_stat & ~NOPOWER)
 		update_appearance()
 		return

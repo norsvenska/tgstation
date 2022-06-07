@@ -20,7 +20,7 @@
 /datum/surgery/advanced/brainwashing/can_start(mob/user, mob/living/carbon/target)
 	if(!..())
 		return FALSE
-	var/obj/item/organ/internal/brain/target_brain = target.getorganslot(ORGAN_SLOT_BRAIN)
+	var/obj/item/organ/brain/target_brain = target.getorganslot(ORGAN_SLOT_BRAIN)
 	if(!target_brain)
 		return FALSE
 	return TRUE
@@ -33,19 +33,15 @@
 		/obj/item/stack/package_wrap = 35,
 		/obj/item/stack/cable_coil = 15)
 	time = 200
-	preop_sound = 'sound/surgery/hemostat1.ogg'
-	success_sound = 'sound/surgery/hemostat1.ogg'
-	failure_sound = 'sound/surgery/organ2.ogg'
 	var/objective
 
 /datum/surgery_step/brainwash/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	objective = tgui_input_text(user, "Choose the objective to imprint on your victim's brain", "Brainwashing")
+	objective = stripped_input(user, "Choose the objective to imprint on your victim's brain.", "Brainwashing", null, MAX_MESSAGE_LEN)
 	if(!objective)
 		return -1
 	display_results(user, target, span_notice("You begin to brainwash [target]..."),
 		span_notice("[user] begins to fix [target]'s brain."),
 		span_notice("[user] begins to perform surgery on [target]'s brain."))
-	display_pain(target, "Your head pounds with unimaginable pain!") // Same message as other brain surgeries
 
 /datum/surgery_step/brainwash/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	if(!target.mind)
@@ -60,8 +56,8 @@
 	to_chat(target, span_userdanger("A new compulsion fills your mind... you feel forced to obey it!"))
 	brainwash(target, objective)
 	message_admins("[ADMIN_LOOKUPFLW(user)] surgically brainwashed [ADMIN_LOOKUPFLW(target)] with the objective '[objective]'.")
-	user.log_message("has brainwashed [key_name(target)] with the objective '[objective]' using brainwashing surgery.", LOG_ATTACK)
-	target.log_message("has been brainwashed with the objective '[objective]' by [key_name(user)] using brainwashing surgery.", LOG_VICTIM, log_globally=FALSE)
+	target.log_message("has been brainwashed with the objective '[objective]' by [key_name(user)] using brainwashing surgery.", LOG_ATTACK)
+	user.log_message("has brainwashed [key_name(target)] with the objective '[objective]' using brainwashing surgery.", LOG_ATTACK, log_globally = FALSE)
 	log_game("[key_name(user)] surgically brainwashed [key_name(target)] with the objective '[objective]'.")
 	return ..()
 
@@ -70,7 +66,6 @@
 		display_results(user, target, span_warning("You screw up, bruising the brain tissue!"),
 			span_warning("[user] screws up, causing brain damage!"),
 			span_notice("[user] completes the surgery on [target]'s brain."))
-		display_pain(target, "Your head throbs with horrible pain!")
 		target.adjustOrganLoss(ORGAN_SLOT_BRAIN, 40)
 	else
 		user.visible_message(span_warning("[user] suddenly notices that the brain [user.p_they()] [user.p_were()] working on is not there anymore."), span_warning("You suddenly notice that the brain you were working on is not there anymore."))

@@ -17,7 +17,7 @@
 		if(!affecting)
 			to_chat(user, span_warning("The limb is missing!"))
 			return
-		if(!IS_ORGANIC_LIMB(affecting))
+		if(affecting.status != BODYPART_ORGANIC)
 			to_chat(user, span_notice("Medicine won't work on a robotic limb!"))
 			return
 	..()

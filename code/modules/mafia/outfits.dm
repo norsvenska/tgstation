@@ -28,7 +28,6 @@
 	name = "Mafia Psychologist"
 
 	uniform = /obj/item/clothing/under/suit/black
-	neck = /obj/item/clothing/neck/tie/black/tied
 	shoes = /obj/item/clothing/shoes/laceup
 
 /datum/outfit/mafia/chaplain
@@ -39,9 +38,9 @@
 /datum/outfit/mafia/md
 	name = "Mafia Medical Doctor"
 
-	uniform = /obj/item/clothing/under/rank/medical/scrubs/blue
+	uniform = /obj/item/clothing/under/rank/medical/doctor
 	shoes = /obj/item/clothing/shoes/sneakers/white
-	suit = /obj/item/clothing/suit/toggle/labcoat
+	suit =  /obj/item/clothing/suit/toggle/labcoat
 
 /datum/outfit/mafia/security
 	name = "Mafia Security Officer"

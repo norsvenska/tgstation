@@ -1,10 +1,16 @@
-/*Narcolepsy
- * Slight reduction to stealth
- * Reduces resistance
- * Greatly reduces stage speed
- * No change to transmissibility
- * Fatal level
- * Bonus: Causes drowsiness and sleep.
+
+/*
+//////////////////////////////////////
+Narcolepsy
+	Noticeable.
+	Lowers resistance
+	Decreases stage speed tremendously.
+	Decreases transmittablity tremendously.
+
+Bonus
+	Causes drowsiness and sleep.
+
+//////////////////////////////////////
 */
 /datum/symptom/narcolepsy
 	name = "Narcolepsy"
@@ -46,7 +52,7 @@
 			if(prob(50))
 				to_chat(M, span_warning("You try to focus on staying awake."))
 			if(M.drowsyness < 70)
-				M.adjust_drowsyness(5)
+				M.drowsyness += 5
 		if(4)
 			if(prob(50))
 				if(yawning)
@@ -54,7 +60,7 @@
 				else
 					to_chat(M, span_warning("You nod off for a moment.")) //you can't really yawn while nodding off, can you?
 			if(M.drowsyness < 70)
-				M.adjust_drowsyness(10)
+				M.drowsyness += 10
 			if(yawning)
 				M.emote("yawn")
 				if(M.CanSpreadAirborneDisease())
@@ -63,7 +69,7 @@
 			if(prob(50))
 				to_chat(M, span_warning("[pick("So tired...","You feel very sleepy.","You have a hard time keeping your eyes open.","You try to stay awake.")]"))
 			if(M.drowsyness < 70)
-				M.adjust_drowsyness(40)
+				M.drowsyness += 40
 			if(yawning)
 				M.emote("yawn")
 				if(M.CanSpreadAirborneDisease())

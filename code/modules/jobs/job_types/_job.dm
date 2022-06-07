@@ -2,10 +2,6 @@
 	/// The name of the job , used for preferences, bans and more. Make sure you know what you're doing before changing this.
 	var/title = "NOPE"
 
-	/// The description of the job, used for preferences menu.
-	/// Keep it short and useful. Avoid in-jokes, these are for new players.
-	var/description
-
 	/// Innate skill levels unlocked at roundstart. Based on config.jobs_have_minimal_access config setting, for example with a skeleton crew. Format is list(/datum/skill/foo = SKILL_EXP_NOVICE) with exp as an integer or as per code/_DEFINES/skills.dm
 	var/list/skills
 	/// Innate skill levels unlocked at roundstart. Based on config.jobs_have_minimal_access config setting, for example with a full crew. Format is list(/datum/skill/foo = SKILL_EXP_NOVICE) with exp as an integer or as per code/_DEFINES/skills.dm
@@ -61,20 +57,16 @@
 	/// Experience type granted by playing in this job.
 	var/exp_granted_type = ""
 
-	///How much money does this crew member make in a single paycheck? Note that passive paychecks are capped to PAYCHECK_CREW in regular gameplay after roundstart.
-	var/paycheck = PAYCHECK_CREW
-	///Which department does this paycheck pay from?
+	var/paycheck = PAYCHECK_MINIMAL
 	var/paycheck_department = ACCOUNT_CIV
 
-	/// Traits added to the mind of the mob assigned this job
-	var/list/mind_traits
+	var/list/mind_traits // Traits added to the mind of the mob assigned this job
 
 	///Lazylist of traits added to the liver of the mob assigned this job (used for the classic "cops heal from donuts" reaction, among others)
 	var/list/liver_traits = null
 
 	var/display_order = JOB_DISPLAY_ORDER_DEFAULT
 
-	///What types of bounty tasks can this job recieve past the default?
 	var/bounty_types = CIV_JOB_BASIC
 
 	/// Goodies that can be received via the mail system.
@@ -87,14 +79,7 @@
 
 	/// Bitfield of departments this job belongs to. These get setup when adding the job into the department, on job datum creation.
 	var/departments_bitflags = NONE
-
-	/// If specified, this department will be used for the preferences menu.
-	var/datum/job_department/department_for_prefs = null
-
 	/// Lazy list with the departments this job belongs to.
-	/// Required to be set for playable jobs.
-	/// The first department will be used in the preferences menu,
-	/// unless department_for_prefs is set.
 	var/list/departments_list = null
 
 	/// Should this job be allowed to be picked for the bureaucratic error event?
@@ -106,7 +91,7 @@
 	/// List of family heirlooms this job can get with the family heirloom quirk. List of types.
 	var/list/family_heirlooms
 
-	/// All values = (JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_BOLD_SELECT_TEXT | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN)
+	/// All values = (JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_BOLD_SELECT_TEXT | JOB_ASSIGN_QUIRKS)
 	var/job_flags = NONE
 
 	/// Multiplier for general usage of the voice of god.
@@ -117,24 +102,28 @@
 	/// String. If set to a non-empty one, it will be the key for the policy text value to show this role on spawn.
 	var/policy_index = ""
 
-	///RPG job names, for the memes
-	var/rpg_title
-
 
 /datum/job/New()
 	. = ..()
+	var/list/jobs_changes = get_map_changes()
+	if(!jobs_changes)
+		return
+	if(isnum(jobs_changes["spawn_positions"]))
+		spawn_positions = jobs_changes["spawn_positions"]
+	if(isnum(jobs_changes["total_positions"]))
+		total_positions = jobs_changes["total_positions"]
+
+/// Loads up map configs if necessary and returns job changes for this job.
+/datum/job/proc/get_map_changes()
+	var/string_type = "[type]"
+	var/list/splits = splittext(string_type, "/")
+	var/endpart = splits[splits.len]
+
 	var/list/job_changes = SSmapping.config.job_changes
-	if(!job_changes[title])
-		return TRUE
+	if(!(endpart in job_changes))
+		return list()
 
-	var/list/job_positions_edits = job_changes[title]
-	if(!job_positions_edits)
-		return TRUE
-
-	if(isnum(job_positions_edits["spawn_positions"]))
-		spawn_positions = job_positions_edits["spawn_positions"]
-	if(isnum(job_positions_edits["total_positions"]))
-		total_positions = job_positions_edits["total_positions"]
+	return job_changes[endpart]
 
 
 /// Executes after the mob has been spawned in the map. Client might not be yet in the mob, and is thus a separate variable.
@@ -144,7 +133,7 @@
 	for(var/trait in mind_traits)
 		ADD_TRAIT(spawned.mind, trait, JOB_TRAIT)
 
-	var/obj/item/organ/internal/liver/liver = spawned.getorganslot(ORGAN_SLOT_LIVER)
+	var/obj/item/organ/liver/liver = spawned.getorganslot(ORGAN_SLOT_LIVER)
 	if(liver)
 		for(var/trait in liver_traits)
 			ADD_TRAIT(liver, trait, JOB_TRAIT)
@@ -167,13 +156,14 @@
 		for(var/i in roundstart_experience)
 			experiencer.mind.adjust_experience(i, roundstart_experience[i], TRUE)
 
+
 /datum/job/proc/announce_job(mob/living/joining_mob)
 	if(head_announce)
 		announce_head(joining_mob, head_announce)
 
 
 //Used for a special check of whether to allow a client to latejoin as this job.
-/datum/job/proc/special_check_latejoin(client/latejoin)
+/datum/job/proc/special_check_latejoin(client/C)
 	return TRUE
 
 
@@ -184,7 +174,7 @@
 	var/datum/bank_account/bank_account = new(real_name, equipping, dna.species.payday_modifier)
 	bank_account.payday(STARTING_PAYCHECKS, TRUE)
 	account_id = bank_account.account_id
-	bank_account.replaceable = FALSE
+
 	dress_up_as_job(equipping)
 
 
@@ -202,14 +192,14 @@
 		SSticker.OnRoundstart(CALLBACK(GLOBAL_PROC, .proc/_addtimer, CALLBACK(pick(GLOB.announcement_systems), /obj/machinery/announcement_system/proc/announce, "NEWHEAD", H.real_name, H.job, channels), 1))
 
 //If the configuration option is set to require players to be logged as old enough to play certain jobs, then this proc checks that they are, otherwise it just returns 1
-/datum/job/proc/player_old_enough(client/player)
-	if(!player || !available_in_days(player))
+/datum/job/proc/player_old_enough(client/C)
+	if(available_in_days(C) == 0)
 		return TRUE //Available in 0 days = available right now = player is old enough to play.
 	return FALSE
 
 
-/datum/job/proc/available_in_days(client/player)
-	if(!player)
+/datum/job/proc/available_in_days(client/C)
+	if(!C)
 		return 0
 	if(!CONFIG_GET(flag/use_age_restriction_for_jobs))
 		return 0
@@ -218,36 +208,15 @@
 	if(!isnum(minimal_player_age))
 		return 0
 
-	return max(0, minimal_player_age - player.player_age)
+	return max(0, minimal_player_age - C.player_age)
 
 /datum/job/proc/config_check()
 	return TRUE
 
-/**
- * # map_check
- *
- * Checks the map config for job changes
- * If they have 0 spawn and total positions in the config, the job is entirely removed from occupations prefs for the round.
- */
 /datum/job/proc/map_check()
-	var/list/job_changes = SSmapping.config.job_changes
-	if(!job_changes[title]) //no edits made
-		return TRUE
-
-	var/list/job_positions_edits = job_changes[title]
-	if(!job_positions_edits)
-		return TRUE
-
-	var/available_roundstart = TRUE
-	var/available_latejoin = TRUE
-	if(!isnull(job_positions_edits["spawn_positions"]) && (job_positions_edits["spawn_positions"] == 0))
-		available_roundstart = FALSE
-	if(!isnull(job_positions_edits["total_positions"]) && (job_positions_edits["total_positions"] == 0))
-		available_latejoin = FALSE
-
-	if(!available_roundstart && !available_latejoin) //map config disabled the job
+	var/list/job_changes = get_map_changes()
+	if(!job_changes)
 		return FALSE
-
 	return TRUE
 
 /datum/job/proc/radio_help_message(mob/M)
@@ -261,36 +230,33 @@
 	uniform = /obj/item/clothing/under/color/grey
 	id = /obj/item/card/id/advanced
 	ears = /obj/item/radio/headset
-	belt = /obj/item/modular_computer/tablet/pda
+	belt = /obj/item/pda
 	back = /obj/item/storage/backpack
 	shoes = /obj/item/clothing/shoes/sneakers/black
 	box = /obj/item/storage/box/survival
 
-	preload = TRUE // These are used by the prefs ui, and also just kinda could use the extra help at roundstart
-
 	var/backpack = /obj/item/storage/backpack
-	var/satchel = /obj/item/storage/backpack/satchel
+	var/satchel  = /obj/item/storage/backpack/satchel
 	var/duffelbag = /obj/item/storage/backpack/duffelbag
 
 	var/pda_slot = ITEM_SLOT_BELT
 
 /datum/outfit/job/pre_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	if(ispath(back, /obj/item/storage/backpack))
-		switch(H.backpack)
-			if(GBACKPACK)
-				back = /obj/item/storage/backpack //Grey backpack
-			if(GSATCHEL)
-				back = /obj/item/storage/backpack/satchel //Grey satchel
-			if(GDUFFELBAG)
-				back = /obj/item/storage/backpack/duffelbag //Grey Duffel bag
-			if(LSATCHEL)
-				back = /obj/item/storage/backpack/satchel/leather //Leather Satchel
-			if(DSATCHEL)
-				back = satchel //Department satchel
-			if(DDUFFELBAG)
-				back = duffelbag //Department duffel bag
-			else
-				back = backpack //Department backpack
+	switch(H.backpack)
+		if(GBACKPACK)
+			back = /obj/item/storage/backpack //Grey backpack
+		if(GSATCHEL)
+			back = /obj/item/storage/backpack/satchel //Grey satchel
+		if(GDUFFELBAG)
+			back = /obj/item/storage/backpack/duffelbag //Grey Duffel bag
+		if(LSATCHEL)
+			back = /obj/item/storage/backpack/satchel/leather //Leather Satchel
+		if(DSATCHEL)
+			back = satchel //Department satchel
+		if(DDUFFELBAG)
+			back = duffelbag //Department duffel bag
+		else
+			back = backpack //Department backpack
 
 	//converts the uniform string into the path we'll wear, whether it's the skirt or regular variant
 	var/holder
@@ -302,11 +268,6 @@
 		holder = "[uniform]"
 	uniform = text2path(holder)
 
-	var/client/client = GLOB.directory[ckey(H.mind?.key)]
-
-	if(client?.is_veteran() && client?.prefs.read_preference(/datum/preference/toggle/playtime_reward_cloak))
-		neck = /obj/item/clothing/neck/cloak/skill_reward/playing
-
 /datum/outfit/job/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	if(visualsOnly)
 		return
@@ -315,26 +276,28 @@
 	if(!J)
 		J = SSjob.GetJob(H.job)
 
-	var/obj/item/card/id/card = H.wear_id
-	if(istype(card))
-		ADD_TRAIT(card, TRAIT_JOB_FIRST_ID_CARD, ROUNDSTART_TRAIT)
-		shuffle_inplace(card.access) // Shuffle access list to make NTNet passkeys less predictable
-		card.registered_name = H.real_name
+	var/obj/item/card/id/C = H.wear_id
+	if(istype(C))
+		shuffle_inplace(C.access) // Shuffle access list to make NTNet passkeys less predictable
+		C.registered_name = H.real_name
 		if(H.age)
-			card.registered_age = H.age
-		card.update_label()
-		card.update_icon()
+			C.registered_age = H.age
+		C.update_label()
+		C.update_icon()
 		var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
 		if(B && B.account_id == H.account_id)
-			card.registered_account = B
-			B.bank_cards += card
+			C.registered_account = B
+			B.bank_cards += C
 		H.sec_hud_set_ID()
 
-	var/obj/item/modular_computer/tablet/pda/PDA = H.get_item_by_slot(pda_slot)
+	var/obj/item/pda/PDA = H.get_item_by_slot(pda_slot)
 	if(istype(PDA))
-		PDA.saved_identification = H.real_name
-		PDA.saved_job = J.title
-		PDA.UpdateDisplay()
+		PDA.owner = H.real_name
+		PDA.ownjob = J.title
+		PDA.update_label()
+
+	if(H.client?.prefs.playtime_reward_cloak)
+		neck = /obj/item/clothing/neck/cloak/skill_reward/playing
 
 
 /datum/outfit/job/get_chameleon_disguise_info()
@@ -344,16 +307,6 @@
 	types += satchel
 	types += duffelbag
 	return types
-
-/datum/outfit/job/get_types_to_preload()
-	var/list/preload = ..()
-	preload += backpack
-	preload += satchel
-	preload += duffelbag
-	preload += /obj/item/storage/backpack/satchel/leather
-	var/skirtpath = "[uniform]/skirt"
-	preload += text2path(skirtpath)
-	return preload
 
 /// An overridable getter for more dynamic goodies.
 /datum/job/proc/get_mail_goodies(mob/recipient)
@@ -374,7 +327,7 @@
 		if(HAS_TRAIT(SSstation, STATION_TRAIT_LATE_ARRIVALS))
 			return get_latejoin_spawn_point()
 		if(HAS_TRAIT(SSstation, STATION_TRAIT_RANDOM_ARRIVALS))
-			return get_safe_random_station_turf(typesof(/area/station/hallway)) || get_latejoin_spawn_point()
+			return get_safe_random_station_turf(typesof(/area/hallway)) || get_latejoin_spawn_point()
 		if(HAS_TRAIT(SSstation, STATION_TRAIT_HANGOVER))
 			var/obj/effect/landmark/start/hangover_spawn_point
 			for(var/obj/effect/landmark/start/hangover/hangover_landmark in GLOB.start_landmarks_list)
@@ -439,40 +392,25 @@
 	var/fully_randomize = GLOB.current_anonymous_theme || player_client.prefs.should_be_random_hardcore(job, player_client.mob.mind) || is_banned_from(player_client.ckey, "Appearance")
 	if(!player_client)
 		return // Disconnected while checking for the appearance ban.
-
-	var/require_human = CONFIG_GET(flag/enforce_human_authority) && (job.departments_bitflags & DEPARTMENT_BITFLAG_COMMAND)
-
-	src.job = job.title
-
 	if(fully_randomize)
-		player_client.prefs.apply_prefs_to(src)
-
-		if(require_human)
-			randomize_human_appearance(~RANDOMIZE_SPECIES)
+		if(CONFIG_GET(flag/enforce_human_authority) && (job.departments_bitflags & DEPARTMENT_BITFLAG_COMMAND))
+			if(player_client.prefs.pref_species.id != SPECIES_HUMAN)
+				player_client.prefs.pref_species = new /datum/species/human
+			player_client.prefs.randomise_appearance_prefs(~RANDOMIZE_SPECIES)
 		else
-			randomize_human_appearance()
-
-		if (require_human)
-			set_species(/datum/species/human)
-			dna.species.roundstart_changed = TRUE
-
+			player_client.prefs.randomise_appearance_prefs()
+		player_client.prefs.apply_prefs_to(src)
 		if(GLOB.current_anonymous_theme)
 			fully_replace_character_name(null, GLOB.current_anonymous_theme.anonymous_name(src))
 	else
 		var/is_antag = (player_client.mob.mind in GLOB.pre_setup_antags)
-		if(require_human)
-			player_client.prefs.randomise["species"] = FALSE
+		if(CONFIG_GET(flag/enforce_human_authority) && (job.departments_bitflags & DEPARTMENT_BITFLAG_COMMAND))
+			player_client.prefs.randomise[RANDOM_SPECIES] = FALSE
+			if(player_client.prefs.pref_species.id != SPECIES_HUMAN)
+				player_client.prefs.pref_species = new /datum/species/human
 		player_client.prefs.safe_transfer_prefs_to(src, TRUE, is_antag)
-		if(require_human && !ishumanbasic(src))
-			set_species(/datum/species/human)
-			dna.species.roundstart_changed = TRUE
-			apply_pref_name(/datum/preference/name/backup_human, player_client)
 		if(CONFIG_GET(flag/force_random_names))
-			var/species_type = player_client.prefs.read_preference(/datum/preference/choiced/species)
-			var/datum/species/species = new species_type
-
-			var/gender = player_client.prefs.read_preference(/datum/preference/choiced/gender)
-			real_name = species.random_name(gender, TRUE)
+			player_client.prefs.real_name = player_client.prefs.pref_species.random_name(player_client.prefs.gender, TRUE)
 	dna.update_dna_identity()
 
 
@@ -480,7 +418,7 @@
 	if(GLOB.current_anonymous_theme)
 		fully_replace_character_name(real_name, GLOB.current_anonymous_theme.anonymous_ai_name(TRUE))
 		return
-	apply_pref_name(/datum/preference/name/ai, player_client) // This proc already checks if the player is appearance banned.
+	apply_pref_name("ai", player_client) // This proc already checks if the player is appearance banned.
 	set_core_display_icon(null, player_client)
 
 
@@ -489,17 +427,14 @@
 		var/organic_name
 		if(GLOB.current_anonymous_theme)
 			organic_name = GLOB.current_anonymous_theme.anonymous_name(src)
-		else if(player_client.prefs.read_preference(/datum/preference/choiced/random_name) == RANDOM_ENABLED || CONFIG_GET(flag/force_random_names) || is_banned_from(player_client.ckey, "Appearance"))
+		else if(player_client.prefs.randomise[RANDOM_NAME] || CONFIG_GET(flag/force_random_names) || is_banned_from(player_client.ckey, "Appearance"))
 			if(!player_client)
 				return // Disconnected while checking the appearance ban.
-
-			var/species_type = player_client.prefs.read_preference(/datum/preference/choiced/species)
-			var/datum/species/species = new species_type
-			organic_name = species.random_name(player_client.prefs.read_preference(/datum/preference/choiced/gender), TRUE)
+			organic_name = player_client.prefs.pref_species.random_name(player_client.prefs.gender, TRUE)
 		else
 			if(!player_client)
 				return // Disconnected while checking the appearance ban.
-			organic_name = player_client.prefs.read_preference(/datum/preference/name/real_name)
+			organic_name = player_client.prefs.real_name
 
 		mmi.name = "[initial(mmi.name)]: [organic_name]"
 		if(mmi.brain)
@@ -508,8 +443,8 @@
 			mmi.brainmob.real_name = organic_name //the name of the brain inside the cyborg is the robotized human's name.
 			mmi.brainmob.name = organic_name
 	// If this checks fails, then the name will have been handled during initialization.
-	if(!GLOB.current_anonymous_theme && player_client.prefs.read_preference(/datum/preference/name/cyborg) != DEFAULT_CYBORG_NAME)
-		apply_pref_name(/datum/preference/name/cyborg, player_client)
+	if(!GLOB.current_anonymous_theme && player_client.prefs.custom_names["cyborg"] != DEFAULT_CYBORG_NAME)
+		apply_pref_name("cyborg", player_client)
 
 /**
  * Called after a successful roundstart spawn.

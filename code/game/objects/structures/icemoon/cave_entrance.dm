@@ -21,7 +21,7 @@ GLOBAL_LIST_INIT(ore_probability, list(
 	move_resist = INFINITY
 	anchored = TRUE
 
-/obj/structure/spawner/ice_moon/Initialize(mapload)
+/obj/structure/spawner/ice_moon/Initialize()
 	. = ..()
 	clear_rock()
 
@@ -80,7 +80,7 @@ GLOBAL_LIST_INIT(ore_probability, list(
 	light_range = 1
 	light_color = COLOR_SOFT_RED
 
-/obj/structure/spawner/ice_moon/demonic_portal/Initialize(mapload)
+/obj/structure/spawner/ice_moon/demonic_portal/Initialize()
 	. = ..()
 	AddComponent(/datum/component/gps, "Netheric Signal")
 
@@ -113,7 +113,7 @@ GLOBAL_LIST_INIT(ore_probability, list(
 	anchored = TRUE
 	density = TRUE
 
-/obj/effect/collapsing_demonic_portal/Initialize(mapload)
+/obj/effect/collapsing_demonic_portal/Initialize()
 	. = ..()
 	playsound(loc,'sound/effects/tendril_destroyed.ogg', 200, FALSE, 50, TRUE, TRUE)
 	visible_message(span_boldannounce("[src] begins to collapse, cutting it off from this world!"))
@@ -137,13 +137,13 @@ GLOBAL_LIST_INIT(ore_probability, list(
 	var/loot = rand(1, 28)
 	switch(loot)
 		if(1)
-			new /obj/item/clothing/suit/hooded/cultrobes/hardened(loc)
+			new /obj/item/clothing/suit/space/hardsuit/cult(loc)
 		if(2)
 			new /obj/item/clothing/glasses/godeye(loc)
 		if(3)
 			new /obj/item/reagent_containers/glass/bottle/potion/flight(loc)
 		if(4)
-			new /obj/item/organ/internal/heart/cursed/wizard(loc)
+			new /obj/item/organ/heart/cursed/wizard(loc)
 		if(5)
 			new /obj/item/jacobs_ladder(loc)
 		if(6)

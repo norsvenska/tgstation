@@ -5,9 +5,10 @@
 	inhand_icon_state = "jackboots"
 	lefthand_file = 'icons/mob/inhands/equipment/security_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/security_righthand.dmi'
-	armor = list(MELEE = 25, BULLET = 25, LASER = 25, ENERGY = 25, BOMB = 50, BIO = 90, FIRE = 70, ACID = 50)
+	armor = list(MELEE = 25, BULLET = 25, LASER = 25, ENERGY = 25, BOMB = 50, BIO = 10, RAD = 0, FIRE = 70, ACID = 50)
 	strip_delay = 40
 	resistance_flags = NONE
+	permeability_coefficient = 0.05 //Thick soles, and covers the ankle
 	pocket_storage_component_path = /datum/component/storage/concrete/pockets/shoes
 	lace_time = 12 SECONDS
 
@@ -17,14 +18,15 @@
 	icon_state = "sneakboots"
 	inhand_icon_state = "sneakboots"
 	w_class = WEIGHT_CLASS_SMALL
-	resistance_flags = FIRE_PROOF | ACID_PROOF
+	resistance_flags = FIRE_PROOF |  ACID_PROOF
 	clothing_traits = list(TRAIT_SILENT_FOOTSTEPS)
 
 /obj/item/clothing/shoes/combat/swat //overpowered boots for death squads
 	name = "\improper SWAT boots"
 	desc = "High speed, no drag combat boots."
+	permeability_coefficient = 0.01
 	clothing_flags = NOSLIP
-	armor = list(MELEE = 40, BULLET = 30, LASER = 25, ENERGY = 25, BOMB = 50, BIO = 100, FIRE = 90, ACID = 50)
+	armor = list(MELEE = 40, BULLET = 30, LASER = 25, ENERGY = 25, BOMB = 50, BIO = 30, RAD = 30, FIRE = 90, ACID = 50)
 
 /obj/item/clothing/shoes/jackboots
 	name = "jackboots"
@@ -36,7 +38,7 @@
 	strip_delay = 30
 	equip_delay_other = 50
 	resistance_flags = NONE
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 90, FIRE = 0, ACID = 0)
+	permeability_coefficient = 0.05 //Thick soles, and covers the ankle
 	pocket_storage_component_path = /datum/component/storage/concrete/pockets/shoes
 	can_be_tied = FALSE
 
@@ -48,7 +50,7 @@
 	desc = "Boots lined with 'synthetic' animal fur."
 	icon_state = "winterboots"
 	inhand_icon_state = "winterboots"
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 80, FIRE = 0, ACID = 0)
+	permeability_coefficient = 0.15
 	cold_protection = FEET|LEGS
 	min_cold_protection_temperature = SHOES_MIN_TEMP_PROTECT
 	heat_protection = FEET|LEGS
@@ -70,7 +72,7 @@
 	inhand_icon_state = "jackboots"
 	lefthand_file = 'icons/mob/inhands/equipment/security_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/security_righthand.dmi'
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 80, FIRE = 0, ACID = 0)
+	permeability_coefficient = 0.15
 	strip_delay = 20
 	equip_delay_other = 40
 	pocket_storage_component_path = /datum/component/storage/concrete/pockets/shoes
@@ -90,15 +92,3 @@
 	inhand_icon_state = "rus_shoes"
 	pocket_storage_component_path = /datum/component/storage/concrete/pockets/shoes
 	lace_time = 8 SECONDS
-
-/obj/item/clothing/shoes/discoshoes
-	name = "green lizardskin shoes"
-	desc = "They may have lost some of their lustre over the years, but these green lizardskin shoes fit you perfectly."
-	icon_state = "lizardskin_shoes"
-	inhand_icon_state = "lizardskin_shoes"
-
-/obj/item/clothing/shoes/kim
-	name = "aerostatic boots"
-	desc = "A crisp, clean set of boots for working long hours on the beat."
-	icon_state = "aerostatic_boots"
-	inhand_icon_state = "aerostatic_boots"

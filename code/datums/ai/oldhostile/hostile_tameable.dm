@@ -10,7 +10,6 @@
 		BB_HOSTILE_ATTACK_WORD = "growls",
 	)
 	ai_movement = /datum/ai_movement/basic_avoidance
-	idle_behavior = /datum/idle_behavior/idle_random_walk/hostile_tameable
 
 	var/ride_penalty_movement = 1 SECONDS
 
@@ -44,7 +43,6 @@
 	return ..() //Run parent at end
 
 /datum/ai_controller/hostile_friend/proc/on_prebuckle(mob/source, mob/living/buckler, force, buckle_mob_flags)
-	SIGNAL_HANDLER
 	if(force || ai_status == AI_STATUS_OFF)
 		return
 	if(WEAKREF(buckler) != blackboard[BB_HOSTILE_FRIEND])
@@ -63,6 +61,15 @@
 		return
 
 	return simple_pawn.access_card
+
+/datum/ai_controller/hostile_friend/PerformIdleBehavior(delta_time)
+	var/mob/living/living_pawn = pawn
+	if(!isturf(living_pawn.loc) || living_pawn.pulledby || length(living_pawn.buckled_mobs))
+		return
+
+	if(DT_PROB(5, delta_time) && (living_pawn.mobility_flags & MOBILITY_MOVE))
+		var/move_dir = pick(GLOB.alldirs)
+		living_pawn.Move(get_step(living_pawn, move_dir), move_dir)
 
 /datum/ai_controller/hostile_friend/proc/on_ridden_driver_move(atom/movable/movable_parent, mob/living/user, direction)
 	SIGNAL_HANDLER
@@ -174,7 +181,7 @@
 			pawn.visible_message(span_notice("[pawn] [blackboard[BB_HOSTILE_ATTACK_WORD]] at [commander]'s command, and [pawn.p_they()] stop[pawn.p_s()] obediently, awaiting further orders."))
 			blackboard[BB_HOSTILE_ORDER_MODE] = HOSTILE_COMMAND_NONE
 			CancelActions()
-		// follow: whatever the commander points to, try and bring it back
+		// fetch: whatever the commander points to, try and bring it back
 		if(COMMAND_FOLLOW)
 			pawn.visible_message(span_notice("[pawn] [blackboard[BB_HOSTILE_ATTACK_WORD]] at [commander]'s command, and [pawn.p_they()] follow[pawn.p_s()] slightly in anticipation."))
 			CancelActions()
@@ -216,7 +223,3 @@
 		if(living_pawn.buckled)
 			queue_behavior(/datum/ai_behavior/resist)//in case they are in bed or something
 		queue_behavior(/datum/ai_behavior/attack)
-
-
-/datum/idle_behavior/idle_random_walk/hostile_tameable
-	walk_chance = 5

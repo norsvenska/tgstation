@@ -21,7 +21,7 @@
 	var/process_scan = TRUE // some pinpointers change target every time they scan, which means we can't have it change very process but instead when it turns on.
 	var/icon_suffix = "" // for special pinpointer icons
 
-/obj/item/pinpointer/Initialize(mapload)
+/obj/item/pinpointer/Initialize()
 	. = ..()
 	GLOB.pinpointer_list += src
 
@@ -90,8 +90,8 @@
 	desc = "A handheld tracking device that points to crew suit sensors."
 	icon_state = "pinpointer_crew"
 	worn_icon_state = "pinpointer_crew"
-	custom_price = PAYCHECK_CREW * 4
-	custom_premium_price = PAYCHECK_CREW * 6
+	custom_price = PAYCHECK_MEDIUM * 4
+	custom_premium_price = PAYCHECK_MEDIUM * 6
 	var/has_owner = FALSE
 	var/pinpointer_owner = null
 	var/ignore_suit_sensor_level = FALSE /// Do we find people even if their suit sensors are turned off
@@ -139,17 +139,15 @@
 		names[crewmember_name] = H
 		name_counts[crewmember_name] = 1
 
-	if(!length(names))
+	if(!names.len)
 		user.visible_message(span_notice("[user]'s pinpointer fails to detect a signal."), span_notice("Your pinpointer fails to detect a signal."))
 		return
-	var/pinpoint_target = tgui_input_list(user, "Person to track", "Pinpoint", sort_list(names))
-	if(isnull(pinpoint_target))
+
+	var/A = input(user, "Person to track", "Pinpoint") in sortList(names)
+	if(!A || QDELETED(src) || !user || !user.is_holding(src) || user.incapacitated())
 		return
-	if(isnull(names[pinpoint_target]))
-		return
-	if(QDELETED(src) || !user || !user.is_holding(src) || user.incapacitated())
-		return
-	target = names[pinpoint_target]
+
+	target = names[A]
 	toggle_on()
 	user.visible_message(span_notice("[user] activates [user.p_their()] pinpointer."), span_notice("You activate your pinpointer."))
 
@@ -167,7 +165,7 @@
 	desc = "A handheld tracking device that displays its proximity to crew suit sensors."
 	icon_state = "pinpointer_crewprox"
 	worn_icon_state = "pinpointer_prox"
-	custom_price = PAYCHECK_CREW * 3
+	custom_price = PAYCHECK_MEDIUM * 3
 
 /obj/item/pinpointer/crew/prox/get_direction_icon(here, there)
 	var/size = ""

@@ -14,14 +14,12 @@
 	material_drop = /obj/item/stack/sheet/cloth
 	delivery_icon = null //unwrappable
 	anchorable = FALSE
-	cutting_tool = null // Bodybags are not deconstructed by cutting
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 	drag_slowdown = 0
 	has_closed_overlay = FALSE
 	var/foldedbag_path = /obj/item/bodybag
 	var/obj/item/bodybag/foldedbag_instance = null
 	var/tagged = FALSE // so closet code knows to put the tag overlay back
-	can_install_electronics = FALSE
 
 /obj/structure/closet/body_bag/Destroy()
 	// If we have a stored bag, and it's in nullspace (not in someone's hand), delete it.
@@ -31,9 +29,10 @@
 
 /obj/structure/closet/body_bag/attackby(obj/item/interact_tool, mob/user, params)
 	if (istype(interact_tool, /obj/item/pen) || istype(interact_tool, /obj/item/toy/crayon))
-		if(!user.can_write(interact_tool))
+		if(!user.is_literate())
+			to_chat(user, span_notice("You scribble illegibly on [src]!"))
 			return
-		var/t = tgui_input_text(user, "What would you like the label to be?", name, max_length = 53)
+		var/t = stripped_input(user, "What would you like the label to be?", name, null, 53)
 		if(user.get_active_held_item() != interact_tool)
 			return
 		if(!user.canUseTopic(src, BE_CLOSE))
@@ -141,11 +140,6 @@
 		content.forceMove(B)
 		if(isliving(content))
 			to_chat(content, span_userdanger("You're suddenly forced into a tiny, compressed space!"))
-		if(iscarbon(content))
-			var/mob/living/carbon/mob = content
-			if (mob.dna.get_mutation(/datum/mutation/human/dwarfism))
-				max_weight_of_contents = max(WEIGHT_CLASS_NORMAL, max_weight_of_contents)
-				continue
 		if(!isitem(content))
 			max_weight_of_contents = max(WEIGHT_CLASS_BULKY, max_weight_of_contents)
 			continue
@@ -156,7 +150,7 @@
 	B.w_class = max_weight_of_contents
 	usr.put_in_hands(B)
 
-/// Environmental bags. They protect against bad weather.
+/// Environmental bags
 
 /obj/structure/closet/body_bag/environmental
 	name = "environmental protection bag"
@@ -166,13 +160,8 @@
 	mob_storage_capacity = 1
 	contents_pressure_protection = 0.8
 	contents_thermal_insulation = 0.5
-	foldedbag_path = /obj/item/bodybag/environmental
-	var/list/weather_protection = list(TRAIT_ASHSTORM_IMMUNE, TRAIT_RADSTORM_IMMUNE, TRAIT_SNOWSTORM_IMMUNE, TRAIT_VOIDSTORM_IMMUNE) // Does not protect against lava or the The Floor Is Lava spell.
-
-/obj/structure/closet/body_bag/environmental/Initialize(mapload)
-	. = ..()
-	for(var/trait in weather_protection)
-		ADD_TRAIT(src, trait, ROUNDSTART_TRAIT)
+	foldedbag_path = /obj/item/bodybag/environmental/
+	weather_protection = list(WEATHER_ACID, WEATHER_ASH, WEATHER_RAD, WEATHER_SNOW, WEATHER_VOID) // Does not protect against lava or the The Floor Is Lava spell.
 
 /obj/structure/closet/body_bag/environmental/nanotrasen
 	name = "elite environmental protection bag"
@@ -181,8 +170,8 @@
 	icon_state = "ntenvirobag"
 	contents_pressure_protection = 1
 	contents_thermal_insulation = 1
-	foldedbag_path = /obj/item/bodybag/environmental/nanotrasen
-	weather_protection = list(TRAIT_WEATHER_IMMUNE)
+	foldedbag_path = /obj/item/bodybag/environmental/nanotrasen/
+	weather_protection = list(WEATHER_ALL)
 
 /// Securable enviro. bags
 
@@ -191,7 +180,7 @@
 	desc = "Intended for transport of prisoners through hazardous environments, this environmental protection bag comes with straps to keep an occupant secure."
 	icon = 'icons/obj/bodybag.dmi'
 	icon_state = "prisonerenvirobag"
-	foldedbag_path = /obj/item/bodybag/environmental/prisoner
+	foldedbag_path = /obj/item/bodybag/environmental/prisoner/
 	breakout_time = 4 MINUTES // because it's probably about as hard to get out of this as it is to get out of a straightjacket.
 	/// How long it takes to sinch the bag.
 	var/sinch_time = 10 SECONDS
@@ -301,55 +290,7 @@
 	log_game("[key_name(user)] [sinched ? "sinched":"unsinched"] secure environmental bag [src] at [AREACOORD(src)]")
 	update_appearance()
 
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized
-	name = "pressurized prisoner transport bag"
-	foldedbag_path = /obj/item/bodybag/environmental/prisoner/pressurized
-	/// The contents of the gas to be distributed to an occupant once sinched down. Set in Initialize()
-	var/datum/gas_mixture/air_contents = null
-
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized/Initialize(mapload)
-	. = ..()
-	refresh_air()
-
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized/proc/refresh_air()
-	air_contents = null
-	air_contents = new(50) //liters
-	air_contents.temperature = T20C
-
-	air_contents.assert_gases(/datum/gas/oxygen, /datum/gas/nitrogen)
-	air_contents.gases[/datum/gas/oxygen][MOLES] = (ONE_ATMOSPHERE*50)/(R_IDEAL_GAS_EQUATION*T20C) * O2STANDARD
-	air_contents.gases[/datum/gas/nitrogen][MOLES] = (ONE_ATMOSPHERE*50)/(R_IDEAL_GAS_EQUATION*T20C) * N2STANDARD
-
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized/Destroy()
-	if(air_contents)
-		QDEL_NULL(air_contents)
-	return ..()
-
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized/return_air()
-	if(sinched)
-		refresh_air()
-		return air_contents
-	return ..()
-
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized/remove_air(amount)
-	if(sinched)
-		refresh_air()
-		return air_contents.remove(amount) // The internals for this bag are bottomless.
-	return ..(amount)
-
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized/return_analyzable_air()
-	if(sinched)
-		refresh_air()
-		return air_contents
-	return ..()
-
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized/togglelock(mob/living/user, silent)
-	. = ..()
-	if(sinched)
-		for(var/mob/living/target in contents)
-			to_chat(target, span_warning("You hear a faint hiss, and a white mist fills your vision..."))
-
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized/syndicate
+/obj/structure/closet/body_bag/environmental/prisoner/syndicate
 	name = "syndicate prisoner transport bag"
 	desc = "An alteration of Nanotrasen's environmental protection bag which has been used in several high-profile kidnappings. Designed to keep a victim unconscious, alive, and secured during transport."
 	icon = 'icons/obj/bodybag.dmi'
@@ -357,11 +298,17 @@
 	contents_pressure_protection = 1
 	contents_thermal_insulation = 1
 	foldedbag_path = /obj/item/bodybag/environmental/prisoner/syndicate
-	weather_protection = list(TRAIT_WEATHER_IMMUNE)
+	weather_protection = list(WEATHER_ALL)
 	breakout_time = 8 MINUTES
 	sinch_time = 20 SECONDS
+	// The contents of the gas to be distributed to an occupant once sinched down. Set in Initialize()
+	var/datum/gas_mixture/air_contents = null
 
-/obj/structure/closet/body_bag/environmental/prisoner/pressurized/syndicate/refresh_air()
+/obj/structure/closet/body_bag/environmental/prisoner/syndicate/Initialize()
+	. = ..()
+	refresh_air()
+
+/obj/structure/closet/body_bag/environmental/prisoner/syndicate/proc/refresh_air()
 	air_contents = null
 	air_contents = new(50) //liters
 	air_contents.temperature = T20C
@@ -369,3 +316,33 @@
 	air_contents.assert_gases(/datum/gas/oxygen, /datum/gas/nitrous_oxide)
 	air_contents.gases[/datum/gas/oxygen][MOLES] = (ONE_ATMOSPHERE*50)/(R_IDEAL_GAS_EQUATION*T20C) * O2STANDARD
 	air_contents.gases[/datum/gas/nitrous_oxide][MOLES] = (ONE_ATMOSPHERE*50)/(R_IDEAL_GAS_EQUATION*T20C) * N2STANDARD
+
+/obj/structure/closet/body_bag/environmental/prisoner/syndicate/Destroy()
+	if(air_contents)
+		QDEL_NULL(air_contents)
+
+	return ..()
+
+/obj/structure/closet/body_bag/environmental/prisoner/syndicate/return_air()
+	if(sinched)
+		refresh_air()
+		return air_contents
+	return ..()
+
+/obj/structure/closet/body_bag/environmental/prisoner/syndicate/remove_air(amount)
+	if(sinched)
+		refresh_air()
+		return air_contents.remove(amount) // The internals for this bag are bottomless. Syndicate bluespace trickery.
+	return ..(amount)
+
+/obj/structure/closet/body_bag/environmental/prisoner/syndicate/return_analyzable_air()
+	if(sinched)
+		refresh_air()
+		return air_contents
+	return ..()
+
+/obj/structure/closet/body_bag/environmental/prisoner/syndicate/togglelock(mob/living/user, silent)
+	. = ..()
+	if(sinched)
+		for(var/mob/living/target in contents)
+			to_chat(target, span_warning("You hear a faint hiss, and a white mist fills your vision..."))

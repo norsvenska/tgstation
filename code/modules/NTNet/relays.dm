@@ -3,7 +3,8 @@
 	name = "NTNet Quantum Relay"
 	desc = "A very complex router and transmitter capable of connecting electronic devices together. Looks fragile."
 	use_power = ACTIVE_POWER_USE
-	active_power_usage = BASE_MACHINE_ACTIVE_CONSUMPTION * 10 //10kW, apropriate for machine that keeps massive cross-Zlevel wireless network operational. Used to be 20 but that actually drained the smes one round
+	active_power_usage = 10000 //10kW, apropriate for machine that keeps massive cross-Zlevel wireless network operational. Used to be 20 but that actually drained the smes one round
+	idle_power_usage = 100
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "bus"
 	density = TRUE
@@ -62,7 +63,10 @@
 	return ..()
 
 /obj/machinery/ntnet_relay/process(delta_time)
-	update_use_power(is_operational ? ACTIVE_POWER_USE : IDLE_POWER_USE)
+	if(is_operational)
+		use_power = ACTIVE_POWER_USE
+	else
+		use_power = IDLE_POWER_USE
 
 	update_appearance()
 
@@ -112,7 +116,7 @@
 			update_appearance()
 			return TRUE
 
-/obj/machinery/ntnet_relay/Initialize(mapload)
+/obj/machinery/ntnet_relay/Initialize()
 	uid = gl_uid++
 	component_parts = list()
 

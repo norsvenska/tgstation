@@ -35,7 +35,8 @@
 		)
 	///List of gases with medium filter priority
 	var/list/mid_filtering_gases = list(
-		/datum/gas/nitrium,
+		/datum/gas/nitryl,
+		/datum/gas/stimulum,
 		/datum/gas/freon,
 		/datum/gas/hypernoblium,
 		/datum/gas/bz
@@ -99,7 +100,7 @@
 	desc = "A piece of filtering cloth to be used with atmospheric gas masks and emergency gas masks, it seems damaged."
 	filter_status = 50 //override on initialize
 
-/obj/item/gas_filter/damaged/Initialize(mapload)
+/obj/item/gas_filter/damaged/Initialize()
 	. = ..()
 	filter_status = rand(35, 65)
 

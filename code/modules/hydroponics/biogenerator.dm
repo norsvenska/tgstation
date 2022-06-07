@@ -4,6 +4,8 @@
 	icon = 'icons/obj/machines/biogenerator.dmi'
 	icon_state = "biogen-empty"
 	density = TRUE
+	use_power = IDLE_POWER_USE
+	idle_power_usage = 40
 	circuit = /obj/item/circuitboard/machine/biogenerator
 	var/processing = FALSE
 	var/obj/item/reagent_containers/glass/beaker = null
@@ -16,7 +18,7 @@
 	/// Currently selected category in the UI
 	var/selected_cat
 
-/obj/machinery/biogenerator/Initialize(mapload)
+/obj/machinery/biogenerator/Initialize()
 	. = ..()
 	stored_research = new /datum/techweb/specialized/autounlocking/biogenerator
 
@@ -44,7 +46,6 @@
 		update_appearance()
 
 /obj/machinery/biogenerator/RefreshParts()
-	. = ..()
 	var/E = 0
 	var/P = 0
 	var/max_storage = 40
@@ -167,20 +168,20 @@
 	if(processing)
 		to_chat(user, span_warning("The biogenerator is in the process of working."))
 		return
-	var/processing_time = 0
+	var/S = 0
 	for(var/obj/item/food/grown/I in contents)
-		processing_time += 5
+		S += 5
 		if(I.reagents.get_reagent_amount(/datum/reagent/consumable/nutriment) < 0.1)
 			points += 1 * productivity
 		else
 			points += I.reagents.get_reagent_amount(/datum/reagent/consumable/nutriment) * 10 * productivity
 		qdel(I)
-	if(processing_time)
+	if(S)
 		processing = TRUE
 		update_appearance()
 		playsound(loc, 'sound/machines/blender.ogg', 50, TRUE)
-		use_power(processing_time * active_power_usage * 0.1) // .1 needed here to convert time (in deciseconds) to seconds such that watts * seconds = joules
-		sleep(processing_time + 15 / productivity)
+		use_power(S * 30)
+		sleep(S + 15 / productivity)
 		processing = FALSE
 		update_appearance()
 

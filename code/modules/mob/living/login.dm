@@ -5,6 +5,7 @@
 
 	//Mind updates
 	sync_mind()
+	mind.show_memory(src, 0)
 
 	update_damage_hud()
 	update_health_hud()
@@ -21,6 +22,8 @@
 	if(ranged_ability)
 		ranged_ability.add_ranged_ability(src, span_notice("You currently have <b>[ranged_ability]</b> active!"))
 
-	med_hud_set_status()
+	var/datum/antagonist/changeling/changeling = mind.has_antag_datum(/datum/antagonist/changeling)
+	if(changeling)
+		changeling.regain_powers()
 
-	update_fov_client()
+	med_hud_set_status()

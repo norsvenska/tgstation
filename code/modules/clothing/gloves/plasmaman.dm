@@ -8,7 +8,8 @@
 	heat_protection = HANDS
 	max_heat_protection_temperature = GLOVES_MAX_TEMP_PROTECT
 	resistance_flags = NONE
-	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, FIRE = 95, ACID = 95)
+	permeability_coefficient = 0.05
+	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, RAD = 0, FIRE = 95, ACID = 95)
 
 /obj/item/clothing/gloves/color/plasmaman/black
 	name = "black envirogloves"
@@ -21,6 +22,7 @@
 	icon_state = "nitrile"
 	inhand_icon_state = "nitrilegloves"
 	clothing_traits = list(TRAIT_QUICKER_CARRY, TRAIT_FASTMED)
+	transfer_prints = FALSE
 
 /obj/item/clothing/gloves/color/plasmaman/white
 	name = "white envirogloves"
@@ -58,12 +60,13 @@
 	icon_state = "explorerplasma"
 	inhand_icon_state = "explorerplasma"
 
-/obj/item/clothing/gloves/color/plasmaman/botanic_leather
+/obj/item/clothing/gloves/botanic_leather/plasmaman
 	name = "botany envirogloves"
-	desc = "These leather gloves protect your boney hands against thorns, barbs, prickles, spikes and other harmful objects of floral origin."
+	desc = "Covers up those scandalous boney hands."
 	icon_state = "botanyplasma"
 	inhand_icon_state = "botanyplasma"
-	clothing_traits = list(TRAIT_PLANT_SAFE)
+	permeability_coefficient = 0.05
+	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 100, RAD = 0, FIRE = 95, ACID = 95)
 
 /obj/item/clothing/gloves/color/plasmaman/prototype
 	name = "prototype envirogloves"
@@ -81,6 +84,11 @@
 	icon_state = "wizard"
 	inhand_icon_state = "purplegloves"
 
+/obj/item/clothing/gloves/radio
+	name = "translation gloves"
+	desc = "A pair of electronic gloves which connect to nearby radios wirelessly. Allows for sign language users to 'speak' over comms."
+	icon_state = "radio_g"
+	inhand_icon_state = "radio_g"
 
 /obj/item/clothing/gloves/color/plasmaman/head_of_personnel
 	name = "head of personnel's envirogloves"
@@ -113,11 +121,3 @@
 	name = "CentCom intern envirogloves"
 	icon_state = "internplasma"
 	inhand_icon_state = "internplasma"
-
-/obj/item/clothing/gloves/color/plasmaman/radio
-	name = "translation envirogloves"
-	desc = "Allows the less vocally-capable plasmamen to use sign language over comms."
-	icon_state = "radio_gplasma"
-	inhand_icon_state = "radio_gplasma"
-	worn_icon_state = "radio_g"
-	clothing_traits = list(TRAIT_CAN_SIGN_ON_COMMS)

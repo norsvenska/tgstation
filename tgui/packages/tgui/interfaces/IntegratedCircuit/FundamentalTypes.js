@@ -1,6 +1,5 @@
 import { BasicInput } from './BasicInput';
-import { NumberInput, Button, Stack, Input, Dropdown } from '../../components';
-import { OPTION_DROPDOWN_LARGE_CHAR_AMOUNT } from './constants';
+import { NumberInput, Button, Stack, Input, Dropdown, Box } from '../../components';
 
 export const FUNDAMENTAL_DATA_TYPES = {
   'string': (props, context) => {
@@ -45,18 +44,6 @@ export const FUNDAMENTAL_DATA_TYPES = {
       />
     );
   },
-  'datum': (props, context) => {
-    const { name, setValue } = props;
-    return (
-      <Button
-        content={name}
-        color="transparent"
-        icon="upload"
-        compact
-        onClick={() => setValue(null, { marked_atom: true })}
-      />
-    );
-  },
   'signal': (props, context) => {
     const { name, setValue } = props;
     return (
@@ -69,30 +56,16 @@ export const FUNDAMENTAL_DATA_TYPES = {
     );
   },
   'option': (props, context) => {
-    const {
-      value,
-      setValue,
-    } = props;
-    let large = false;
-    const extraData = props.extraData || [];
-    const data = Array.isArray(extraData)
-      ? extraData
-      : Object.keys(extraData);
-
-    data.forEach(element => {
-      if (element.length > OPTION_DROPDOWN_LARGE_CHAR_AMOUNT) {
-        large = true;
-      }
-    });
-
+    const { value, setValue, extraData } = props;
     return (
       <Dropdown
-        className="IntegratedCircuit__BlueBorder"
+        className="Datatype__Option"
         color={"transparent"}
-        options={data}
+        options={Array.isArray(extraData)
+          ? extraData
+          : Object.keys(extraData)}
         onSelected={setValue}
         displayText={value}
-        openWidth={large ? "200px" : undefined}
         noscroll
       />
     );

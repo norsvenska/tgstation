@@ -72,17 +72,16 @@
 		M.swap_hand()
 	return 1
 
-/atom/movable/screen/navigate
-	name = "navigate"
+/atom/movable/screen/skills
+	name = "skills"
 	icon = 'icons/hud/screen_midnight.dmi'
-	icon_state = "navigate"
-	screen_loc = ui_navigate_menu
+	icon_state = "skills"
+	screen_loc = ui_skill_menu
 
-/atom/movable/screen/navigate/Click()
-	if(!isliving(usr))
-		return TRUE
-	var/mob/living/navigator = usr
-	navigator.navigate()
+/atom/movable/screen/skills/Click()
+	if(ishuman(usr))
+		var/mob/living/carbon/human/H = usr
+		H.mind.print_levels(H)
 
 /atom/movable/screen/craft
 	name = "crafting menu"
@@ -133,7 +132,7 @@
 	if(world.time <= usr.next_move)
 		return TRUE
 
-	if(usr.incapacitated(IGNORE_STASIS))
+	if(usr.incapacitated(ignore_stasis = TRUE))
 		return TRUE
 	if(ismecha(usr.loc)) // stops inventory actions in a mech
 		return TRUE
@@ -267,7 +266,7 @@
 	icon_state = "combat_off"
 	screen_loc = ui_combat_toggle
 
-/atom/movable/screen/combattoggle/Initialize(mapload)
+/atom/movable/screen/combattoggle/Initialize()
 	. = ..()
 	update_appearance()
 
@@ -574,7 +573,6 @@
 	if(choice != hud.mymob.zone_selected)
 		hud.mymob.zone_selected = choice
 		update_appearance()
-		SEND_SIGNAL(user, COMSIG_MOB_SELECTED_ZONE_SET, choice)
 
 	return TRUE
 
@@ -669,15 +667,13 @@
 	return
 
 /atom/movable/screen/splash
-	icon = 'icons/blanks/blank_title.png'
+	icon = 'icons/blank_title.png'
 	icon_state = ""
 	screen_loc = "1,1"
 	plane = SPLASHSCREEN_PLANE
 	var/client/holder
 
-INITIALIZE_IMMEDIATE(/atom/movable/screen/splash)
-
-/atom/movable/screen/splash/Initialize(mapload, client/C, visible, use_previous_title)
+/atom/movable/screen/splash/New(client/C, visible, use_previous_title) //TODO: Make this use INITIALIZE_IMMEDIATE, except its not easy
 	. = ..()
 	if(!istype(C))
 		return
@@ -692,7 +688,8 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/splash)
 			icon = SStitle.icon
 	else
 		if(!SStitle.previous_icon)
-			return INITIALIZE_HINT_QDEL
+			qdel(src)
+			return
 		icon = SStitle.previous_icon
 
 	holder.screen += src
@@ -756,8 +753,3 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/splash)
 		intent_icon.pixel_x = 16 * (i - 1) - 8 * length(streak)
 		add_overlay(intent_icon)
 	return ..()
-
-/atom/movable/screen/stamina
-	name = "stamina"
-	icon_state = "stamina0"
-	screen_loc = ui_stamina

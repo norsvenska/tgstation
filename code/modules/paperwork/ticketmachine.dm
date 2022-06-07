@@ -22,17 +22,21 @@
 	var/list/ticket_holders = list()
 	var/list/obj/item/ticket_machine_ticket/tickets = list()
 
-/obj/machinery/ticket_machine/Initialize(mapload)
-	. = ..()
-	update_appearance()
+/obj/machinery/ticket_machine/directional/north
+	dir = SOUTH
+	pixel_y = 32
 
-/obj/machinery/ticket_machine/Destroy()
-	for(var/obj/item/ticket_machine_ticket/ticket in tickets)
-		ticket.source = null
-	tickets.Cut()
-	return ..()
+/obj/machinery/ticket_machine/directional/south
+	dir = NORTH
+	pixel_y = -32
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/ticket_machine, 32)
+/obj/machinery/ticket_machine/directional/east
+	dir = WEST
+	pixel_x = 32
+
+/obj/machinery/ticket_machine/directional/west
+	dir = EAST
+	pixel_x = -32
 
 /obj/machinery/ticket_machine/multitool_act(mob/living/user, obj/item/I)
 	if(!multitool_check_buffer(user, I)) //make sure it has a data buffer
@@ -56,6 +60,10 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/ticket_machine, 32)
 		tickets.Cut()
 	update_appearance()
 
+/obj/machinery/ticket_machine/Initialize()
+	. = ..()
+	update_appearance()
+
 /obj/machinery/ticket_machine/proc/increment()
 	if(current_number > ticket_number)
 		return
@@ -77,7 +85,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/ticket_machine, 32)
 	req_access = list()
 	id = "ticket_machine_default"
 
-/obj/machinery/button/ticket_machine/Initialize(mapload)
+/obj/machinery/button/ticket_machine/Initialize()
 	. = ..()
 	if(device)
 		var/obj/item/assembly/control/ticket_machine/ours = device
@@ -100,7 +108,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/ticket_machine, 32)
 	desc = "A remote controller for the HoP's ticket machine."
 	var/datum/weakref/linked //To whom are we linked?
 
-/obj/item/assembly/control/ticket_machine/Initialize(mapload)
+/obj/item/assembly/control/ticket_machine/Initialize()
 	..()
 	return INITIALIZE_HINT_LATELOAD
 
@@ -184,21 +192,21 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/ticket_machine, 32)
 	if(ticket_number >= max_number)
 		to_chat(user,span_warning("Ticket supply depleted, please refill this unit with a hand labeller refill cartridge!"))
 		return
-	var/user_ref = REF(user)
-	if((user_ref in ticket_holders) && !(obj_flags & EMAGGED))
+	if((user in ticket_holders) && !(obj_flags & EMAGGED))
 		to_chat(user, span_warning("You already have a ticket!"))
 		return
 	playsound(src, 'sound/machines/terminal_insert_disc.ogg', 100, FALSE)
-	ticket_number++
+	ticket_number ++
 	to_chat(user, span_notice("You take a ticket from [src], looks like you're ticket number #[ticket_number]..."))
 	var/obj/item/ticket_machine_ticket/theirticket = new /obj/item/ticket_machine_ticket(get_turf(src))
 	theirticket.name = "Ticket #[ticket_number]"
 	theirticket.maptext = MAPTEXT(ticket_number)
 	theirticket.saved_maptext = MAPTEXT(ticket_number)
+	theirticket.ticket_number = ticket_number
 	theirticket.source = src
-	theirticket.owner_ref = user_ref
+	theirticket.owner = user
 	user.put_in_hands(theirticket)
-	ticket_holders += user_ref
+	ticket_holders += user
 	tickets += theirticket
 	if(obj_flags & EMAGGED) //Emag the machine to destroy the HOP's life.
 		ready = FALSE
@@ -206,7 +214,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/ticket_machine, 32)
 		theirticket.fire_act()
 		user.dropItemToGround(theirticket)
 		user.adjust_fire_stacks(1)
-		user.ignite_mob()
+		user.IgniteMob()
 		return
 
 /obj/item/ticket_machine_ticket
@@ -220,8 +228,9 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/ticket_machine, 32)
 	resistance_flags = FLAMMABLE
 	max_integrity = 50
 	var/saved_maptext = null
-	var/owner_ref // A ref to our owner. Doesn't need to be weak because mobs have unique refs
+	var/mob/living/carbon/owner
 	var/obj/machinery/ticket_machine/source
+	var/ticket_number
 
 /obj/item/ticket_machine_ticket/attack_hand(mob/user, list/modifiers)
 	. = ..()
@@ -238,8 +247,9 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/ticket_machine, 32)
 	update_appearance()
 
 /obj/item/ticket_machine_ticket/Destroy()
-	if(source)
-		source.ticket_holders -= owner_ref
-		source.tickets -= src
+	if(owner && source)
+		source.ticket_holders -= owner
+		source.tickets[ticket_number] = null
+		owner = null
 		source = null
 	return ..()

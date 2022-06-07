@@ -91,7 +91,7 @@
 /area/template_noop)
 "av" = (
 /obj/effect/turf_decal/bot_white/right,
-/obj/machinery/power/apc/auto_name/directional/west,
+/obj/machinery/power/apc/auto_name/west,
 /obj/machinery/light/small/directional/north,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
@@ -165,7 +165,7 @@
 /area/shuttle/caravan/freighter3)
 "aO" = (
 /obj/machinery/airalarm/all_access{
-	dir = 8;
+	dir = 4;
 	pixel_x = -24
 	},
 /obj/effect/decal/cleanable/blood,
@@ -226,7 +226,7 @@
 /obj/effect/turf_decal/bot_white/right,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/power/apc/auto_name/directional/west,
+/obj/machinery/power/apc/auto_name/west,
 /obj/machinery/light/small/directional/north,
 /obj/structure/cable,
 /obj/machinery/button/door/directional/north{
@@ -256,7 +256,7 @@
 "bg" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/airalarm/all_access{
-	dir = 8;
+	dir = 4;
 	pixel_x = -24
 	},
 /obj/machinery/atmospherics/components/unary/vent_pump/on{
@@ -305,7 +305,7 @@
 /turf/template_noop,
 /area/template_noop)
 "dD" = (
-/turf/open/misc/asteroid/airless,
+/turf/open/floor/plating/asteroid/airless,
 /area/ruin/unpowered)
 "dE" = (
 /turf/closed/wall/mineral/plastitanium/nodiagonal,
@@ -336,11 +336,11 @@
 /area/ruin/unpowered)
 "ew" = (
 /obj/effect/gibspawner/human,
-/turf/open/misc/asteroid/airless,
+/turf/open/floor/plating/asteroid/airless,
 /area/ruin/unpowered)
 "ex" = (
 /obj/item/stack/sheet/iron,
-/turf/open/misc/asteroid/airless,
+/turf/open/floor/plating/asteroid/airless,
 /area/ruin/unpowered)
 "eG" = (
 /obj/item/stack/cable_coil{
@@ -364,12 +364,14 @@
 /turf/open/floor/plating/airless,
 /area/shuttle/caravan/freighter3)
 "gc" = (
-/obj/machinery/door/airlock/external/ruin,
+/obj/machinery/door/airlock/external{
+	req_access_txt = "13"
+	},
 /obj/effect/mapping_helpers/airlock/cyclelink_helper,
 /turf/open/floor/plating/airless,
 /area/shuttle/caravan/freighter3)
 "gd" = (
-/obj/effect/spawner/structure/window/reinforced/shuttle,
+/obj/effect/spawner/structure/window/shuttle,
 /turf/open/floor/plating,
 /area/shuttle/caravan/freighter3)
 "gk" = (
@@ -558,12 +560,14 @@
 /area/shuttle/caravan/freighter2)
 "hs" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/door/airlock/external/ruin,
+/obj/machinery/door/airlock/external{
+	req_access_txt = "13"
+	},
 /obj/effect/mapping_helpers/airlock/cyclelink_helper,
 /turf/open/floor/plating/airless,
 /area/shuttle/caravan/freighter2)
 "ht" = (
-/obj/effect/spawner/structure/window/reinforced/shuttle,
+/obj/effect/spawner/structure/window/shuttle,
 /turf/open/floor/plating,
 /area/shuttle/caravan/freighter2)
 "hu" = (
@@ -593,8 +597,8 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/closet/crate/secure/engineering,
-/obj/effect/spawner/random/exotic/technology,
-/obj/effect/spawner/random/exotic/technology,
+/obj/effect/spawner/lootdrop/space/fancytech,
+/obj/effect/spawner/lootdrop/space/fancytech,
 /turf/open/floor/iron/dark/airless,
 /area/shuttle/caravan/freighter3)
 "hy" = (
@@ -663,8 +667,8 @@
 	},
 /obj/machinery/light/small/directional/north,
 /obj/structure/closet/crate/secure,
-/obj/effect/spawner/random/entertainment/money_large,
-/obj/effect/spawner/random/entertainment/money_large,
+/obj/effect/spawner/lootdrop/space/cashmoney,
+/obj/effect/spawner/lootdrop/space/cashmoney,
 /turf/open/floor/iron/dark/airless,
 /area/shuttle/caravan/freighter2)
 "hX" = (
@@ -711,8 +715,8 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/closet/crate/secure/engineering,
-/obj/effect/spawner/random/exotic/technology,
-/obj/effect/spawner/random/exotic/technology,
+/obj/effect/spawner/lootdrop/space/fancytech,
+/obj/effect/spawner/lootdrop/space/fancytech,
 /turf/open/floor/plating/airless,
 /area/shuttle/caravan/freighter3)
 "ic" = (
@@ -729,7 +733,7 @@
 /area/shuttle/caravan/freighter3)
 "ie" = (
 /obj/machinery/airalarm/all_access{
-	dir = 4;
+	dir = 8;
 	pixel_x = 24
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -745,7 +749,7 @@
 /obj/structure/chair{
 	dir = 4
 	},
-/obj/effect/mob_spawn/corpse/human/cargo_tech,
+/obj/effect/mob_spawn/human/corpse/cargo_tech,
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/iron/dark/airless,
 /area/shuttle/caravan/freighter3)
@@ -929,9 +933,9 @@
 "ja" = (
 /obj/effect/turf_decal/bot_white,
 /obj/structure/closet/crate/secure/engineering,
-/obj/item/organ/internal/cyberimp/arm/toolset,
-/obj/item/organ/internal/cyberimp/eyes/hud/medical,
-/obj/item/organ/internal/cyberimp/brain/anti_stun,
+/obj/item/organ/cyberimp/arm/toolset,
+/obj/item/organ/cyberimp/eyes/hud/medical,
+/obj/item/organ/cyberimp/brain/anti_stun,
 /turf/open/floor/iron/dark/airless,
 /area/shuttle/caravan/freighter3)
 "jb" = (
@@ -1006,7 +1010,7 @@
 "ju" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/airalarm/all_access{
-	dir = 4;
+	dir = 8;
 	pixel_x = 24
 	},
 /turf/open/floor/iron/airless,
@@ -1235,7 +1239,9 @@
 /turf/closed/wall/mineral/plastitanium,
 /area/ruin/unpowered)
 "vE" = (
-/obj/machinery/door/airlock/external/ruin,
+/obj/machinery/door/airlock/external{
+	req_access_txt = "13"
+	},
 /obj/effect/mapping_helpers/airlock/cyclelink_helper{
 	dir = 1
 	},
@@ -1243,7 +1249,9 @@
 /area/shuttle/caravan/freighter3)
 "GL" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/door/airlock/external/ruin,
+/obj/machinery/door/airlock/external{
+	req_access_txt = "13"
+	},
 /obj/effect/mapping_helpers/airlock/cyclelink_helper{
 	dir = 1
 	},

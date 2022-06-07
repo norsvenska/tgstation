@@ -25,15 +25,12 @@
 	///Unlike speak_emote, the list of things in this variable only show by themselves with no spoken text. IE: Ian barks, Ian yaps
 	var/list/emote_see = list()
 
-	///ticks up every time `handle_automated_movement()` is called, which is every 2 seconds at the time of documenting. 1  turns per move is 1 movement every 2 seconds.
 	var/turns_per_move = 1
 	var/turns_since_move = 0
 	///Use this to temporarely stop random movement or to if you write special movement code for animals.
 	var/stop_automated_movement = 0
 	///Does the mob wander around when idle?
 	var/wander = 1
-	/// Makes Goto() return FALSE and not start a move loop
-	var/prevent_goto_movement = FALSE
 	///When set to 1 this stops the animal from moving when someone is pulling it.
 	var/stop_automated_movement_when_pulled = 1
 
@@ -66,9 +63,6 @@
 	var/unsuitable_cold_damage
 	///This damage is taken when the body temp is too hot.
 	var/unsuitable_heat_damage
-
-	/// List of weather immunity traits that are then added on Initialize(), see traits.dm.
-	var/list/weather_immunities
 
 	///Healable by medical stacks? Defaults to yes.
 	var/healable = 1
@@ -134,7 +128,7 @@
 	var/allow_movement_on_non_turfs = FALSE
 
 	///Played when someone punches the creature.
-	var/attacked_sound = SFX_PUNCH
+	var/attacked_sound = "punch"
 
 	///If the creature has, and can use, hands.
 	var/dextrous = FALSE
@@ -184,9 +178,7 @@
 		AddComponent(/datum/component/personal_crafting)
 		ADD_TRAIT(src, TRAIT_ADVANCEDTOOLUSER, ROUNDSTART_TRAIT)
 		ADD_TRAIT(src, TRAIT_CAN_STRIP, ROUNDSTART_TRAIT)
-	ADD_TRAIT(src, TRAIT_NOFIRE_SPREAD, ROUNDSTART_TRAIT)
-	for(var/trait in weather_immunities)
-		ADD_TRAIT(src, trait, ROUNDSTART_TRAIT)
+	ADD_TRAIT(src, TRAIT_NOFIRE_SPREAD, SPECIES_TRAIT)
 
 	if(speak)
 		speak = string_list(speak)
@@ -202,9 +194,9 @@
 		damage_coeff = string_assoc_list(damage_coeff)
 	if(footstep_type)
 		AddElement(/datum/element/footstep, footstep_type)
-	if(isnull(unsuitable_cold_damage))
+	if(!isnull(unsuitable_cold_damage))
 		unsuitable_cold_damage = unsuitable_atmos_damage
-	if(isnull(unsuitable_heat_damage))
+	if(!isnull(unsuitable_heat_damage))
 		unsuitable_heat_damage = unsuitable_atmos_damage
 
 /mob/living/simple_animal/Life(delta_time = SSMOBS_DT, times_fired)
@@ -214,7 +206,8 @@
 
 /mob/living/simple_animal/Destroy()
 	GLOB.simple_animals[AIStatus] -= src
-	SSnpcpool.currentrun -= src
+	if (SSnpcpool.state == SS_PAUSED && LAZYLEN(SSnpcpool.currentrun))
+		SSnpcpool.currentrun -= src
 
 	if(nest)
 		nest.spawned_mobs -= src
@@ -224,6 +217,8 @@
 	if (T && AIStatus == AI_Z_OFF)
 		SSidlenpcpool.idle_mobs_by_zlevel[T.z] -= src
 
+	//Walking counts as a reference, putting this here because most things don't walk, clean this up once walk() procs are dead
+	walk(src, 0)
 	return ..()
 
 /mob/living/simple_animal/examine(mob/user)
@@ -261,23 +256,16 @@
 
 /mob/living/simple_animal/proc/handle_automated_movement()
 	set waitfor = FALSE
-	if(stop_automated_movement || !wander)
-		return
-	if(!isturf(loc) && !allow_movement_on_non_turfs)
-		return
-	if(!(mobility_flags & MOBILITY_MOVE)) //This is so it only moves if it's not inside a closet, gentics machine, etc.
-		return TRUE
-
-	turns_since_move++
-	if(turns_since_move < turns_per_move)
-		return TRUE
-	if(stop_automated_movement_when_pulled && pulledby) //Some animals don't move when pulled
-		return TRUE
-	var/anydir = pick(GLOB.cardinals)
-	if(Process_Spacemove(anydir))
-		Move(get_step(src, anydir), anydir)
-		turns_since_move = 0
-	return TRUE
+	if(!stop_automated_movement && wander)
+		if((isturf(loc) || allow_movement_on_non_turfs) && (mobility_flags & MOBILITY_MOVE)) //This is so it only moves if it's not inside a closet, gentics machine, etc.
+			turns_since_move++
+			if(turns_since_move >= turns_per_move)
+				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
+					var/anydir = pick(GLOB.cardinals)
+					if(Process_Spacemove(anydir))
+						Move(get_step(src, anydir), anydir)
+						turns_since_move = 0
+			return 1
 
 /mob/living/simple_animal/proc/handle_automated_speech(override)
 	set waitfor = FALSE
@@ -324,11 +312,11 @@
 		var/turf/open/ST = loc
 		if(ST.air)
 			var/ST_gases = ST.air.gases
-			ST.air.assert_gases(/datum/gas/oxygen, /datum/gas/nitrogen, /datum/gas/carbon_dioxide, /datum/gas/plasma)
+			ST.air.assert_gases(arglist(GLOB.hardcoded_gases))
 
 			var/plas = ST_gases[/datum/gas/plasma][MOLES]
 			var/oxy = ST_gases[/datum/gas/oxygen][MOLES]
-			var/n2 = ST_gases[/datum/gas/nitrogen][MOLES]
+			var/n2  = ST_gases[/datum/gas/nitrogen][MOLES]
 			var/co2 = ST_gases[/datum/gas/carbon_dioxide][MOLES]
 
 			ST.air.garbage_collect()
@@ -374,9 +362,9 @@
 	if(!environment_air_is_safe() && unsuitable_atmos_damage)
 		adjustHealth(unsuitable_atmos_damage * delta_time)
 		if(unsuitable_atmos_damage > 0)
-			throw_alert(ALERT_NOT_ENOUGH_OXYGEN, /atom/movable/screen/alert/not_enough_oxy)
+			throw_alert("not_enough_oxy", /atom/movable/screen/alert/not_enough_oxy)
 	else
-		clear_alert(ALERT_NOT_ENOUGH_OXYGEN)
+		clear_alert("not_enough_oxy")
 
 	handle_temperature_damage(delta_time, times_fired)
 
@@ -386,26 +374,26 @@
 		adjustHealth(unsuitable_cold_damage * delta_time)
 		switch(unsuitable_cold_damage)
 			if(1 to 5)
-				throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/cold, 1)
+				throw_alert("temp", /atom/movable/screen/alert/cold, 1)
 			if(5 to 10)
-				throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/cold, 2)
+				throw_alert("temp", /atom/movable/screen/alert/cold, 2)
 			if(10 to INFINITY)
-				throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/cold, 3)
+				throw_alert("temp", /atom/movable/screen/alert/cold, 3)
 		. = TRUE
 
 	if((bodytemperature > maxbodytemp) && unsuitable_heat_damage)
 		adjustHealth(unsuitable_heat_damage * delta_time)
 		switch(unsuitable_heat_damage)
 			if(1 to 5)
-				throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/hot, 1)
+				throw_alert("temp", /atom/movable/screen/alert/hot, 1)
 			if(5 to 10)
-				throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/hot, 2)
+				throw_alert("temp", /atom/movable/screen/alert/hot, 2)
 			if(10 to INFINITY)
-				throw_alert(ALERT_TEMPERATURE, /atom/movable/screen/alert/hot, 3)
+				throw_alert("temp", /atom/movable/screen/alert/hot, 3)
 		. = TRUE
 
 	if(!.)
-		clear_alert(ALERT_TEMPERATURE)
+		clear_alert("temp")
 
 /mob/living/simple_animal/gib()
 	if(butcher_results || guaranteed_butcher_results)
@@ -468,7 +456,7 @@
 	if(del_on_death)
 		..()
 		//Prevent infinite loops if the mob Destroy() is overridden in such
-		//a manner as to cause a call to death() again //Pain
+		//a manner as to cause a call to death() again
 		del_on_death = FALSE
 		qdel(src)
 	else
@@ -496,7 +484,10 @@
 			return FALSE
 	return TRUE
 
-/mob/living/simple_animal/ignite_mob()
+/mob/living/simple_animal/handle_fire(delta_time, times_fired)
+	return TRUE
+
+/mob/living/simple_animal/IgniteMob()
 	return FALSE
 
 /mob/living/simple_animal/extinguish_mob()
@@ -532,10 +523,23 @@
 			return //we never mate when not alone, so just abort early
 
 	if(alone && partner && children < 3)
-		var/childspawn = pick_weight(childtype)
+		var/childspawn = pickweight(childtype)
 		var/turf/target = get_turf(loc)
 		if(target)
 			return new childspawn(target)
+
+/mob/living/simple_animal/stripPanelUnequip(obj/item/what, mob/who, where)
+	if(!canUseTopic(who, BE_CLOSE))
+		return
+	else
+		..()
+
+/mob/living/simple_animal/stripPanelEquip(obj/item/what, mob/who, where)
+	if(!canUseTopic(who, BE_CLOSE))
+		return
+	else
+		..()
+
 
 /mob/living/simple_animal/update_resting()
 	if(resting)
@@ -543,6 +547,19 @@
 	else
 		REMOVE_TRAIT(src, TRAIT_IMMOBILIZED, RESTING_TRAIT)
 	return ..()
+
+
+/mob/living/simple_animal/update_transform()
+	var/matrix/ntransform = matrix(transform) //aka transform.Copy()
+	var/changed = FALSE
+
+	if(resize != RESIZE_DEFAULT_SIZE)
+		changed = TRUE
+		ntransform.Scale(resize)
+		resize = RESIZE_DEFAULT_SIZE
+
+	if(changed)
+		animate(src, transform = ntransform, time = 2, easing = EASE_IN|EASE_OUT)
 
 /mob/living/simple_animal/proc/sentience_act() //Called when a simple animal gains sentience via gold slime potion
 	toggle_ai(AI_OFF) // To prevent any weirdness.
@@ -552,21 +569,15 @@
 	if(!client)
 		return
 	if(stat == DEAD)
-		if(SSmapping.level_trait(z, ZTRAIT_NOXRAY))
-			sight = null
-		else if(is_secret_level(z))
-			sight = initial(sight)
-		else
-			sight = (SEE_TURFS|SEE_MOBS|SEE_OBJS)
-		see_in_dark = NIGHTVISION_FOV_RANGE
+		sight = (SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_OBSERVER
 		return
 
 	see_invisible = initial(see_invisible)
 	see_in_dark = initial(see_in_dark)
 	sight = initial(sight)
-	if(SSmapping.level_trait(z, ZTRAIT_NOXRAY))
-		sight = null
+
 	if(client.eye != src)
 		var/atom/A = client.eye
 		if(A.update_remote_sight(src)) //returns 1 if we override all other sight updates.
@@ -615,8 +626,8 @@
 		if(H)
 			H.update_appearance()
 
-/mob/living/simple_animal/put_in_hands(obj/item/I, del_on_fail = FALSE, merge_stacks = TRUE, ignore_animation = TRUE)
-	. = ..()
+/mob/living/simple_animal/put_in_hands(obj/item/I, del_on_fail = FALSE, merge_stacks = TRUE)
+	. = ..(I, del_on_fail, merge_stacks)
 	update_inv_hands()
 
 /mob/living/simple_animal/update_inv_hands()
@@ -639,19 +650,16 @@
 	return ..()
 
 /mob/living/simple_animal/proc/toggle_ai(togglestatus)
-	if(QDELETED(src))
-		return
 	if(!can_have_ai && (togglestatus != AI_OFF))
 		return
 	if (AIStatus != togglestatus)
 		if (togglestatus > 0 && togglestatus < 5)
 			if (togglestatus == AI_Z_OFF || AIStatus == AI_Z_OFF)
 				var/turf/T = get_turf(src)
-				if (T)
-					if (AIStatus == AI_Z_OFF)
-						SSidlenpcpool.idle_mobs_by_zlevel[T.z] -= src
-					else
-						SSidlenpcpool.idle_mobs_by_zlevel[T.z] += src
+				if (AIStatus == AI_Z_OFF)
+					SSidlenpcpool.idle_mobs_by_zlevel[T.z] -= src
+				else
+					SSidlenpcpool.idle_mobs_by_zlevel[T.z] += src
 			GLOB.simple_animals[AIStatus] -= src
 			GLOB.simple_animals[togglestatus] += src
 			AIStatus = togglestatus
@@ -662,10 +670,10 @@
 	if (pulledby || shouldwakeup)
 		toggle_ai(AI_ON)
 
-/mob/living/simple_animal/on_changed_z_level(turf/old_turf, turf/new_turf)
+/mob/living/simple_animal/onTransitZ(old_z, new_z)
 	..()
-	if (old_turf && AIStatus == AI_Z_OFF)
-		SSidlenpcpool.idle_mobs_by_zlevel[old_turf.z] -= src
+	if (AIStatus == AI_Z_OFF)
+		SSidlenpcpool.idle_mobs_by_zlevel[old_z] -= src
 		toggle_ai(initial(AIStatus))
 
 ///This proc is used for adding the swabbale element to mobs so that they are able to be biopsied and making sure holograpic and butter-based creatures don't yield viable cells samples.
@@ -688,11 +696,6 @@
 /mob/living/simple_animal/proc/stop_deadchat_plays()
 	stop_automated_movement = FALSE
 
-/mob/living/simple_animal/proc/Goto(target, delay, minimum_distance)
-	if(prevent_goto_movement)
-		return FALSE
-	SSmove_manager.move_to(src, target, minimum_distance, delay)
-	return TRUE
 
 //Makes this mob hunt the prey, be it living or an object. Will kill living creatures, and delete objects.
 /mob/living/simple_animal/proc/hunt(hunted)
@@ -705,8 +708,9 @@
 		return
 	if(!COOLDOWN_FINISHED(src, emote_cooldown)) // Has the cooldown on this ended?
 		return
-	if(!Adjacent(hunted) && Goto(hunted, 3, 0))
+	if(!Adjacent(hunted))
 		stop_automated_movement = TRUE
+		walk_to(src,hunted,0,3)
 		if(Adjacent(hunted))
 			hunt(hunted) // In case it gets next to the target immediately, skip the scan timer and kill it.
 		return

@@ -47,7 +47,7 @@
 
 	var/is_tree = TRUE
 
-/mob/living/simple_animal/hostile/tree/Initialize(mapload)
+/mob/living/simple_animal/hostile/tree/Initialize()
 	. = ..()
 	add_cell_sample()
 

@@ -16,14 +16,14 @@
 	// It's a simple purple beam, works well enough for the purple hiero effects.
 	beam_effect = "plasmabeam"
 
-/datum/action/innate/dash/hierophant/teleport(mob/user, atom/target)
+/datum/action/innate/dash/hierophant/Teleport(mob/user, atom/target)
 	var/dist = get_dist(user, target)
 	if(dist > HIEROPHANT_BLINK_RANGE)
-		user.balloon_alert(user, "destination out of range!")
+		to_chat(user, span_hierophant_warning("Blink destination out of range."))
 		return
 	var/turf/target_turf = get_turf(target)
 	if(target_turf.is_blocked_turf_ignore_climbable())
-		user.balloon_alert(user, "destination blocked!")
+		to_chat(user, span_hierophant_warning("Blink destination blocked."))
 		return
 	. = ..()
 	if(!current_charges)
@@ -77,7 +77,7 @@
 	/// Whether the blink is charged. Set and unset by the blink action. Used as part of setting the appropriate icon states.
 	var/blink_charged = TRUE
 
-/obj/item/hierophant_club/Initialize(mapload)
+/obj/item/hierophant_club/Initialize()
 	. = ..()
 	blink = new(src)
 
@@ -117,7 +117,7 @@
 	if((target == beacon) && target.Adjacent(src))
 		return
 	if(blink_activated)
-		blink.teleport(user, target)
+		blink.Teleport(user, target)
 
 /obj/item/hierophant_club/update_icon_state()
 	icon_state = inhand_icon_state = "hierophant_club[blink_charged ? "_ready":""][(!QDELETED(beacon)) ? "":"_beacon"]"
@@ -253,96 +253,73 @@
 
 /obj/item/mayhem/attack_self(mob/user)
 	for(var/mob/living/carbon/human/target in range(7,user))
-		target.apply_status_effect(/datum/status_effect/mayhem)
+		target.apply_status_effect(STATUS_EFFECT_MAYHEM)
 	to_chat(user, span_notice("You shatter the bottle!"))
 	playsound(user.loc, 'sound/effects/glassbr1.ogg', 100, TRUE)
 	message_admins(span_adminnotice("[ADMIN_LOOKUPFLW(user)] has activated a bottle of mayhem!"))
 	user.log_message("activated a bottle of mayhem", LOG_ATTACK)
 	qdel(src)
 
-/obj/item/clothing/suit/hooded/hostile_environment
+/obj/item/clothing/suit/space/hardsuit/hostile_environment
 	name = "H.E.C.K. suit"
 	desc = "Hostile Environment Cross-Kinetic Suit: A suit designed to withstand the wide variety of hazards from Lavaland. It wasn't enough for its last owner."
 	icon_state = "hostile_env"
-	hoodtype = /obj/item/clothing/head/hooded/hostile_environment
-	armor = list(MELEE = 70, BULLET = 40, LASER = 10, ENERGY = 20, BOMB = 50, BIO = 0, FIRE = 100, ACID = 100)
-	cold_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
-	min_cold_protection_temperature = FIRE_SUIT_MIN_TEMP_PROTECT
-	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
+	inhand_icon_state = "hostile_env"
 	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT
-	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
-	clothing_flags = THICKMATERIAL
-	resistance_flags = FIRE_PROOF|LAVA_PROOF|ACID_PROOF
-	transparent_protection = HIDEGLOVES|HIDESUITSTORAGE|HIDEJUMPSUIT|HIDESHOES
-	allowed = list(/obj/item/flashlight, /obj/item/tank/internals, /obj/item/resonator, /obj/item/mining_scanner, /obj/item/t_scanner/adv_mining_scanner, /obj/item/gun/energy/recharge/kinetic_accelerator, /obj/item/pickaxe)
-	greyscale_colors = "#4d4d4d#808080"
-	greyscale_config = /datum/greyscale_config/heck_suit
-	greyscale_config_worn = /datum/greyscale_config/heck_suit/worn
-	flags_1 = IS_PLAYER_COLORABLE_1
+	resistance_flags = FIRE_PROOF | LAVA_PROOF | ACID_PROOF
+	helmettype = /obj/item/clothing/head/helmet/space/hardsuit/hostile_environment
+	slowdown = 0
+	armor = list(MELEE = 70, BULLET = 40, LASER = 10, ENERGY = 20, BOMB = 50, BIO = 100, RAD = 100, FIRE = 100, ACID = 100)
+	allowed = list(/obj/item/flashlight, /obj/item/tank/internals, /obj/item/resonator, /obj/item/mining_scanner, /obj/item/t_scanner/adv_mining_scanner, /obj/item/gun/energy/kinetic_accelerator, /obj/item/pickaxe)
 
-/obj/item/clothing/suit/hooded/hostile_environment/Initialize(mapload)
-	. = ..()
-	AddElement(/datum/element/radiation_protected_clothing)
-	AddComponent(/datum/component/gags_recolorable)
-
-/obj/item/clothing/suit/hooded/hostile_environment/process(delta_time)
+/obj/item/clothing/suit/space/hardsuit/hostile_environment/process(delta_time)
 	. = ..()
 	var/mob/living/carbon/wearer = loc
 	if(istype(wearer) && DT_PROB(1, delta_time)) //cursed by bubblegum
-		if(prob(7.5))
+		if(DT_PROB(7.5, delta_time))
 			new /datum/hallucination/oh_yeah(wearer)
 			to_chat(wearer, span_colossus("<b>[pick("I AM IMMORTAL.","I SHALL TAKE BACK WHAT'S MINE.","I SEE YOU.","YOU CANNOT ESCAPE ME FOREVER.","DEATH CANNOT HOLD ME.")]</b>"))
 		else
 			to_chat(wearer, span_warning("[pick("You hear faint whispers.","You smell ash.","You feel hot.","You hear a roar in the distance.")]"))
 
-/obj/item/clothing/head/hooded/hostile_environment
+/obj/item/clothing/head/helmet/space/hardsuit/hostile_environment
 	name = "H.E.C.K. helmet"
 	desc = "Hostile Environiment Cross-Kinetic Helmet: A helmet designed to withstand the wide variety of hazards from Lavaland. It wasn't enough for its last owner."
-	icon_state = "hostile_env"
+	icon_state = "hardsuit0-heck"
+	inhand_icon_state = "hostile_env"
+	hardsuit_type = "heck"
 	w_class = WEIGHT_CLASS_NORMAL
-	armor = list(MELEE = 70, BULLET = 40, LASER = 10, ENERGY = 20, BOMB = 50, BIO = 0, FIRE = 100, ACID = 100)
-	cold_protection = HEAD
-	min_cold_protection_temperature = FIRE_SUIT_MIN_TEMP_PROTECT
-	heat_protection = HEAD
 	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT
-	clothing_flags = SNUG_FIT|THICKMATERIAL
-	resistance_flags = FIRE_PROOF|LAVA_PROOF|ACID_PROOF
-	flags_inv = HIDEMASK|HIDEEARS|HIDEFACE|HIDEEYES|HIDEHAIR|HIDEFACIALHAIR|HIDESNOUT
-	flags_cover = HEADCOVERSMOUTH
+	armor = list(MELEE = 70, BULLET = 40, LASER = 10, ENERGY = 20, BOMB = 50, BIO = 100, RAD = 100, FIRE = 100, ACID = 100)
+	resistance_flags = FIRE_PROOF | LAVA_PROOF | ACID_PROOF
 	actions_types = list()
-	greyscale_colors = "#4d4d4d#808080#ff3300"
-	greyscale_config = /datum/greyscale_config/heck_helmet
-	greyscale_config_worn = /datum/greyscale_config/heck_helmet/worn
-	flags_1 = IS_PLAYER_COLORABLE_1
 
-/obj/item/clothing/head/hooded/hostile_environment/Initialize(mapload)
+/obj/item/clothing/head/helmet/space/hardsuit/hostile_environment/Initialize()
 	. = ..()
 	update_appearance()
 	AddComponent(/datum/component/butchering, 5, 150, null, null, null, TRUE, CALLBACK(src, .proc/consume))
-	AddElement(/datum/element/radiation_protected_clothing)
-	AddComponent(/datum/component/gags_recolorable)
 
-/obj/item/clothing/head/hooded/hostile_environment/equipped(mob/user, slot, initial = FALSE)
+/obj/item/clothing/head/helmet/space/hardsuit/hostile_environment/equipped(mob/user, slot, initial = FALSE)
 	. = ..()
 	RegisterSignal(user, COMSIG_HUMAN_EARLY_UNARMED_ATTACK, .proc/butcher_target)
 	var/datum/component/butchering/butchering = GetComponent(/datum/component/butchering)
 	butchering.butchering_enabled = TRUE
 	to_chat(user, span_notice("You feel a bloodlust. You can now butcher corpses with your bare arms."))
 
-/obj/item/clothing/head/hooded/hostile_environment/dropped(mob/user, silent = FALSE)
+/obj/item/clothing/head/helmet/space/hardsuit/hostile_environment/dropped(mob/user, silent = FALSE)
 	. = ..()
 	UnregisterSignal(user, COMSIG_HUMAN_EARLY_UNARMED_ATTACK)
 	var/datum/component/butchering/butchering = GetComponent(/datum/component/butchering)
 	butchering.butchering_enabled = FALSE
 	to_chat(user, span_notice("You lose your bloodlust."))
 
-/obj/item/clothing/head/hooded/hostile_environment/proc/butcher_target(mob/user, atom/target, proximity)
+/obj/item/clothing/head/helmet/space/hardsuit/hostile_environment/proc/butcher_target(mob/user, atom/target, proximity)
 	SIGNAL_HANDLER
 	if(!isliving(target))
 		return
 	return SEND_SIGNAL(src, COMSIG_ITEM_ATTACK, target, user)
 
-/obj/item/clothing/head/hooded/hostile_environment/proc/consume(mob/living/user, mob/living/butchered)
+/obj/item/clothing/head/helmet/space/hardsuit/hostile_environment/proc/consume(mob/living/user, mob/living/butchered)
 	if(butchered.mob_biotypes & (MOB_ROBOTIC | MOB_SPIRIT))
 		return
 	var/health_consumed = butchered.maxHealth * 0.1
@@ -350,6 +327,19 @@
 	to_chat(user, span_notice("You heal from the corpse of [butchered]."))
 	var/datum/client_colour/color = user.add_client_colour(/datum/client_colour/bloodlust)
 	QDEL_IN(color, 1 SECONDS)
+
+/obj/item/clothing/head/helmet/space/hardsuit/hostile_environment/update_overlays()
+	. = ..()
+	var/mutable_appearance/glass_overlay = mutable_appearance(icon, "hostile_env_glass")
+	glass_overlay.appearance_flags = RESET_COLOR
+	. += glass_overlay
+
+/obj/item/clothing/head/helmet/space/hardsuit/hostile_environment/worn_overlays(mutable_appearance/standing, isinhands)
+	. = ..()
+	if(!isinhands)
+		var/mutable_appearance/glass_overlay = mutable_appearance('icons/mob/clothing/head.dmi', "hostile_env_glass")
+		glass_overlay.appearance_flags = RESET_COLOR
+		. += glass_overlay
 
 #define MAX_BLOOD_LEVEL 100
 
@@ -383,13 +373,13 @@
 	/// Cooldown between attacks
 	COOLDOWN_DECLARE(attack_cooldown)
 
-/obj/item/soulscythe/Initialize(mapload)
+/obj/item/soulscythe/Initialize()
 	. = ..()
 	soul = new(src)
 	RegisterSignal(soul, COMSIG_LIVING_RESIST, .proc/on_resist)
 	RegisterSignal(soul, COMSIG_MOB_ATTACK_RANGED, .proc/on_attack)
 	RegisterSignal(soul, COMSIG_MOB_ATTACK_RANGED_SECONDARY, .proc/on_secondary_attack)
-	RegisterSignal(src, COMSIG_ATOM_INTEGRITY_CHANGED, .proc/on_integrity_change)
+	RegisterSignal(src, COMSIG_OBJ_INTEGRITY_CHANGED, .proc/on_integrity_change)
 
 /obj/item/soulscythe/examine(mob/user)
 	. = ..()
@@ -425,7 +415,7 @@
 	using = TRUE
 	balloon_alert(user, "you hold the scythe up...")
 	ADD_TRAIT(src, TRAIT_NODROP, type)
-	var/list/mob/dead/observer/candidates = poll_ghost_candidates("Do you want to play as [user.real_name]'s soulscythe?", ROLE_PAI, FALSE, 100, POLL_IGNORE_POSSESSED_BLADE)
+	var/list/mob/dead/observer/candidates = pollGhostCandidates("Do you want to play as [user.real_name]'s soulscythe?", ROLE_PAI, FALSE, 100, POLL_IGNORE_POSSESSED_BLADE)
 	if(LAZYLEN(candidates))
 		var/mob/dead/observer/picked_ghost = pick(candidates)
 		soul.ckey = picked_ghost.ckey
@@ -587,7 +577,6 @@
 	gender = NEUTER
 	mob_biotypes = MOB_SPIRIT
 	faction = list()
-	weather_immunities = list(TRAIT_ASHSTORM_IMMUNE, TRAIT_SNOWSTORM_IMMUNE)
 	/// Blood level, used for movement and abilities in a soulscythe
 	var/blood_level = MAX_BLOOD_LEVEL
 
@@ -603,7 +592,7 @@
 /obj/projectile/soulscythe
 	name = "soulslash"
 	icon_state = "soulslash"
-	armor_flag = MELEE //jokair
+	flag = MELEE //jokair
 	damage = 15
 	light_range = 1
 	light_power = 1
@@ -637,11 +626,11 @@
 	var/summon_cooldown = 0
 	var/list/mob/dead/observer/spirits
 
-/obj/item/melee/ghost_sword/Initialize(mapload)
+/obj/item/melee/ghost_sword/Initialize()
 	. = ..()
 	spirits = list()
 	START_PROCESSING(SSobj, src)
-	SSpoints_of_interest.make_point_of_interest(src)
+	AddElement(/datum/element/point_of_interest)
 	AddComponent(/datum/component/butchering, 150, 90)
 
 /obj/item/melee/ghost_sword/Destroy()
@@ -675,7 +664,7 @@
 /obj/item/melee/ghost_sword/proc/ghost_check()
 	var/ghost_counter = 0
 	var/turf/T = get_turf(src)
-	var/list/contents = T.get_all_contents()
+	var/list/contents = T.GetAllContents()
 	var/mob/dead/observer/current_spirits = list()
 	for(var/thing in contents)
 		var/atom/A = thing
@@ -721,9 +710,8 @@
 	switch(random)
 		if(1)
 			to_chat(user, span_danger("Your appearance morphs to that of a very small humanoid ash dragon! You get to look like a freak without the cool abilities."))
-			consumer.dna.features = list("mcolor" = "#A02720", "tail_lizard" = "Dark Tiger", "tail_human" = "None", "snout" = "Sharp", "horns" = "Curled", "ears" = "None", "wings" = "None", "frills" = "None", "spines" = "Long", "body_markings" = "Dark Tiger Body", "legs" = "Digitigrade Legs")
-			consumer.eye_color_left = "#FEE5A3"
-			consumer.eye_color_right = "#FEE5A3"
+			consumer.dna.features = list("mcolor" = "A02720", "tail_lizard" = "Dark Tiger", "tail_human" = "None", "snout" = "Sharp", "horns" = "Curled", "ears" = "None", "wings" = "None", "frills" = "None", "spines" = "Long", "body_markings" = "Dark Tiger Body", "legs" = "Digitigrade Legs")
+			consumer.eye_color = "fee5a3"
 			consumer.set_species(/datum/species/lizard)
 		if(2)
 			to_chat(user, span_danger("Your flesh begins to melt! Miraculously, you seem fine otherwise."))
@@ -735,7 +723,7 @@
 				user.mind.AddSpell(dragon_shapeshift)
 		if(4)
 			to_chat(user, span_danger("You feel like you could walk straight through lava now."))
-			ADD_TRAIT(user, TRAIT_LAVA_IMMUNE, type)
+			LAZYOR(consumer.weather_immunities, WEATHER_LAVA)
 
 	playsound(user,'sound/items/drink.ogg', 30, TRUE)
 	qdel(src)
@@ -757,7 +745,7 @@
 	hitsound = 'sound/weapons/sear.ogg'
 	var/turf_type = /turf/open/lava/smooth/weak
 	var/transform_string = "lava"
-	var/reset_turf_type = /turf/open/misc/asteroid/basalt
+	var/reset_turf_type = /turf/open/floor/plating/asteroid/basalt
 	var/reset_string = "basalt"
 	var/create_cooldown = 10 SECONDS
 	var/create_delay = 3 SECONDS
@@ -775,7 +763,7 @@
 		var/turf/open/T = get_turf(target)
 		if(!istype(T))
 			return
-		if(!istype(T, /turf/open/lava))
+		if(!istype(T, turf_type))
 			var/obj/effect/temp_visual/lavastaff/L = new /obj/effect/temp_visual/lavastaff(T)
 			L.alpha = 0
 			animate(L, alpha = 255, time = create_delay)
@@ -844,7 +832,7 @@
 	/// Throwforce when the saw is opened.
 	var/open_throwforce = 20
 
-/obj/item/melee/cleaving_saw/Initialize(mapload)
+/obj/item/melee/cleaving_saw/Initialize()
 	. = ..()
 	AddComponent(/datum/component/transforming, \
 		transform_cooldown_time = (CLICK_CD_MELEE * 0.25), \
@@ -910,11 +898,11 @@
 /obj/item/melee/cleaving_saw/proc/nemesis_effects(mob/living/user, mob/living/target)
 	if(istype(target, /mob/living/simple_animal/hostile/asteroid/elite))
 		return
-	var/datum/status_effect/stacking/saw_bleed/existing_bleed = target.has_status_effect(/datum/status_effect/stacking/saw_bleed)
+	var/datum/status_effect/stacking/saw_bleed/existing_bleed = target.has_status_effect(STATUS_EFFECT_SAWBLEED)
 	if(existing_bleed)
 		existing_bleed.add_stacks(bleed_stacks_per_hit)
 	else
-		target.apply_status_effect(/datum/status_effect/stacking/saw_bleed, bleed_stacks_per_hit)
+		target.apply_status_effect(STATUS_EFFECT_SAWBLEED, bleed_stacks_per_hit)
 
 /*
  * Signal proc for [COMSIG_TRANSFORMING_ON_TRANSFORM].
@@ -1046,7 +1034,6 @@
 		for(var/mob/living/hit_mob in turf)
 			to_chat(hit_mob, span_userdanger("You've been struck by lightning!"))
 			hit_mob.electrocute_act(15 * (isanimal(hit_mob) ? 3 : 1) * (turf == target ? 2 : 1) * (boosted ? 2 : 1), src, flags = SHOCK_TESLA|SHOCK_NOSTUN)
-
 		for(var/obj/hit_thing in turf)
 			hit_thing.take_damage(20, BURN, ENERGY, FALSE)
 	playsound(target, 'sound/magic/lightningbolt.ogg', 100, TRUE)

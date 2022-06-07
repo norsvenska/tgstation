@@ -9,7 +9,6 @@
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "grill_open"
 	density = TRUE
-	pass_flags_self = PASSMACHINE | LETPASSTHROW
 	layer = BELOW_OBJ_LAYER
 	use_power = NO_POWER_USE
 	var/grill_fuel = 0
@@ -17,7 +16,7 @@
 	var/grill_time = 0
 	var/datum/looping_sound/grill/grill_loop
 
-/obj/machinery/grill/Initialize(mapload)
+/obj/machinery/grill/Initialize()
 	. = ..()
 	grill_loop = new(src, FALSE)
 
@@ -85,8 +84,8 @@
 	else
 		grill_fuel -= GRILL_FUELUSAGE_IDLE * delta_time
 		if(DT_PROB(0.5, delta_time))
-			var/datum/effect_system/fluid_spread/smoke/bad/smoke = new
-			smoke.set_up(1, holder = src, location = loc)
+			var/datum/effect_system/smoke_spread/bad/smoke = new
+			smoke.set_up(1, loc)
 			smoke.start()
 	if(grilled_item)
 		SEND_SIGNAL(grilled_item, COMSIG_ITEM_GRILLED, src, delta_time)
@@ -134,7 +133,22 @@
 	return ..()
 
 /obj/machinery/grill/proc/finish_grill()
-	SEND_SIGNAL(grilled_item, COMSIG_GRILL_FOOD, grilled_item, grill_time)
+	switch(grill_time) //no 0-20 to prevent spam
+		if(20 to 30)
+			grilled_item.name = "lightly-grilled [grilled_item.name]"
+			grilled_item.desc = "[grilled_item.desc] It's been lightly grilled."
+		if(30 to 80)
+			grilled_item.name = "grilled [grilled_item.name]"
+			grilled_item.desc = "[grilled_item.desc] It's been grilled."
+			grilled_item.foodtype |= FRIED
+		if(80 to 100)
+			grilled_item.name = "heavily grilled [grilled_item.name]"
+			grilled_item.desc = "[grilled_item.desc] It's been heavily grilled."
+			grilled_item.foodtype |= FRIED
+		if(100 to INFINITY) //grill marks reach max alpha
+			grilled_item.name = "Powerfully Grilled [grilled_item.name]"
+			grilled_item.desc = "A [grilled_item.name]. Reminds you of your wife, wait, no, it's prettier!"
+			grilled_item.foodtype |= FRIED
 	grill_time = 0
 	UnregisterSignal(grilled_item, COMSIG_GRILL_COMPLETED)
 	grill_loop.stop()

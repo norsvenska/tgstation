@@ -16,7 +16,6 @@ Passive gate is similar to the regular pump except:
 	interaction_flags_machine = INTERACT_MACHINE_OFFLINE | INTERACT_MACHINE_WIRES_IF_OPEN | INTERACT_MACHINE_ALLOW_SILICON | INTERACT_MACHINE_OPEN_SILICON | INTERACT_MACHINE_SET_MACHINE
 	construction_type = /obj/item/pipe/directional
 	pipe_state = "passivegate"
-	use_power = NO_POWER_USE
 	///Set the target pressure the component should arrive to
 	var/target_pressure = ONE_ATMOSPHERE
 	///Variable for radio frequency
@@ -49,7 +48,7 @@ Passive gate is similar to the regular pump except:
 	cut_overlays()
 	icon_state = "passgate_off-[set_overlay_offset(piping_layer)]"
 	if(on)
-		add_overlay(get_pipe_image(icon, "passgate_on-[set_overlay_offset(piping_layer)]"))
+		add_overlay(getpipeimage(icon, "passgate_on-[set_overlay_offset(piping_layer)]"))
 
 /obj/machinery/atmospherics/components/binary/passive_gate/process_atmos()
 	if(!on)
@@ -63,7 +62,7 @@ Passive gate is similar to the regular pump except:
 //Radio remote control
 
 /**
- * Called in atmos_init(), used to change or remove the radio frequency from the component
+ * Called in atmosinit(), used to change or remove the radio frequency from the component
  * Arguments:
  * * -new_frequency: the frequency that should be used for the radio to attach to the component, use 0 to remove the radio
  */
@@ -74,7 +73,7 @@ Passive gate is similar to the regular pump except:
 		radio_connection = SSradio.add_object(src, frequency, filter = RADIO_ATMOSIA)
 
 /**
- * Called in atmos_init(), send the component status to the radio device connected
+ * Called in atmosinit(), send the component status to the radio device connected
  */
 /obj/machinery/atmospherics/components/binary/passive_gate/proc/broadcast_status()
 	if(!radio_connection)
@@ -129,7 +128,7 @@ Passive gate is similar to the regular pump except:
 				investigate_log("was set to [target_pressure] kPa by [key_name(usr)]", INVESTIGATE_ATMOS)
 	update_appearance()
 
-/obj/machinery/atmospherics/components/binary/passive_gate/atmos_init()
+/obj/machinery/atmospherics/components/binary/passive_gate/atmosinit()
 	..()
 	if(frequency)
 		set_frequency(frequency)

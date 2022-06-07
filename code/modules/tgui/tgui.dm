@@ -31,12 +31,8 @@
 	var/closing = FALSE
 	/// The status/visibility of the UI.
 	var/status = UI_INTERACTIVE
-	/// Timed refreshing state
-	var/refreshing = FALSE
 	/// Topic state used to determine status/interactability.
 	var/datum/ui_state/state = null
-	/// Rate limit client refreshes to prevent DoS.
-	COOLDOWN_DECLARE(refresh_cooldown)
 
 /**
  * public
@@ -54,7 +50,7 @@
  */
 /datum/tgui/New(mob/user, datum/src_object, interface, title, ui_x, ui_y)
 	log_tgui(user,
-		"new [interface] fancy [user?.client?.prefs.read_preference(/datum/preference/toggle/tgui_fancy)]",
+		"new [interface] fancy [user?.client?.prefs.tgui_fancy]",
 		src_object = src_object)
 	src.user = user
 	src.src_object = src_object
@@ -94,9 +90,8 @@
 	window.acquire_lock(src)
 	if(!window.is_ready())
 		window.initialize(
-			strict_mode = TRUE,
-			fancy = user.client.prefs.read_preference(/datum/preference/toggle/tgui_fancy),
-			assets = list(
+			fancy = user.client.prefs.tgui_fancy,
+			inline_assets = list(
 				get_asset_datum(/datum/asset/simple/tgui),
 			))
 	else
@@ -185,17 +180,11 @@
 /datum/tgui/proc/send_full_update(custom_data, force)
 	if(!user.client || !initialized || closing)
 		return
-	if(!COOLDOWN_FINISHED(src, refresh_cooldown))
-		refreshing = TRUE
-		addtimer(CALLBACK(src, .proc/send_full_update), TGUI_REFRESH_FULL_UPDATE_COOLDOWN, TIMER_UNIQUE)
-		return
-	refreshing = FALSE
 	var/should_update_data = force || status >= UI_UPDATE
 	window.send_message("update", get_payload(
 		custom_data,
 		with_data = should_update_data,
 		with_static_data = TRUE))
-	COOLDOWN_START(src, refresh_cooldown, TGUI_REFRESH_FULL_UPDATE_COOLDOWN)
 
 /**
  * public
@@ -226,12 +215,11 @@
 		"title" = title,
 		"status" = status,
 		"interface" = interface,
-		"refreshing" = refreshing,
 		"window" = list(
 			"key" = window_key,
 			"size" = window_size,
-			"fancy" = user.client.prefs.read_preference(/datum/preference/toggle/tgui_fancy),
-			"locked" = user.client.prefs.read_preference(/datum/preference/toggle/tgui_lock),
+			"fancy" = user.client.prefs.tgui_fancy,
+			"locked" = user.client.prefs.tgui_lock,
 		),
 		"client" = list(
 			"ckey" = user.client.ckey,
@@ -264,7 +252,7 @@
 		return
 	var/datum/host = src_object.ui_host(user)
 	// If the object or user died (or something else), abort.
-	if(QDELETED(src_object) || QDELETED(host) || QDELETED(user) || QDELETED(window))
+	if(!src_object || !host || !user || !window)
 		close(can_be_suspended = FALSE)
 		return
 	// Validate ping
@@ -314,11 +302,8 @@
 		return FALSE
 	switch(type)
 		if("ready")
-			// Send a full update when the user manually refreshes the UI
-			if(initialized)
-				send_full_update()
 			initialized = TRUE
-		if("ping/reply")
+		if("pingReply")
 			initialized = TRUE
 		if("suspend")
 			close(can_be_suspended = TRUE)

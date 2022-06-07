@@ -1,9 +1,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon
 	name = "mecha weapon"
 	range = MECHA_RANGED
-	equipment_slot = MECHA_WEAPON
 	destroy_sound = 'sound/mecha/weapdestr.ogg'
-	mech_flags = EXOSUIT_MODULE_COMBAT
 	var/projectile
 	var/fire_sound
 	var/projectiles_per_shot = 1
@@ -12,15 +10,18 @@
 	var/projectile_delay = 0
 	var/firing_effect_type = /obj/effect/temp_visual/dir_setting/firing_effect //the visual effect appearing when the weapon is fired.
 	var/kickback = TRUE //Will using this weapon in no grav push mecha back.
+	mech_flags = EXOSUIT_MODULE_COMBAT
 
-/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(obj/vehicle/sealed/mecha/M, attach_right = FALSE)
+/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(obj/vehicle/sealed/mecha/M)
 	if(!..())
 		return FALSE
 	if(istype(M, /obj/vehicle/sealed/mecha/combat))
 		return TRUE
+	if((locate(/obj/item/mecha_parts/concealed_weapon_bay) in M.contents) && !(locate(/obj/item/mecha_parts/mecha_equipment/weapon) in M.equipment))
+		return TRUE
 	return FALSE
 
-/obj/item/mecha_parts/mecha_equipment/weapon/action(mob/source, atom/target, list/modifiers)
+/obj/item/mecha_parts/mecha_equipment/weapon/action(mob/source, atom/target, params)
 	if(!action_checks(target))
 		return FALSE
 	var/newtonian_target = turn(chassis.dir,180)
@@ -35,14 +36,13 @@
 			else
 				spread = round((i / projectiles_per_shot - 0.5) * variance)
 
-		var/obj/projectile/projectile_obj = new projectile(get_turf(src))
-		projectile_obj.firer = chassis
-		projectile_obj.preparePixelProjectile(target, source, modifiers, spread)
-		if(source.client && isliving(source)) //dont want it to happen from syndie mecha npc mobs, they do direct fire anyways
-			var/mob/living/shooter = source
-			projectile_obj.hit_prone_targets = shooter.combat_mode
-		projectile_obj.fire()
-		if(!projectile_obj.suppressed && firing_effect_type)
+		var/obj/projectile/A = new projectile(get_turf(src))
+		var/modifiers = params2list(params)
+		A.firer = chassis
+		A.preparePixelProjectile(target, source, modifiers, spread)
+
+		A.fire()
+		if(!A.suppressed && firing_effect_type)
 			new firing_effect_type(get_turf(src), chassis.dir)
 		playsound(chassis, fire_sound, 50, TRUE)
 
@@ -126,12 +126,11 @@
 	projectile = /obj/projectile/plasma/adv/mech
 	fire_sound = 'sound/weapons/plasma_cutter.ogg'
 	harmful = TRUE
-	mech_flags = EXOSUIT_MODULE_COMBAT | EXOSUIT_MODULE_WORKING
 
-/obj/item/mecha_parts/mecha_equipment/weapon/energy/plasma/can_attach(obj/vehicle/sealed/mecha/M, attach_right = FALSE)
+/obj/item/mecha_parts/mecha_equipment/weapon/energy/plasma/can_attach(obj/vehicle/sealed/mecha/M)
 	if(..()) //combat mech
 		return TRUE
-	else if(default_can_attach(M, attach_right))
+	else if(LAZYLEN(M.equipment) < M.max_equip)
 		return TRUE
 	return FALSE
 
@@ -145,14 +144,13 @@
 	projectile = /obj/projectile/kinetic/mech
 	fire_sound = 'sound/weapons/kenetic_accel.ogg'
 	harmful = TRUE
-	mech_flags = EXOSUIT_MODULE_COMBAT | EXOSUIT_MODULE_WORKING
 
 //attachable to all mechas, like the plasma cutter
-/obj/item/mecha_parts/mecha_equipment/weapon/energy/mecha_kineticgun/can_attach(obj/vehicle/sealed/mecha/M, attach_right = FALSE)
+/obj/item/mecha_parts/mecha_equipment/weapon/energy/mecha_kineticgun/can_attach(obj/vehicle/sealed/mecha/M)
 	. = ..()
 	if(.) //combat mech
 		return
-	if(default_can_attach(M, attach_right))
+	if(LAZYLEN(M.equipment) < M.max_equip)
 		return TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/taser
@@ -175,7 +173,7 @@
 	kickback = FALSE
 	mech_flags = EXOSUIT_MODULE_HONK
 
-/obj/item/mecha_parts/mecha_equipment/weapon/honker/can_attach(obj/vehicle/sealed/mecha/mecha, attach_right = FALSE)
+/obj/item/mecha_parts/mecha_equipment/weapon/honker/can_attach(obj/vehicle/sealed/mecha/mecha)
 	. = ..()
 	if(!.)
 		return
@@ -183,7 +181,7 @@
 		return FALSE
 
 
-/obj/item/mecha_parts/mecha_equipment/weapon/honker/action(mob/source, atom/target, list/modifiers)
+/obj/item/mecha_parts/mecha_equipment/weapon/honker/action(mob/source, atom/target, params)
 	if(!action_checks(target))
 		return
 	playsound(chassis, 'sound/items/airhorn.ogg', 100, TRUE)
@@ -196,8 +194,8 @@
 			continue
 		to_chat(M, "<font color='red' size='7'>HONK</font>")
 		M.SetSleeping(0)
-		M.adjust_timed_status_effect(40 SECONDS, /datum/status_effect/speech/stutter)
-		var/obj/item/organ/internal/ears/ears = M.getorganslot(ORGAN_SLOT_EARS)
+		M.stuttering += 20
+		var/obj/item/organ/ears/ears = M.getorganslot(ORGAN_SLOT_EARS)
 		if(ears)
 			ears.adjustEarDamage(0, 30)
 		M.Paralyze(60)
@@ -205,7 +203,7 @@
 			M.Stun(200)
 			M.Unconscious(80)
 		else
-			M.set_timed_status_effect(1000 SECONDS, /datum/status_effect/jitter, only_if_higher = TRUE)
+			M.Jitter(500)
 
 	log_message("Honked from [src.name]. HONK!", LOG_MECHA)
 	var/turf/T = get_turf(src)
@@ -221,6 +219,7 @@
 	var/projectiles
 	var/projectiles_cache //ammo to be loaded in, if possible.
 	var/projectiles_cache_max
+	var/projectile_energy_cost
 	var/disabledreload //For weapons with no cache (like the rockets) which are reloaded by hand
 	var/ammo_type
 
@@ -231,35 +230,52 @@
 		return FALSE
 	return TRUE
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
-	. = ..()
-	if(action == "reload")
-		rearm()
-		return TRUE
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/get_equip_info()
+	return "[..()] \[[src.projectiles][projectiles_cache_max &&!projectile_energy_cost?"/[projectiles_cache]":""]\][!disabledreload &&(src.projectiles < initial(src.projectiles))?" - <a href='?src=[REF(src)];rearm=1'>Rearm</a>":null]"
+
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/rearm()
 	if(projectiles < initial(projectiles))
 		var/projectiles_to_add = initial(projectiles) - projectiles
-		if(!projectiles_cache)
-			return FALSE
-		if(projectiles_to_add <= projectiles_cache)
-			projectiles = projectiles + projectiles_to_add
-			projectiles_cache = projectiles_cache - projectiles_to_add
+
+		if(projectile_energy_cost)
+			while(chassis.get_charge() >= projectile_energy_cost && projectiles_to_add)
+				projectiles++
+				projectiles_to_add--
+				chassis.use_power(projectile_energy_cost)
+
 		else
-			projectiles = projectiles + projectiles_cache
-			projectiles_cache = 0
-		log_message("Rearmed [src].", LOG_MECHA)
+			if(!projectiles_cache)
+				return FALSE
+			if(projectiles_to_add <= projectiles_cache)
+				projectiles = projectiles + projectiles_to_add
+				projectiles_cache = projectiles_cache - projectiles_to_add
+			else
+				projectiles = projectiles + projectiles_cache
+				projectiles_cache = 0
+
+		send_byjax(chassis.occupants,"exosuit.browser","[REF(src)]",src.get_equip_info())
+		log_message("Rearmed [src.name].", LOG_MECHA)
 		return TRUE
 
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/needs_rearm()
-	return projectiles <= 0
+	. = !(projectiles > 0)
 
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/action(mob/source, atom/target, list/modifiers)
-	. = ..()
-	if(!.)
-		return
-	projectiles -= projectiles_per_shot
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Topic(href, href_list)
+	..()
+	if (href_list["rearm"])
+		src.rearm()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/action(mob/source, atom/target, params)
+	if(..())
+		projectiles -= projectiles_per_shot
+		send_byjax(chassis.occupants,"exosuit.browser","[REF(src)]",src.get_equip_info())
+		return ..()
+
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/carbine
 	name = "\improper FNX-99 \"Hades\" Carbine"
@@ -271,7 +287,7 @@
 	projectiles_cache = 24
 	projectiles_cache_max = 96
 	harmful = TRUE
-	ammo_type = MECHA_AMMO_INCENDIARY
+	ammo_type = "incendiary"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/silenced
 	name = "\improper S.H.H. \"Quietus\" Carbine"
@@ -281,7 +297,7 @@
 	equip_cooldown = 30
 	projectile = /obj/projectile/bullet/mime
 	projectiles = 6
-	projectiles_cache = 999
+	projectile_energy_cost = 50
 	harmful = TRUE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
@@ -296,7 +312,7 @@
 	projectiles_per_shot = 4
 	variance = 25
 	harmful = TRUE
-	ammo_type = MECHA_AMMO_BUCKSHOT
+	ammo_type = "scattershot"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
 	name = "\improper Ultra AC 2"
@@ -312,7 +328,7 @@
 	randomspread = 1
 	projectile_delay = 2
 	harmful = TRUE
-	ammo_type = MECHA_AMMO_LMG
+	ammo_type = "lmg"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack
 	name = "\improper SRM-8 missile rack"
@@ -326,7 +342,7 @@
 	disabledreload = TRUE
 	equip_cooldown = 60
 	harmful = TRUE
-	ammo_type = MECHA_AMMO_MISSILE_HE
+	ammo_type = "missiles_he"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/breaching
 	name = "\improper BRM-6 missile rack"
@@ -340,7 +356,7 @@
 	disabledreload = TRUE
 	equip_cooldown = 60
 	harmful = TRUE
-	ammo_type = MECHA_AMMO_MISSILE_AP
+	ammo_type = "missiles_br"
 
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher
@@ -348,7 +364,7 @@
 	var/missile_range = 30
 	var/diags_first = FALSE
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/action(mob/source, atom/target, list/modifiers)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/action(mob/source, atom/target, params)
 	if(!action_checks(target))
 		return
 	var/obj/O = new projectile(chassis.loc)
@@ -375,8 +391,8 @@
 	projectiles_cache_max = 24
 	missile_speed = 1.5
 	equip_cooldown = 60
-	ammo_type = MECHA_AMMO_FLASHBANG
 	var/det_time = 20
+	ammo_type = "flashbang"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/flashbang/proj_init(obj/item/grenade/flashbang/F, mob/user)
 	var/turf/T = get_turf(src)
@@ -393,7 +409,7 @@
 	disabledreload = TRUE
 	projectile = /obj/item/grenade/clusterbuster
 	equip_cooldown = 90
-	ammo_type = MECHA_AMMO_CLUSTERBANG
+	ammo_type = "clusterbang"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/banana_mortar
 	name = "banana mortar"
@@ -403,11 +419,11 @@
 	fire_sound = 'sound/items/bikehorn.ogg'
 	projectiles = 15
 	missile_speed = 1.5
-	projectiles_cache = 999
+	projectile_energy_cost = 100
 	equip_cooldown = 20
 	mech_flags = EXOSUIT_MODULE_HONK
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/banana_mortar/can_attach(obj/vehicle/sealed/mecha/combat/honker/M, attach_right = FALSE)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/banana_mortar/can_attach(obj/vehicle/sealed/mecha/combat/honker/M)
 	if(..())
 		if(istype(M))
 			return 1
@@ -421,11 +437,11 @@
 	fire_sound = 'sound/items/bikehorn.ogg'
 	projectiles = 15
 	missile_speed = 1.5
-	projectiles_cache = 999
+	projectile_energy_cost = 100
 	equip_cooldown = 10
 	mech_flags = EXOSUIT_MODULE_HONK
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/mousetrap_mortar/can_attach(obj/vehicle/sealed/mecha/combat/honker/M, attach_right = FALSE)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/mousetrap_mortar/can_attach(obj/vehicle/sealed/mecha/combat/honker/M)
 	if(..())
 		if(istype(M))
 			return 1
@@ -447,36 +463,42 @@
 	projectile = /obj/item/punching_glove
 	fire_sound = 'sound/items/bikehorn.ogg'
 	projectiles = 10
-	projectiles_cache = 999
+	projectile_energy_cost = 500
 	harmful = TRUE
 	diags_first = TRUE
 	/// Damage done by the glove on contact. Also used to determine throw distance (damage / 5)
 	var/punch_damage = 35
+	/// TRUE - Can toggle between lethal and non-lethal || FALSE - Cannot toggle
+	var/can_toggle_lethal = TRUE
 	mech_flags = EXOSUIT_MODULE_HONK
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/punching_glove/can_attach(obj/vehicle/sealed/mecha/combat/honker/M, attach_right = FALSE)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/punching_glove/can_attach(obj/vehicle/sealed/mecha/combat/honker/M)
 	if(..())
 		if(istype(M))
 			return 1
 	return 0
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/punching_glove/get_snowflake_data()
-	return list(
-		"snowflake_id" = MECHA_SNOWFLAKE_ID_MODE,
-		"mode" = harmful ? "LETHAL FISTING" : "Cuddles",
-	)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/punching_glove/get_equip_info()
+	if(!chassis)
+		return
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/punching_glove/ui_act(action, list/params)
-	. = ..()
-	if(action == "toggle")
+	if(can_toggle_lethal)
+		return "[..()] &nbsp; <a href='?src=[REF(src)];lethalPunch=1'>[harmful?"Punch":"Pat"] mode</a>"
+	else
+		return ..()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/punching_glove/Topic(href, href_list)
+	..()
+	if(href_list["lethalPunch"])
 		harmful = !harmful
+		if(!chassis)
+			return
 		if(harmful)
 			to_chat(usr, "[icon2html(src, usr)][span_warning("Lethal Fisting Enabled.")]")
 		else
 			to_chat(usr, "[icon2html(src, usr)][span_warning("Lethal Fisting Disabled.")]")
-		return TRUE
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/punching_glove/action(mob/source, atom/target, list/modifiers)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/punching_glove/action(mob/source, atom/target, params)
 	. = ..()
 	if(.)
 		to_chat(usr, "[icon2html(src, usr)]<font color='red' size='5'>HONK</font>")
@@ -513,9 +535,9 @@
 	icon_state = "mecha_bananamrtr"
 	projectile = /obj/item/grown/bananapeel/bombanana
 	projectiles = 8
-	projectiles_cache = 999
+	projectile_energy_cost = 1000
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/banana_mortar/bombanana/can_attach(obj/vehicle/sealed/mecha/combat/honker/M, attach_right = FALSE)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/banana_mortar/bombanana/can_attach(obj/vehicle/sealed/mecha/combat/honker/M)
 	if(..())
 		if(istype(M))
 			return TRUE
@@ -529,11 +551,11 @@
 	fire_sound = 'sound/weapons/gun/general/grenade_launch.ogg'
 	projectiles = 6
 	missile_speed = 1.5
-	projectiles_cache = 999
+	projectile_energy_cost = 800
 	equip_cooldown = 60
 	det_time = 20
 
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/flashbang/tearstache/can_attach(obj/vehicle/sealed/mecha/combat/honker/M, attach_right = FALSE)
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/launcher/flashbang/tearstache/can_attach(obj/vehicle/sealed/mecha/combat/honker/M)
 	if(..())
 		if(istype(M))
 			return TRUE

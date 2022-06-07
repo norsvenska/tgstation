@@ -133,51 +133,50 @@
 		SSblackbox.record_feedback("associative", "antagonists", 1, antag_info)
 
 /datum/controller/subsystem/ticker/proc/record_nuke_disk_location()
-	var/disk_count = 1
-	for(var/obj/item/disk/nuclear/nuke_disk as anything in SSpoints_of_interest.real_nuclear_disks)
+	var/obj/item/disk/nuclear/N = locate() in GLOB.poi_list
+	if(N)
 		var/list/data = list()
-		var/turf/disk_turf = get_turf(nuke_disk)
-		if(disk_turf)
-			data["x"] = disk_turf.x
-			data["y"] = disk_turf.y
-			data["z"] = disk_turf.z
-		var/atom/outer = get_atom_on_turf(nuke_disk, /mob/living)
-		if(outer != nuke_disk)
+		var/turf/T = get_turf(N)
+		if(T)
+			data["x"] = T.x
+			data["y"] = T.y
+			data["z"] = T.z
+		var/atom/outer = get_atom_on_turf(N,/mob/living)
+		if(outer != N)
 			if(isliving(outer))
-				var/mob/living/disk_holder = outer
-				data["holder"] = disk_holder.real_name
+				var/mob/living/L = outer
+				data["holder"] = L.real_name
 			else
 				data["holder"] = outer.name
 
-		SSblackbox.record_feedback("associative", "roundend_nukedisk", disk_count, data)
-		disk_count++
+		SSblackbox.record_feedback("associative", "roundend_nukedisk", 1 , data)
 
 /datum/controller/subsystem/ticker/proc/gather_newscaster()
 	var/json_file = file("[GLOB.log_directory]/newscaster.json")
 	var/list/file_data = list()
 	var/pos = 1
 	for(var/V in GLOB.news_network.network_channels)
-		var/datum/feed_channel/channel = V
+		var/datum/newscaster/feed_channel/channel = V
 		if(!istype(channel))
 			stack_trace("Non-channel in newscaster channel list")
 			continue
-		file_data["[pos]"] = list("channel name" = "[channel.channel_name]", "author" = "[channel.author]", "censored" = channel.censored ? 1 : 0, "author censored" = channel.author_censor ? 1 : 0, "messages" = list())
+		file_data["[pos]"] = list("channel name" = "[channel.channel_name]", "author" = "[channel.author]", "censored" = channel.censored ? 1 : 0, "author censored" = channel.authorCensor ? 1 : 0, "messages" = list())
 		for(var/M in channel.messages)
-			var/datum/feed_message/message = M
+			var/datum/newscaster/feed_message/message = M
 			if(!istype(message))
 				stack_trace("Non-message in newscaster channel messages list")
 				continue
 			var/list/comment_data = list()
 			for(var/C in message.comments)
-				var/datum/feed_comment/comment = C
+				var/datum/newscaster/feed_comment/comment = C
 				if(!istype(comment))
 					stack_trace("Non-message in newscaster message comments list")
 					continue
 				comment_data += list(list("author" = "[comment.author]", "time stamp" = "[comment.time_stamp]", "body" = "[comment.body]"))
-			file_data["[pos]"]["messages"] += list(list("author" = "[message.author]", "time stamp" = "[message.time_stamp]", "censored" = message.body_censor ? 1 : 0, "author censored" = message.author_censor ? 1 : 0, "photo file" = "[message.photo_file]", "photo caption" = "[message.caption]", "body" = "[message.body]", "comments" = comment_data))
+			file_data["[pos]"]["messages"] += list(list("author" = "[message.author]", "time stamp" = "[message.time_stamp]", "censored" = message.bodyCensor ? 1 : 0, "author censored" = message.authorCensor ? 1 : 0, "photo file" = "[message.photo_file]", "photo caption" = "[message.caption]", "body" = "[message.body]", "comments" = comment_data))
 		pos++
 	if(GLOB.news_network.wanted_issue.active)
-		file_data["wanted"] = list("author" = "[GLOB.news_network.wanted_issue.scanned_user]", "criminal" = "[GLOB.news_network.wanted_issue.criminal]", "description" = "[GLOB.news_network.wanted_issue.body]", "photo file" = "[GLOB.news_network.wanted_issue.photo_file]")
+		file_data["wanted"] = list("author" = "[GLOB.news_network.wanted_issue.scannedUser]", "criminal" = "[GLOB.news_network.wanted_issue.criminal]", "description" = "[GLOB.news_network.wanted_issue.body]", "photo file" = "[GLOB.news_network.wanted_issue.photo_file]")
 	WRITE_FILE(json_file, json_encode(file_data))
 
 ///Handles random hardcore point rewarding if it applies.
@@ -207,8 +206,9 @@
 	to_chat(world, "<span class='infoplain'><BR><BR><BR><span class='big bold'>The round has ended.</span></span>")
 	log_game("The round has ended.")
 
-	for(var/datum/callback/roundend_callbacks as anything in round_end_events)
-		roundend_callbacks.InvokeAsync()
+	for(var/I in round_end_events)
+		var/datum/callback/cb = I
+		cb.InvokeAsync()
 	LAZYCLEARLIST(round_end_events)
 
 	var/speed_round = FALSE
@@ -229,9 +229,10 @@
 	CHECK_TICK
 
 	// Add AntagHUD to everyone, see who was really evil the whole time!
-	for(var/datum/atom_hud/alternate_appearance/basic/antagonist_hud/antagonist_hud in GLOB.active_alternate_appearances)
-		for(var/mob/player as anything in GLOB.player_list)
-			antagonist_hud.show_to(player)
+	for(var/datum/atom_hud/antag/H in GLOB.huds)
+		for(var/m in GLOB.player_list)
+			var/mob/M = m
+			H.add_hud_to(M)
 
 	CHECK_TICK
 
@@ -271,10 +272,8 @@
 
 	CHECK_TICK
 	SSdbcore.SetRoundEnd()
-
 	//Collects persistence features
-	SSpersistence.collect_data()
-	SSpersistent_paintings.save_paintings()
+	SSpersistence.CollectData()
 
 	//stop collecting feedback during grifftime
 	SSblackbox.Seal()
@@ -314,7 +313,7 @@
 	//Economy & Money
 	parts += market_report()
 
-	list_clear_nulls(parts)
+	listclearnulls(parts)
 
 	return parts.Join()
 
@@ -346,10 +345,6 @@
 		var/datum/game_mode/dynamic/mode = SSticker.mode
 		parts += "[FOURSPACES]Threat level: [mode.threat_level]"
 		parts += "[FOURSPACES]Threat left: [mode.mid_round_budget]"
-		if(mode.roundend_threat_log.len)
-			parts += "[FOURSPACES]Threat edits:"
-			for(var/entry as anything in mode.roundend_threat_log)
-				parts += "[FOURSPACES][FOURSPACES][entry]<BR>"
 		parts += "[FOURSPACES]Executed rules:"
 		for(var/datum/dynamic_ruleset/rule in mode.executed_rules)
 			parts += "[FOURSPACES][FOURSPACES][rule.ruletype] - <b>[rule.name]</b>: -[rule.cost + rule.scaled_times * rule.scaling_cost] threat"
@@ -443,7 +438,7 @@
 
 /datum/controller/subsystem/ticker/proc/law_report()
 	var/list/parts = list()
-	var/borg_spacer = FALSE //inserts an extra linebreak to separate AIs from independent borgs, and then multiple independent borgs.
+	var/borg_spacer = FALSE //inserts an extra linebreak to seperate AIs from independent borgs, and then multiple independent borgs.
 	//Silicon laws report
 	for (var/i in GLOB.ai_list)
 		var/mob/living/silicon/ai/aiPlayer = i
@@ -646,7 +641,7 @@
 	name = "Show roundend report"
 	button_icon_state = "round_end"
 
-/datum/action/report/Trigger(trigger_flags)
+/datum/action/report/Trigger()
 	if(owner && GLOB.common_report && SSticker.current_state == GAME_STATE_FINISHED)
 		SSticker.show_roundend_report(owner.client)
 
@@ -716,7 +711,7 @@
 	var/list/sql_admins = list()
 	for(var/i in GLOB.protected_admins)
 		var/datum/admins/A = GLOB.protected_admins[i]
-		sql_admins += list(list("ckey" = A.target, "rank" = A.rank_names()))
+		sql_admins += list(list("ckey" = A.target, "rank" = A.rank.name))
 	SSdbcore.MassInsert(format_table_name("admin"), sql_admins, duplicate_key = TRUE)
 	var/datum/db_query/query_admin_rank_update = SSdbcore.NewQuery("UPDATE [format_table_name("player")] p INNER JOIN [format_table_name("admin")] a ON p.ckey = a.ckey SET p.lastadminrank = a.rank")
 	query_admin_rank_update.Execute()
@@ -743,7 +738,7 @@
 			if (!admin)
 				continue
 
-		file_data["admins"][admin_ckey] = admin.rank_names()
+		file_data["admins"][admin_ckey] = admin.rank.name
 
 		if (admin.owner)
 			file_data["connections"][admin_ckey] = list(

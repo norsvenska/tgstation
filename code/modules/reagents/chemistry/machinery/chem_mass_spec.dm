@@ -13,7 +13,8 @@ This will not clean any inverted reagents. Inverted reagents will still be corre
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "HPLC"
 	base_icon_state = "HPLC"
-	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.2
+	use_power = IDLE_POWER_USE
+	idle_power_usage = 20
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	circuit = /obj/item/circuitboard/machine/chem_mass_spec
 	///If we're processing reagents or not
@@ -47,7 +48,6 @@ This will not clean any inverted reagents. Inverted reagents will still be corre
 	return ..()
 
 /obj/machinery/chem_mass_spec/RefreshParts()
-	. = ..()
 	cms_coefficient = 1
 	for(var/obj/item/stock_parts/micro_laser/laser in component_parts)
 		cms_coefficient /= laser.rating
@@ -66,12 +66,8 @@ This will not clean any inverted reagents. Inverted reagents will still be corre
 	if(panel_open)
 		. += mutable_appearance(icon, "[base_icon_state]_panel-o")
 
-/obj/machinery/chem_mass_spec/wrench_act(mob/living/user, obj/item/tool)
-	. = ..()
-	default_unfasten_wrench(user, tool)
-	return TOOL_ACT_TOOLTYPE_SUCCESS
-
 /*			beaker swapping/attack code			*/
+
 /obj/machinery/chem_mass_spec/attackby(obj/item/item, mob/user, params)
 	if(processing_reagents)
 		to_chat(user, "<span class='notice'> The [src] is currently processing a batch!")
@@ -79,6 +75,9 @@ This will not clean any inverted reagents. Inverted reagents will still be corre
 
 	if(default_deconstruction_screwdriver(user, icon_state, icon_state, item))
 		update_appearance()
+		return
+
+	if(default_unfasten_wrench(user, item))
 		return
 
 	if(istype(item, /obj/item/reagent_containers) && !(item.item_flags & ABSTRACT) && item.is_open_container())
@@ -89,13 +88,11 @@ This will not clean any inverted reagents. Inverted reagents will still be corre
 		replace_beaker(user, BEAKER1, beaker)
 		to_chat(user, span_notice("You add [beaker] to [src]."))
 		update_appearance()
-		ui_interact(user)
+		updateUsrDialog()
 		return
 	..()
 
 /obj/machinery/chem_mass_spec/attackby_secondary(obj/item/item, mob/user, params)
-	. = ..()
-
 	if(processing_reagents)
 		to_chat(user, "<span class='notice'> The [src] is currently processing a batch!")
 		return
@@ -109,10 +106,9 @@ This will not clean any inverted reagents. Inverted reagents will still be corre
 			return
 		replace_beaker(user, BEAKER2, beaker)
 		to_chat(user, span_notice("You add [beaker] to [src]."))
-		ui_interact(user)
-		. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
-
+		updateUsrDialog()
 	update_appearance()
+	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /obj/machinery/chem_mass_spec/AltClick(mob/living/user)
 	. = ..()
@@ -306,7 +302,6 @@ This will not clean any inverted reagents. Inverted reagents will still be corre
 		return FALSE
 	if(!processing_reagents)
 		return TRUE
-	use_power(active_power_usage)
 	if(progress_time >= delay_time)
 		processing_reagents = FALSE
 		progress_time = 0

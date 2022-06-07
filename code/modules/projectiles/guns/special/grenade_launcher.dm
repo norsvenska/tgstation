@@ -18,8 +18,6 @@
 
 /obj/item/gun/grenadelauncher/attackby(obj/item/I, mob/user, params)
 
-	if(istype(I, /obj/item/grenade/c4))
-		return
 	if((istype(I, /obj/item/grenade)))
 		if(grenades.len < max_grenades)
 			if(!user.transferItemToLoc(I, src))

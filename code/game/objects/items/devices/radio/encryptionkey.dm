@@ -9,20 +9,17 @@
 	var/independent = FALSE
 	var/list/channels = list()
 
-/obj/item/encryptionkey/Initialize(mapload)
+/obj/item/encryptionkey/Initialize()
 	. = ..()
-	if(!channels.len && !translate_binary)
-		desc += " Has no special codes in it. You should probably tell a coder!"
+	if(!channels.len)
+		desc = "An encryption key for a radio headset.  Has no special codes in it. You should probably tell a coder!"
 
 /obj/item/encryptionkey/examine(mob/user)
 	. = ..()
-	if(LAZYLEN(channels) || translate_binary)
+	if(LAZYLEN(channels))
 		var/list/examine_text_list = list()
 		for(var/i in channels)
 			examine_text_list += "[GLOB.channel_tokens[i]] - [lowertext(i)]"
-
-		if(translate_binary)
-			examine_text_list += "[GLOB.channel_tokens[MODE_BINARY]] - [MODE_BINARY]"
 
 		. += span_notice("It can access the following channels; [jointext(examine_text_list, ", ")].")
 

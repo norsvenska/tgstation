@@ -1,6 +1,6 @@
 /obj/machinery/portable_atmospherics/scrubber
 	name = "portable air scrubber"
-	icon_state = "scrubber"
+	icon_state = "pscrubber:0"
 	density = TRUE
 	max_integrity = 250
 	volume = 1000
@@ -23,7 +23,7 @@
 		/datum/gas/carbon_dioxide,
 		/datum/gas/nitrous_oxide,
 		/datum/gas/bz,
-		/datum/gas/nitrium,
+		/datum/gas/nitryl,
 		/datum/gas/tritium,
 		/datum/gas/hypernoblium,
 		/datum/gas/water_vapor,
@@ -41,7 +41,7 @@
 	return ..()
 
 /obj/machinery/portable_atmospherics/scrubber/update_icon_state()
-	icon_state = "[initial(icon_state)]_[on]"
+	icon_state = "pscrubber:[on]"
 	return ..()
 
 /obj/machinery/portable_atmospherics/scrubber/update_overlays()
@@ -169,15 +169,12 @@
 			. = TRUE
 	update_appearance()
 
-/obj/machinery/portable_atmospherics/scrubber/unregister_holding()
-	on = FALSE
-	return ..()
-
 /obj/machinery/portable_atmospherics/scrubber/huge
 	name = "huge air scrubber"
-	icon_state = "hugescrubber"
+	icon_state = "scrubber:0"
 	anchored = TRUE
-	active_power_usage = BASE_MACHINE_ACTIVE_CONSUMPTION * 0.5
+	active_power_usage = 500
+	idle_power_usage = 10
 
 	overpressure_m = 200
 	volume_rate = 1500
@@ -193,14 +190,14 @@
 	anchored = FALSE
 
 /obj/machinery/portable_atmospherics/scrubber/huge/update_icon_state()
-	icon_state = "[initial(icon_state)]_[on]"
+	icon_state = "scrubber:[on]"
 	return ..()
 
 /obj/machinery/portable_atmospherics/scrubber/huge/process_atmos()
 	if((!anchored && !movable) || !is_operational)
 		on = FALSE
 		update_appearance()
-	update_use_power(on ? ACTIVE_POWER_USE : IDLE_POWER_USE)
+	use_power = on ? ACTIVE_POWER_USE : IDLE_POWER_USE
 	if(!on)
 		return ..()
 
@@ -208,16 +205,14 @@
 
 	if(!holding)
 		var/turf/T = get_turf(src)
-		for(var/turf/AT in T.get_atmos_adjacent_turfs(alldir = TRUE))
+		for(var/turf/AT in T.GetAtmosAdjacentTurfs(alldir = TRUE))
 			scrub(AT.return_air())
 
 	return ..()
 
-/obj/machinery/portable_atmospherics/scrubber/huge/wrench_act(mob/living/user, obj/item/tool)
-	. = ..()
-	if(default_unfasten_wrench(user, tool))
+/obj/machinery/portable_atmospherics/scrubber/huge/attackby(obj/item/W, mob/user)
+	if(default_unfasten_wrench(user, W))
 		if(!movable)
 			on = FALSE
-		return TOOL_ACT_TOOLTYPE_SUCCESS
-	return FALSE
-
+	else
+		return ..()

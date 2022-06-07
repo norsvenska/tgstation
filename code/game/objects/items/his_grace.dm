@@ -14,12 +14,11 @@
 	righthand_file = 'icons/mob/inhands/equipment/toolbox_righthand.dmi'
 	w_class = WEIGHT_CLASS_GIGANTIC
 	force = 12
-	demolition_mod = 1.25
 	attack_verb_continuous = list("robusts")
 	attack_verb_simple = list("robust")
 	hitsound = 'sound/weapons/smash.ogg'
 	drop_sound = 'sound/items/handling/toolbox_drop.ogg'
-	pickup_sound = 'sound/items/handling/toolbox_pickup.ogg'
+	pickup_sound =  'sound/items/handling/toolbox_pickup.ogg'
 	var/awakened = FALSE
 	var/bloodthirst = HIS_GRACE_SATIATED
 	var/prev_bloodthirst = HIS_GRACE_SATIATED
@@ -28,10 +27,10 @@
 	var/victims_needed = 25
 	var/ascend_bonus = 15
 
-/obj/item/his_grace/Initialize(mapload)
+/obj/item/his_grace/Initialize()
 	. = ..()
 	START_PROCESSING(SSprocessing, src)
-	SSpoints_of_interest.make_point_of_interest(src)
+	AddElement(/datum/element/point_of_interest)
 	RegisterSignal(src, COMSIG_MOVABLE_POST_THROW, .proc/move_gracefully)
 	update_appearance()
 
@@ -107,13 +106,13 @@
 				master.visible_message(span_boldwarning("[src] turns on [master]!"), "<span class='his_grace big bold'>[src] turns on you!</span>")
 				do_attack_animation(master, null, src)
 				master.emote("scream")
-				master.remove_status_effect(/datum/status_effect/his_grace)
+				master.remove_status_effect(STATUS_EFFECT_HISGRACE)
 				REMOVE_TRAIT(src, TRAIT_NODROP, HIS_GRACE_TRAIT)
 				master.Paralyze(60)
 				master.adjustBruteLoss(master.maxHealth)
 				playsound(master, 'sound/effects/splat.ogg', 100, FALSE)
 			else
-				master.apply_status_effect(/datum/status_effect/his_grace)
+				master.apply_status_effect(STATUS_EFFECT_HISGRACE)
 		return
 	forceMove(get_turf(src)) //no you can't put His Grace in a locker you just have to deal with Him
 	if(bloodthirst < HIS_GRACE_CONSUME_OWNER)

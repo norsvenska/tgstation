@@ -32,11 +32,11 @@
 	/// If the cyborg's cover panel starts locked
 	var/panel_locked = TRUE
 
-/obj/item/robot_suit/Initialize(mapload)
+/obj/item/robot_suit/Initialize()
 	. = ..()
 	update_appearance()
 
-/obj/item/robot_suit/prebuilt/Initialize(mapload)
+/obj/item/robot_suit/prebuilt/Initialize()
 	. = ..()
 	l_arm = new(src)
 	r_arm = new(src)
@@ -47,23 +47,23 @@
 	head.flash2 = new(head)
 	chest = new(src)
 	chest.wired = TRUE
-	chest.cell = new /obj/item/stock_parts/cell/high(chest)
+	chest.cell = new /obj/item/stock_parts/cell/high/plus(chest)
 	update_appearance()
 
 /obj/item/robot_suit/update_overlays()
 	. = ..()
 	if(l_arm)
-		. += "[initial(l_arm.icon_state)]+o"
+		. += "[l_arm.icon_state]+o"
 	if(r_arm)
-		. += "[initial(r_arm.icon_state)]+o"
+		. += "[r_arm.icon_state]+o"
 	if(chest)
-		. += "[initial(chest.icon_state)]+o"
+		. += "[chest.icon_state]+o"
 	if(l_leg)
-		. += "[initial(l_leg.icon_state)]+o"
+		. += "[l_leg.icon_state]+o"
 	if(r_leg)
-		. += "[initial(r_leg.icon_state)]+o"
+		. += "[r_leg.icon_state]+o"
 	if(head)
-		. += "[initial(head.icon_state)]+o"
+		. += "[head.icon_state]+o"
 
 /obj/item/robot_suit/proc/check_completion()
 	if(l_arm && r_arm && l_leg && r_leg && head && head.flash1 && head.flash2 && chest && chest.wired && chest.cell)
@@ -146,8 +146,8 @@
 	chest.cell = temp_cell
 	return TRUE
 
-//ADD
 /obj/item/robot_suit/attackby(obj/item/W, mob/user, params)
+
 	if(istype(W, /obj/item/stack/sheet/iron))
 		var/obj/item/stack/sheet/iron/M = W
 		if(!l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
@@ -220,9 +220,10 @@
 
 	else if(istype(W, /obj/item/bodypart/head/robot))
 		var/obj/item/bodypart/head/robot/HD = W
-		if(locate(/obj/item/organ/internal) in HD)
-			to_chat(user, span_warning("There are organs inside [HD]!"))
-			return
+		for(var/X in HD.contents)
+			if(istype(X, /obj/item/organ))
+				to_chat(user, span_warning("There are organs inside [HD]!"))
+				return
 		if(head)
 			return
 		if(HD.flash2 && HD.flash1)
@@ -253,8 +254,8 @@
 			if(!M.brain_check(user))
 				return
 
-			var/mob/living/brain/brainmob = M.brainmob
-			if(is_banned_from(brainmob.ckey, JOB_CYBORG) || QDELETED(src) || QDELETED(brainmob) || QDELETED(user) || QDELETED(M) || !Adjacent(user))
+			var/mob/living/brain/B = M.brainmob
+			if(is_banned_from(B.ckey, "Cyborg") || QDELETED(src) || QDELETED(B) || QDELETED(user) || QDELETED(M) || !Adjacent(user))
 				if(!QDELETED(M))
 					to_chat(user, span_warning("This [M.name] does not seem to fit!"))
 				return
@@ -278,17 +279,16 @@
 				lawsync = FALSE
 				O.set_connected_ai(null)
 			else
-				O.notify_ai(AI_NOTIFICATION_NEW_BORG)
+				O.notify_ai(NEW_BORG)
 				if(forced_ai)
 					O.set_connected_ai(forced_ai)
 			if(!lawsync)
 				O.lawupdate = FALSE
 				if(M.laws.id == DEFAULT_AI_LAWID)
 					O.make_laws()
-					O.log_current_laws()
 
-			brainmob.mind?.remove_antags_for_borging()
-			O.job = JOB_CYBORG
+			B.mind?.remove_antags_for_borging()
+			O.job = "Cyborg"
 
 			O.cell = chest.cell
 			chest.cell.forceMove(O)
@@ -297,12 +297,14 @@
 			if(O.mmi) //we delete the mmi created by robot/New()
 				qdel(O.mmi)
 			O.mmi = W //and give the real mmi to the borg.
-			O.updatename(brainmob.client)
-			brainmob.mind.transfer_to(O)
-			brainmob.mind.add_memory(MEMORY_BORGED, list(DETAIL_PROTAGONIST = user), story_value = STORY_VALUE_OKAY, memory_flags = MEMORY_SKIP_UNCONSCIOUS)
+
+			O.updatename(B.client)
+
+			B.mind.transfer_to(O)
 			playsound(O.loc, 'sound/voice/liveagain.ogg', 75, TRUE)
 
 			if(O.mind && O.mind.special_role)
+				O.mind.store_memory("As a cyborg, you must obey your silicon laws and master AI above all else. Your objectives will consider you to be dead.")
 				to_chat(O, span_userdanger("You have been robotized!"))
 				to_chat(O, span_danger("You must obey your silicon laws and master AI above all else. Your objectives will consider you to be dead."))
 
@@ -323,7 +325,7 @@
 		var/obj/item/borg/upgrade/ai/M = W
 		if(check_completion())
 			if(!isturf(loc))
-				to_chat(user, span_warning("You cannot install [M], the frame has to be standing on the ground to be perfectly precise!"))
+				to_chat(user, span_warning("You cannot install[M], the frame has to be standing on the ground to be perfectly precise!"))
 				return
 			if(!user.temporarilyRemoveItemFromInventory(M))
 				to_chat(user, span_warning("[M] is stuck to your hand!"))
@@ -337,17 +339,16 @@
 			else
 				if(forced_ai)
 					O.set_connected_ai(forced_ai)
-				O.notify_ai(AI_NOTIFICATION_AI_SHELL)
+				O.notify_ai(AI_SHELL)
 			if(!lawsync)
 				O.lawupdate = FALSE
 				O.make_laws()
-				O.log_current_laws()
 
 			O.cell = chest.cell
 			chest.cell.forceMove(O)
 			chest.cell = null
 			O.locked = panel_locked
-			O.job = JOB_CYBORG
+			O.job = "Cyborg"
 			forceMove(O)
 			O.robot_suit = src
 			if(!locomotion)
@@ -400,19 +401,16 @@
 				created_name = ""
 				return
 			created_name = new_name
-			log_silicon("[key_name(user)] has set \"[new_name]\" as a cyborg shell name at [loc_name(user)]")
+			log_game("[key_name(user)] have set \"[new_name]\" as a cyborg shell name at [loc_name(user)]")
 			return TRUE
 		if("locomotion")
 			locomotion = !locomotion
-			log_silicon("[key_name(user)] has [locomotion ? "enabled" : "disabled"] movement on a cyborg shell at [loc_name(user)]")
 			return TRUE
 		if("panel")
 			panel_locked = !panel_locked
-			log_silicon("[key_name(user)] has [panel_locked ? "locked" : "unlocked"] the panel on a cyborg shell at [loc_name(user)]")
 			return TRUE
 		if("aisync")
 			aisync = !aisync
-			log_silicon("[key_name(user)] has [aisync ? "enabled" : "disabled"] the AI sync for a cyborg shell at [loc_name(user)]")
 			return TRUE
 		if("set_ai")
 			var/selected_ai = select_active_ai(user, z)
@@ -422,9 +420,7 @@
 				to_chat(user, span_alert("No active AIs detected."))
 				return
 			forced_ai = selected_ai
-			log_silicon("[key_name(user)] set the default AI for a cyborg shell to [key_name(selected_ai)] at [loc_name(user)]")
 			return TRUE
 		if("lawsync")
 			lawsync = !lawsync
-			log_silicon("[key_name(user)] has [lawsync ? "enabled" : "disabled"] the law sync for a cyborg shell at [loc_name(user)]")
 			return TRUE

@@ -17,7 +17,7 @@
 	icon_state = "[initial(icon_state)][contents.len]"
 	return ..()
 
-/obj/item/storage/cans/Initialize(mapload)
+/obj/item/storage/cans/Initialize()
 	. = ..()
 	update_appearance()
 

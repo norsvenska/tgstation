@@ -7,7 +7,7 @@
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 
 
-/obj/structure/mopbucket/Initialize(mapload)
+/obj/structure/mopbucket/Initialize()
 	. = ..()
 	create_reagents(100, OPENCONTAINER)
 
@@ -20,7 +20,6 @@
 			to_chat(user, span_notice("You wet [I] in [src]."))
 			playsound(loc, 'sound/effects/slosh.ogg', 25, TRUE)
 			update_appearance()
-		return TRUE //Stop the click handling chain so the mop after attack doesn't proc and you don't wet the turf the bucket is on
 	else
 		. = ..()
 		update_appearance()

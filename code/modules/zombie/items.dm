@@ -17,7 +17,7 @@
 	bare_wound_bonus = 15
 	damtype = BRUTE
 
-/obj/item/zombie_hand/Initialize(mapload)
+/obj/item/zombie_hand/Initialize()
 	. = ..()
 	ADD_TRAIT(src, TRAIT_NODROP, HAND_REPLACEMENT_TRAIT)
 
@@ -48,7 +48,7 @@
 		// zombies)
 		return
 
-	var/obj/item/organ/internal/zombie_infection/infection
+	var/obj/item/organ/zombie_infection/infection
 	infection = target.getorganslot(ORGAN_SLOT_ZOMBIE)
 	if(!infection)
 		infection = new()

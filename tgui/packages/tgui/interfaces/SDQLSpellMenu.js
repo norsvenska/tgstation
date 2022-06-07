@@ -16,12 +16,6 @@ const typevars = (type) => {
     { name: 'name', type: 'string', options: null, default_value: '' },
     { name: 'desc', type: 'string', options: null, default_value: '' },
     { name: 'query', type: 'string', options: null, default_value: '' },
-    {
-      name: 'suppress_message_admins',
-      type: 'bool',
-      options: null,
-      default_value: false,
-    },
     { name: 'action_icon', type: 'string', options: null, default_value: '' },
     {
       name: 'action_icon_state',
@@ -62,6 +56,7 @@ const typevars = (type) => {
       default_value: '',
     },
     { name: 'clothes_req', type: 'bool', options: null, default_value: false },
+    { name: 'cult_req', type: 'bool', options: null, default_value: false },
     { name: 'human_req', type: 'bool', options: null, default_value: false },
     {
       name: 'nonabstract_req',
@@ -377,7 +372,7 @@ export const SDQLSpellMenu = (props, context) => {
   const { type, types, fixed_type, alert, parse_errors } = data;
 
   return (
-    <Window width={800} height={600} theme="admin">
+    <Window width={800} height={600}>
       <Window.Content>
         <Stack fill>
           <Stack.Item grow={1} basis={0}>
@@ -830,11 +825,11 @@ const SDQLSpellParseErrorModal = (props, context) => {
   const multiple_errors = parse_errors.length > 1;
   return (
     <Modal>
-      <Stack fill vertical>
+      <Stack vertical>
         <Stack.Item>
           Parse error{multiple_errors ? "s" : ""} occured while loading from file.
         </Stack.Item>
-        <Stack.Item>
+        <Stack.Item grow>
           <Section scrollable maxWidth="600px" maxHeight="200px">
             {parse_errors.map((error, i) => {
               return (
@@ -857,7 +852,7 @@ const SDQLSpellParseErrorModal = (props, context) => {
                 Some data could be correctly parsed. Click below to view.
               </Box>
             </Stack.Item>
-            <Stack.Item>
+            <Stack.Item grow>
               <Collapsible title="Parsed Data">
                 <Section scrollable maxWidth="600px" maxHeight="200px">
                   <LabeledList>

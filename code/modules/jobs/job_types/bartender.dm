@@ -1,7 +1,6 @@
 /datum/job/bartender
-	title = JOB_BARTENDER
-	description = "Serve booze, mix drinks, keep the crew drunk."
-	department_head = list(JOB_HEAD_OF_PERSONNEL)
+	title = "Bartender"
+	department_head = list("Head of Personnel")
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
@@ -12,7 +11,7 @@
 	outfit = /datum/outfit/job/bartender
 	plasmaman_outfit = /datum/outfit/plasmaman/bar
 
-	paycheck = PAYCHECK_CREW
+	paycheck = PAYCHECK_EASY
 	paycheck_department = ACCOUNT_SRV
 	display_order = JOB_DISPLAY_ORDER_BARTENDER
 	bounty_types = CIV_JOB_DRINK
@@ -29,8 +28,8 @@
 		/obj/item/stack/sheet/mineral/uranium = 10,
 	)
 
-	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
-	rpg_title = "Tavernkeeper"
+	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS
+
 
 /datum/job/bartender/award_service(client/winner, award)
 	winner.give_award(award, winner.mob)
@@ -47,16 +46,14 @@
 	name = "Bartender"
 	jobtype = /datum/job/bartender
 
-	id_trim = /datum/id_trim/job/bartender
+	glasses = /obj/item/clothing/glasses/sunglasses/reagent
+	belt = /obj/item/pda/bar
+	ears = /obj/item/radio/headset/headset_srv
 	uniform = /obj/item/clothing/under/rank/civilian/bartender
 	suit = /obj/item/clothing/suit/armor/vest
-	backpack_contents = list(
-		/obj/item/storage/box/beanbag = 1,
-		)
-	belt = /obj/item/modular_computer/tablet/pda/bar
-	ears = /obj/item/radio/headset/headset_srv
-	glasses = /obj/item/clothing/glasses/sunglasses/reagent
+	backpack_contents = list(/obj/item/storage/box/beanbag=1)
 	shoes = /obj/item/clothing/shoes/laceup
+	id_trim = /datum/id_trim/job/bartender
 
 /datum/outfit/job/bartender/post_equip(mob/living/carbon/human/H, visualsOnly)
 	. = ..()

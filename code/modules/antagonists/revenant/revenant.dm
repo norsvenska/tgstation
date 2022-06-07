@@ -26,7 +26,7 @@
 	sight = SEE_SELF
 	throwforce = 0
 
-	see_in_dark = NIGHTVISION_FOV_RANGE
+	see_in_dark = 8
 	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
 	response_help_continuous = "passes through"
 	response_help_simple = "pass through"
@@ -72,6 +72,7 @@
 /mob/living/simple_animal/revenant/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/simple_flying)
+	flags_1 |= RAD_NO_CONTAMINATE_1
 	ADD_TRAIT(src, TRAIT_SPACEWALK, INNATE_TRAIT)
 	ADD_TRAIT(src, TRAIT_SIXTHSENSE, INNATE_TRAIT)
 	AddSpell(new /obj/effect/proc_holder/spell/targeted/night_vision/revenant(null))
@@ -157,11 +158,9 @@
 /mob/living/simple_animal/revenant/med_hud_set_status()
 	return //we use no hud
 
-/mob/living/simple_animal/revenant/say(message, bubble_type, list/spans = list(), sanitize = TRUE, datum/language/language = null, ignore_spam = FALSE, forced = null, filterproof = null)
+/mob/living/simple_animal/revenant/say(message, bubble_type, list/spans = list(), sanitize = TRUE, datum/language/language = null, ignore_spam = FALSE, forced = null)
 	if(!message)
 		return
-	if(sanitize)
-		message = trim(copytext_char(sanitize(message), 1, MAX_MESSAGE_LEN))
 	src.log_talk(message, LOG_SAY)
 	var/rendered = span_revennotice("<b>[src]</b> says, \"[message]\"")
 	for(var/mob/M in GLOB.mob_list)
@@ -398,7 +397,7 @@
 	var/old_key //key of the previous revenant, will have first pick on reform.
 	var/mob/living/simple_animal/revenant/revenant
 
-/obj/item/ectoplasm/revenant/Initialize(mapload)
+/obj/item/ectoplasm/revenant/Initialize()
 	. = ..()
 	addtimer(CALLBACK(src, .proc/try_reform), 600)
 
@@ -449,7 +448,7 @@
 				break
 	if(!key_of_revenant)
 		message_admins("The new revenant's old client either could not be found or is in a new, living mob - grabbing a random candidate instead...")
-		var/list/candidates = poll_candidates_for_mob("Do you want to be [revenant.name] (reforming)?", ROLE_REVENANT, ROLE_REVENANT, 5 SECONDS, revenant)
+		var/list/candidates = pollCandidatesForMob("Do you want to be [revenant.name] (reforming)?", ROLE_REVENANT, ROLE_REVENANT, 50, revenant)
 		if(!LAZYLEN(candidates))
 			qdel(revenant)
 			message_admins("No candidates were found for the new revenant. Oh well!")

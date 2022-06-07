@@ -40,7 +40,3 @@
 /datum/id_trim/tunnel_clown/New()
 	. = ..()
 	access |= SSid_access.get_region_access_list(list(REGION_ALL_STATION))
-
-/// Trim for Bounty Hunters NOT hired by centcom. (?)
-/datum/id_trim/bounty_hunter
-	assignment = "Bounty Hunter"

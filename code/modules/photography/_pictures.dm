@@ -1,9 +1,7 @@
 /datum/picture
 	var/picture_name = "picture"
 	var/picture_desc = "This is a picture."
-	/// List of weakrefs pointing at mobs that appear in this photo
 	var/list/mobs_seen = list()
-	/// List of weakrefs pointing at dead mobs that appear in this photo
 	var/list/dead_seen = list()
 	var/caption
 	var/icon/picture_image
@@ -22,11 +20,9 @@
 	if(!isnull(desc))
 		picture_desc = desc
 	if(!isnull(mobs_spotted))
-		for(var/mob/seen as anything in mobs_spotted)
-			mobs_seen += WEAKREF(seen)
+		mobs_seen = mobs_spotted
 	if(!isnull(dead_spotted))
-		for(var/mob/seen as anything in dead_spotted)
-			dead_seen += WEAKREF(seen)
+		dead_seen = dead_spotted
 	if(!isnull(image))
 		picture_image = image
 	if(!isnull(icon))
@@ -109,13 +105,7 @@
 	if(!json[id])
 		return
 	var/datum/picture/P = new
-
-	// Old photos were saved as, and I shit you not, encoded JSON strings.
-	if (istext(json[id]))
-		P.deserialize_json(json[id])
-	else
-		P.deserialize_list(json[id])
-
+	P.deserialize_json(json[id])
 	return P
 
 /proc/log_path_from_picture_ID(id)

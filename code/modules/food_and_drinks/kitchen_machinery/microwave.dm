@@ -7,6 +7,9 @@
 	icon_state = "mw"
 	layer = BELOW_OBJ_LAYER
 	density = TRUE
+	use_power = IDLE_POWER_USE
+	idle_power_usage = 5
+	active_power_usage = 100
 	circuit = /obj/item/circuitboard/machine/microwave
 	pass_flags = PASSTABLE
 	light_color = LIGHT_COLOR_YELLOW
@@ -29,7 +32,7 @@
 	var/static/list/radial_options = list("eject" = radial_eject, "use" = radial_use)
 	var/static/list/ai_radial_options = list("eject" = radial_eject, "use" = radial_use, "examine" = radial_examine)
 
-/obj/machinery/microwave/Initialize(mapload)
+/obj/machinery/microwave/Initialize()
 	. = ..()
 	wires = new /datum/wires/microwave(src)
 	create_reagents(100)
@@ -43,7 +46,6 @@
 	. = ..()
 
 /obj/machinery/microwave/RefreshParts()
-	. = ..()
 	efficiency = 0
 	for(var/obj/item/stock_parts/micro_laser/M in component_parts)
 		efficiency += M.rating
@@ -105,14 +107,6 @@
 	icon_state = "mw"
 	return ..()
 
-/obj/machinery/microwave/wrench_act(mob/living/user, obj/item/tool)
-	. = ..()
-	if(dirty >= 100)
-		return FALSE
-	if(default_unfasten_wrench(user, tool))
-		update_appearance()
-	return TOOL_ACT_TOOLTYPE_SUCCESS
-
 /obj/machinery/microwave/attackby(obj/item/O, mob/living/user, params)
 	if(operating)
 		return
@@ -120,7 +114,7 @@
 		return
 
 	if(dirty < 100)
-		if(default_deconstruction_screwdriver(user, icon_state, icon_state, O))
+		if(default_deconstruction_screwdriver(user, icon_state, icon_state, O) || default_unfasten_wrench(user, O))
 			update_appearance()
 			return
 
@@ -317,7 +311,7 @@
 				pre_success()
 		return
 	time--
-	use_power(active_power_usage)
+	use_power(500)
 	addtimer(CALLBACK(src, .proc/loop, type, time, wait), wait)
 
 /obj/machinery/microwave/power_change()
@@ -372,21 +366,6 @@
 	set_light(0)
 	soundloop.stop()
 	update_appearance()
-
-/// Type of microwave that automatically turns it self on erratically. Probably don't use this outside of the holodeck program "Microwave Paradise".
-/// You could also live your life with a microwave that will continously run in the background of everything while also not having any power draw. I think the former makes more sense.
-/obj/machinery/microwave/hell
-	desc = "Cooks and boils stuff. This one appears to be a bit... off."
-	use_power = NO_POWER_USE
-	idle_power_usage = 0
-	active_power_usage = 0
-
-/obj/machinery/microwave/hell/Initialize()
-	. = ..()
-	//We want there to be some chance of them getting a working microwave (eventually).
-	if(prob(95))
-		//The microwave should turn off asynchronously from any other microwaves that initialize at the same time. Keep in mind this will not turn off, since there is nothing to call the proc that ends this microwave's looping
-		addtimer(CALLBACK(src, .proc/wzhzhzh), rand(0.5 SECONDS, 3 SECONDS))
 
 #undef MICROWAVE_NORMAL
 #undef MICROWAVE_MUCK

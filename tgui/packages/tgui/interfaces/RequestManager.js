@@ -38,7 +38,7 @@ export const RequestManager = (props, context) => {
   }
 
   return (
-    <Window title="Request Manager" width={575} height={600} theme="admin">
+    <Window title="Request Manager" width={575} height={600}>
       <Window.Content scrollable>
         <Section
           title="Requests"
