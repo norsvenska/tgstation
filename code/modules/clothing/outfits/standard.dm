@@ -331,57 +331,27 @@
 	H.sec_hud_set_ID()
 	..()
 
-/datum/outfit/centcom/commander/armored/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+/datum/outfit/centcom/medical
+	name = "CentCom Medic"
+
+	id = /obj/item/card/id/advanced/centcom
+	id_trim = /datum/id_trim/centcom/medical_officer
+	uniform = /obj/item/clothing/under/rank/centcom/centmed
+	suit = /obj/item/clothing/suit/toggle/labcoat/cmo/centcom
+	back = /obj/item/storage/backpack/duffelbag/med/centcom
+	belt = /obj/item/pda/centcom
+	ears = /obj/item/radio/headset/headset_cent/commander //placeholder
+	glasses = /obj/item/clothing/glasses/centcom
+	gloves = /obj/item/clothing/gloves/color/latex/centcom
+	shoes = /obj/item/clothing/shoes/laceup
+
+/datum/outfit/centcom/medical/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	if(visualsOnly)
 		return
 
 	var/obj/item/pda/centcom/pda = H.belt
 	pda.owner = H.real_name
-	pda.ownjob = "CentCom Commander"
-	pda.update_label()
-	pda.update_icon()
-
-	var/obj/item/card/id/W = H.wear_id
-	W.registered_name = H.real_name
-	W.update_label()
-	W.update_icon()
-	W.registered_age = H.age
-	var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
-	if(B && B.account_id == H.account_id)
-		W.registered_account = B
-		B.bank_cards += W
-	H.sec_hud_set_ID()
-	..()
-
-/datum/outfit/centcom/commander/winter/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	if(visualsOnly)
-		return
-
-	var/obj/item/pda/centcom/pda = H.belt
-	pda.owner = H.real_name
-	pda.ownjob = "CentCom Commander"
-	pda.update_label()
-	pda.update_icon()
-
-	var/obj/item/card/id/W = H.wear_id
-	W.registered_name = H.real_name
-	W.update_label()
-	W.update_icon()
-	W.registered_age = H.age
-	var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
-	if(B && B.account_id == H.account_id)
-		W.registered_account = B
-		B.bank_cards += W
-	H.sec_hud_set_ID()
-	..()
-
-/datum/outfit/centcom/commander/formal/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	if(visualsOnly)
-		return
-
-	var/obj/item/pda/centcom/pda = H.belt
-	pda.owner = H.real_name
-	pda.ownjob = "CentCom Commander"
+	pda.ownjob = "CentCom Medic"
 	pda.update_label()
 	pda.update_icon()
 

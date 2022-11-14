@@ -418,7 +418,22 @@
 	icon_state = "duffel-virology"
 	inhand_icon_state = "duffel-virology"
 
+/obj/item/storage/backpack/duffelbag/med/centcom
+	name = "CentCom medical duffel bag"
+	desc = "A large duffel bag for holding advanced medical supplies."
+	icon_state = "duffel-centmed"
+	inhand_icon_state = "duffel-centmed"
 
+/obj/item/storage/backpack/duffelbag/med/centcom/PopulateContents()
+	new /obj/item/scalpel/advanced(src)
+	new /obj/item/retractor/advanced(src)
+	new /obj/item/cautery/advanced(src)
+	new /obj/item/healthanalyzer/advanced(src)
+	new /obj/item/bonesetter(src)
+	new /obj/item/surgical_drapes(src)
+	new /obj/item/clothing/mask/surgical(src)
+	new /obj/item/razor(src)
+	new /obj/item/blood_filter(src)
 
 /obj/item/storage/backpack/duffelbag/med/surgery/PopulateContents()
 	new /obj/item/scalpel(src)

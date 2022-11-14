@@ -1,4 +1,4 @@
-#define EXP_ASSIGN_WAYFINDER 1200
+#define EXP_ASSIGN_WAYFINDER 0
 #define RANDOM_QUIRK_BONUS 3
 #define MINIMUM_RANDOM_QUIRKS 3
 //Used to process and handle roundstart quirks

@@ -786,7 +786,7 @@ SUBSYSTEM_DEF(job)
 		"Entertainment Response Officer", "Religious Response Officer", "Janitorial Response Officer", "Death Commando", "Security Officer (Engineering)", \
 		"Security Officer (Cargo)", "Security Officer (Medical)", "Security Officer (Science)")
 
-	centcom_jobs = list("Central Command","VIP Guest","Custodian","Thunderdome Overseer","CentCom Official","Medical Officer","Research Officer", \
+	centcom_jobs = list("Central Command","VIP Guest","Custodian","Thunderdome Overseer","CentCom Official","CentCom Medical Officer","Research Officer", \
 		"Special Ops Officer","Admiral","CentCom Commander","CentCom Bartender","Private Security Force")
 
 	all_jobs = list("Assistant", "Captain", "Head of Personnel", "Bartender", "Cook", "Botanist", "Quartermaster", "Cargo Technician", \
@@ -794,7 +794,7 @@ SUBSYSTEM_DEF(job)
 		"Atmospheric Technician", "Chief Medical Officer", "Medical Doctor", "Paramedic", "Chemist", "Geneticist", "Virologist", "Psychologist", \
 		"Research Director", "Scientist", "Roboticist", "Head of Security", "Warden", "Detective", "Security Officer", "Prisoner","Emergency Response Team Commander", "Security Response Officer", "Engineering Response Officer", "Medical Response Officer", \
 		"Entertainment Response Officer", "Religious Response Officer", "Janitorial Response Officer", "Death Commando", "Security Officer (Engineering)", \
-		"Security Officer (Cargo)", "Security Officer (Medical)", "Security Officer (Science)","Central Command","VIP Guest","Custodian","Thunderdome Overseer","CentCom Official","Medical Officer","Research Officer", \
+		"Security Officer (Cargo)", "Security Officer (Medical)", "Security Officer (Science)","Central Command","VIP Guest","Custodian","Thunderdome Overseer","CentCom Official","CentCom Medical Officer","Research Officer", \
 		"Special Ops Officer","Admiral","CentCom Commander","CentCom Bartender","Private Security Force")
 
 /obj/item/paper/fluff/spare_id_safe_code

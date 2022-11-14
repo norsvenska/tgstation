@@ -44,3 +44,16 @@
 	icon_state = "centcom_skirt"
 	inhand_icon_state = "dg_suit"
 	fitted = FEMALE_UNIFORM_TOP
+
+/obj/item/clothing/under/rank/centcom/centmed
+	desc = "It's a jumpsuit worn by CentCom's on-station medical personnel."
+	name = "\improper CentCom medical jumpsuit"
+	icon_state = "centmed"
+	inhand_icon_state = "w_suit"
+
+/obj/item/clothing/under/rank/centcom/centmed_skirt
+	name = "\improper CentCom medical jumpskirt"
+	desc = "It's a jumpskirt worn by CentCom's on-station medical personnel."
+	icon_state = "centmed_skirt"
+	inhand_icon_state = "w_suit"
+	fitted = FEMALE_UNIFORM_TOP

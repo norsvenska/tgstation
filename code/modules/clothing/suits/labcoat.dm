@@ -35,11 +35,17 @@
 	icon_state = "labcoat_cmo"
 	inhand_icon_state = "labcoat_cmo"
 
+/obj/item/clothing/suit/toggle/labcoat/cmo/centcom
+	name = "\improper CentCom medical labcoat"
+	desc = "A white labecoat with a green inside and gold highlights. Designed for CentCom medical officers."
+	icon_state = "labcoat_centcom"
+	inhand_icon_state = "labcoat_centcom"
+
 /obj/item/clothing/suit/toggle/labcoat/cmo/Initialize()
 	. = ..()
 	allowed += list(
 		/obj/item/melee/classic_baton/telescopic,
-	)	
+	)
 
 /obj/item/clothing/suit/toggle/labcoat/paramedic
 	name = "paramedic's jacket"

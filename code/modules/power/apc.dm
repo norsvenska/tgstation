@@ -120,8 +120,8 @@
 	var/area/area
 	var/areastring = null
 	var/obj/item/stock_parts/cell/cell
-	var/start_charge = 90 // initial cell charge %
-	var/cell_type = /obj/item/stock_parts/cell/upgraded //Base cell has 2500 capacity. Enter the path of a different cell you want to use. cell determines charge rates, max capacity, ect. These can also be changed with other APC vars, but isn't recommended to minimize the risk of accidental usage of dirty editted APCs
+	var/start_charge = 91000 // initial cell charge %
+	var/cell_type = /obj/item/stock_parts/cell/infinite //Base cell has 2500 capacity. Enter the path of a different cell you want to use. cell determines charge rates, max capacity, ect. These can also be changed with other APC vars, but isn't recommended to minimize the risk of accidental usage of dirty editted APCs
 	var/opened = APC_COVER_CLOSED
 	var/shorted = FALSE
 	var/lighting = APC_CHANNEL_AUTO_ON
@@ -173,13 +173,13 @@
 	req_access = list(ACCESS_AWAY_GENERAL)
 
 /obj/machinery/power/apc/highcap/five_k
-	cell_type = /obj/item/stock_parts/cell/upgraded/plus
+	cell_type = /obj/item/stock_parts/cell/infinite
 
 /obj/machinery/power/apc/highcap/ten_k
-	cell_type = /obj/item/stock_parts/cell/high
+	cell_type = /obj/item/stock_parts/cell/infinite
 
 /obj/machinery/power/apc/highcap/fifteen_k
-	cell_type = /obj/item/stock_parts/cell/high/plus
+	cell_type = /obj/item/stock_parts/cell/infinite
 
 /obj/machinery/power/apc/auto_name
 	auto_name = TRUE

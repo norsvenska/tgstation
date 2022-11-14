@@ -226,6 +226,14 @@
 	clothing_traits = list(TRAIT_QUICKER_CARRY, TRAIT_FASTMED)
 	transfer_prints = FALSE
 
+/obj/item/clothing/gloves/color/latex/centcom
+	name = "\improper CentCom nitrile gloves"
+	desc = "Pricy sterile gloves that are thicker than latex. Excellent grip ensures very fast carrying of patients along with the faster use time of various chemical related items. These ones are in traditional CentCom green."
+	icon_state = "centmed"
+	inhand_icon_state = "commanderplasma"
+	clothing_traits = list(TRAIT_QUICKER_CARRY, TRAIT_FASTMED)
+	transfer_prints = FALSE
+
 /obj/item/clothing/gloves/color/infiltrator
 	name = "infiltrator gloves"
 	desc = "Specialized tactical gloves for carrying people around. Has tactical rubber grips for tactical ease of kidnapping. Tactically."

@@ -45,8 +45,12 @@
 
 /// Trim for Centcom Medical Officers.
 /datum/id_trim/centcom/medical_officer
-	access = list(ACCESS_CENT_GENERAL, ACCESS_CENT_LIVING, ACCESS_CENT_MEDICAL)
 	assignment = "Medical Officer"
+
+/datum/id_trim/centcom/medical_officer/New()
+	. = ..()
+
+	access = SSid_access.get_region_access_list(list(REGION_CENTCOM, REGION_ALL_STATION))
 
 /// Trim for Centcom Research Officers.
 /datum/id_trim/centcom/research_officer
