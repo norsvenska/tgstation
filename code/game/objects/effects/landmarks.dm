@@ -201,6 +201,10 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	var/primary_ai = TRUE
 	var/latejoin_active = TRUE
 
+/obj/effect/landmark/start/centcomcommander
+	name = "CentCom Commander"
+	icon_state = "Commander"
+
 /obj/effect/landmark/start/ai/after_round_start()
 	if(latejoin_active && !used)
 		new /obj/structure/ai_core/latejoin_inactive(loc)

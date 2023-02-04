@@ -279,6 +279,69 @@
 	id = /obj/item/card/id/advanced/centcom
 	id_trim = /datum/id_trim/centcom/commander
 	uniform = /obj/item/clothing/under/rank/centcom/commander
+	suit = /obj/item/clothing/suit/armor/bulletproof
+	suit_store = /obj/item/gun/ballistic/revolver/mateba
+	back = /obj/item/storage/backpack/satchel/leather
+	backpack_contents = list(
+		/obj/item/stamp/centcom = 1,
+		/obj/item/pen/fountain/centcom = 1,
+		/obj/item/flashlight/seclite = 1,
+		/obj/item/book/granter/martial/cqc = 1,
+)
+	belt = /obj/item/modular_computer/tablet/pda/heads/centcom
+	ears = /obj/item/radio/headset/headset_cent/commander
+	glasses = /obj/item/clothing/glasses/centcom
+	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+	head = /obj/item/clothing/head/hats/centhat
+	shoes = /obj/item/clothing/shoes/combat/swat
+	l_pocket = /obj/item/ammo_box/a357
+	r_pocket = /obj/item/knife/combat
+
+/datum/outfit/centcom/commander/armored
+	name = "CentCom Commander (Combat)"
+
+	head = /obj/item/clothing/head/beret/centcom_formal
+
+/datum/outfit/centcom/commander/winter
+	name = "CentCom Commander (Winter)"
+
+	suit = /obj/item/clothing/suit/hooded/wintercoat/centcom
+	neck = /obj/item/clothing/neck/scarf/green
+
+/datum/outfit/centcom/commander/formal
+	name = "CentCom Commander (Formal)"
+
+	head = /obj/item/clothing/head/hats/centcom_cap
+	suit = /obj/item/clothing/suit/armor/centcom_formal
+	neck = null
+
+/datum/outfit/centcom/commander/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	if(visualsOnly)
+		return
+
+	var/obj/item/modular_computer/tablet/pda/heads/centcom/pda = H.belt
+	pda.saved_identification = H.real_name
+	pda.saved_job = "CentCom Commander"
+
+	var/obj/item/card/id/W = H.wear_id
+	W.registered_name = H.real_name
+	W.update_label()
+	W.update_icon()
+	W.registered_age = H.age
+
+	var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
+	if(B && B.account_id == H.account_id)
+		W.registered_account = B
+		B.bank_cards += W
+	H.sec_hud_set_ID()
+	..()
+
+/datum/outfit/centcom/commander/original
+	name = "CentCom Commander"
+
+	id = /obj/item/card/id/advanced/centcom
+	id_trim = /datum/id_trim/centcom/commander
+	uniform = /obj/item/clothing/under/rank/centcom/commander
 	suit = /obj/item/clothing/suit/armor/centcom_formal
 	back = /obj/item/storage/backpack/satchel/leather
 	belt = /obj/item/gun/ballistic/revolver/mateba
@@ -301,7 +364,7 @@
 	W.update_icon()
 	..()
 
-/datum/outfit/centcom/commander/mod
+/datum/outfit/centcom/commander/original/mod
 	name = "CentCom Commander (MODsuit)"
 
 	suit_store = /obj/item/tank/internals/oxygen
@@ -310,6 +373,41 @@
 	mask = /obj/item/clothing/mask/gas/sechailer
 	back = /obj/item/mod/control/pre_equipped/corporate
 	internals_slot = ITEM_SLOT_SUITSTORE
+
+/datum/outfit/centcom/medical
+	name = "CentCom Medic"
+
+	id = /obj/item/card/id/advanced/centcom
+	id_trim = /datum/id_trim/centcom/medical_officer
+	uniform = /obj/item/clothing/under/rank/centcom
+	suit = /obj/item/clothing/suit/toggle/labcoat/cmo
+	back = /obj/item/storage/backpack/duffelbag/virology
+	belt = /obj/item/modular_computer/tablet/pda/heads/centcom
+	ears = /obj/item/radio/headset/headset_cent/commander //placeholder
+	glasses = /obj/item/clothing/glasses/centcom
+	gloves = /obj/item/clothing/gloves/color/latex/nitrile
+	shoes = /obj/item/clothing/shoes/laceup
+
+/datum/outfit/centcom/medical/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
+	if(visualsOnly)
+		return
+
+	var/obj/item/modular_computer/tablet/pda/heads/centcom/pda = H.belt
+	pda.saved_identification = H.real_name
+	pda.saved_job = "CentCom Commander"
+
+	var/obj/item/card/id/W = H.wear_id
+	W.registered_name = H.real_name
+	W.update_label()
+	W.update_icon()
+	W.registered_age = H.age
+
+	var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
+	if(B && B.account_id == H.account_id)
+		W.registered_account = B
+		B.bank_cards += W
+	H.sec_hud_set_ID()
+	..()
 
 /datum/outfit/ghost_cultist
 	name = "Cultist Ghost"

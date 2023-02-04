@@ -23,6 +23,12 @@
 	greyscale_colors = "#2C7CB2#FF0000#FFFFFF#FFD55B"
 	inserted_item = /obj/item/pen/fountain/captain
 
+/obj/item/modular_computer/tablet/pda/heads/centcom
+	name = "CentCom PDA"
+	greyscale_config = /datum/greyscale_config/tablet/stripe_split
+	greyscale_colors = "#118900#040404#b3901c"
+	inserted_item = /obj/item/pen/fountain/centcom
+
 /obj/item/modular_computer/tablet/pda/heads/captain/Initialize(mapload)
 	. = ..()
 	RegisterSignal(src, COMSIG_TABLET_CHECK_DETONATE, .proc/tab_no_detonate)

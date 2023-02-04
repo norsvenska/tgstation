@@ -134,6 +134,28 @@
 	if(current_skin)
 		desc = "It's an expensive [current_skin] fountain pen. The nib is quite sharp."
 
+/obj/item/pen/fountain/centcom
+	name = "CentCom fountain pen"
+	desc = "It's an expensive green fountain pen. The nib is quite sharp."
+	icon_state = "pen-fountain-centcom"
+	force = 6
+	throwforce = 6
+	throw_speed = 5
+	colour = "#0c5c20"
+	custom_materials = list(/datum/material/gold = 750)
+	sharpness = SHARP_EDGED
+	resistance_flags = FIRE_PROOF
+	embedding = list("embed_chance" = 80)
+
+/obj/item/pen/fountain/captain/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/butchering, \
+	speed = 17 SECONDS, \
+	effectiveness = 120, \
+	)
+	//da heck is centcom doing with their pens
+
+
 /obj/item/pen/attack_self(mob/living/carbon/user)
 	. = ..()
 	if(.)

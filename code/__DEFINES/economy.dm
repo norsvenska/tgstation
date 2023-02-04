@@ -14,6 +14,9 @@
 #define PAYCHECK_CREW 50
 ///Paygrade for Heads of Staff.
 #define PAYCHECK_COMMAND 100
+//Paygrade for CentCom personnel
+#define PAYCHECK_CENTCOM 10000
+//yeah it's high i'll change it later
 
 //How many credits a player is charged if they print something from a departmental lathe they shouldn't have access to.
 #define LATHE_TAX 10
@@ -43,6 +46,8 @@
 #define ACCOUNT_CAR_NAME "Cargo Budget"
 #define ACCOUNT_SEC "SEC"
 #define ACCOUNT_SEC_NAME "Defense Budget"
+#define ACCOUNT_COM "COM"
+#define ACCOUNT_COM_NAME "Command Budget"
 
 #define NO_FREEBIES "commies go home"
 
