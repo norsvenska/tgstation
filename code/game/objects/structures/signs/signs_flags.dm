@@ -45,3 +45,10 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/flag/mothic, 32)
 	icon_state = "flag_mars"
 
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/flag/mars, 32)
+
+/obj/structure/sign/flag/scandi
+	name = "flag of Scandinavia"
+	desc = "The flag of Scandinavia. A union between the nations of Scandinavia, which formed in the late 2100s, whose flag is a symbol of democracy and equality."
+	icon_state = "flag_scandi"
+
+MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/flag/scandi, 32)

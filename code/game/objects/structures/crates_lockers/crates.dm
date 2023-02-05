@@ -305,3 +305,21 @@
 	. = ..()
 	for(var/i in 1 to 4)
 		new /obj/effect/spawner/random/decoration/generic(src)
+
+/obj/structure/closet/crate/build
+	name = "construction crate"
+	desc = "A crate full of construction materials and equipment. Perfect for large building projects!"
+	icon_state = "build_crate"
+
+/obj/structure/closet/crate/build/PopulateContents()
+	. = ..()
+	new /obj/item/crowbar/red(src)
+	new /obj/item/screwdriver/power(src)
+	new /obj/item/weldingtool/experimental(src)
+	new /obj/item/multitool(src)
+	new /obj/item/wirecutters(src)
+	new /obj/item/stack/sheet/plasteel/fifty(src)
+	new /obj/item/stack/sheet/glass/fifty(src)
+	new /obj/item/stack/sheet/plastic/fifty(src)
+	new /obj/item/stack/sheet/mineral/wood/fifty(src)
+	new /obj/item/stack/sheet/iron/fifty(src)
