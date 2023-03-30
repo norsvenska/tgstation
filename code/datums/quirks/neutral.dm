@@ -5,7 +5,7 @@
 	name = "Extrovert"
 	desc = "You are energized by talking to others, and enjoy spending your free time in the bar."
 	icon = "users"
-	value = 0
+	value = -8
 	mob_trait = TRAIT_EXTROVERT
 	gain_text = "<span class='notice'>You feel like hanging out with other people.</span>"
 	lose_text = "<span class='danger'>You feel like you're over the bar scene.</span>"
@@ -192,7 +192,7 @@
 	name = "Heterochromatic"
 	desc = "One of your eyes is a different color than the other!"
 	icon = "eye-low-vision" // Ignore the icon name, its actually a fairly good representation of different color eyes
-	value = 0
+	value = -8
 	mail_goodies = list(/obj/item/clothing/glasses/eyepatch)
 	var/color
 

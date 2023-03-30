@@ -94,7 +94,7 @@
 #define JOB_CENTCOM_BARTENDER "CentCom Bartender"
 #define JOB_CENTCOM_CUSTODIAN "Custodian"
 #define JOB_CENTCOM_THUNDERDOME_OVERSEER "Thunderdome Overseer"
-#define JOB_CENTCOM_MEDICAL_DOCTOR "Medical Officer"
+#define JOB_CENTCOM_MEDICAL_DOCTOR "CentCom Medic"
 #define JOB_CENTCOM_RESEARCH_OFFICER "Research Officer"
 #define JOB_CENTCOM_SPECIAL_OFFICER "Special Ops Officer"
 #define JOB_CENTCOM_PRIVATE_SECURITY "Private Security Force"
@@ -161,6 +161,8 @@
 #define DEPARTMENT_ASSISTANT "Assistant"
 #define DEPARTMENT_BITFLAG_CAPTAIN (1<<9)
 #define DEPARTMENT_CAPTAIN "Captain"
+#define DEPARTMENT_BITFLAG_CENTCOM (1<<10)
+#define DEPARTMENT_CENTCOM "CentCom"
 
 /* Job datum job_flags */
 /// Whether the mob is announced on arrival.

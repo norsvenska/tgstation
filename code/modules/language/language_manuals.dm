@@ -98,6 +98,14 @@
 	flavour_text = "suddenly the drone chittering makes sense"
 	charges = INFINITY
 
+/obj/item/language_manual/norse_manual
+	name = "norse dictionary"
+	desc = "The book's cover reads: \"The Ultimate Norse Dictionary.\""
+	icon_state = "bookscandi"
+	charges = INFINITY
+	language = /datum/language/norse
+	flavour_text = "you feel like a true space viking now"
+
 /obj/item/language_manual/dronespeak_manual/attack(mob/living/M, mob/living/user)
 	// If they are not drone or silicon, we don't want them to learn this language.
 	if(!(isdrone(M) || issilicon(M)))

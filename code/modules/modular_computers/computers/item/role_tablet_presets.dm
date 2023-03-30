@@ -26,7 +26,7 @@
 /obj/item/modular_computer/tablet/pda/heads/centcom
 	name = "CentCom PDA"
 	greyscale_config = /datum/greyscale_config/tablet/stripe_split
-	greyscale_colors = "#118900#040404#b3901c"
+	greyscale_colors = "#b3901c#040404#118900"
 	inserted_item = /obj/item/pen/fountain/centcom
 
 /obj/item/modular_computer/tablet/pda/heads/captain/Initialize(mapload)

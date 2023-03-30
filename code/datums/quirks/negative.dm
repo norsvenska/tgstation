@@ -9,7 +9,7 @@
 	gain_text = "<span class='danger'>Your back REALLY hurts!</span>"
 	lose_text = "<span class='notice'>Your back feels better.</span>"
 	medical_record_text = "Patient scans indicate severe and chronic back pain."
-	hardcore_value = 4
+	hardcore_value = 8
 	mail_goodies = list(/obj/item/cane)
 	var/datum/weakref/backpack
 
@@ -156,7 +156,7 @@
 	desc = "You sometimes just hate life."
 	icon = "frown"
 	mob_trait = TRAIT_DEPRESSION
-	value = -3
+	value = -8
 	gain_text = "<span class='danger'>You start feeling depressed.</span>"
 	lose_text = "<span class='notice'>You no longer feel depressed.</span>" //if only it were that easy!
 	medical_record_text = "Patient has a mild mood disorder causing them to experience acute episodes of depression."
@@ -168,7 +168,7 @@
 	name = "Family Heirloom"
 	desc = "You are the current owner of an heirloom, passed down for generations. You have to keep it safe!"
 	icon = "toolbox"
-	value = -2
+	value = -8
 	mood_quirk = TRUE
 	medical_record_text = "Patient demonstrates an unnatural attachment to a family heirloom."
 	hardcore_value = 1
@@ -254,7 +254,7 @@
 	name = "Heavy Sleeper"
 	desc = "You sleep like a rock! Whenever you're put to sleep or knocked unconscious, you take a little bit longer to wake up."
 	icon = "bed"
-	value = -2
+	value = -8
 	mob_trait = TRAIT_HEAVY_SLEEPER
 	gain_text = "<span class='danger'>You feel sleepy.</span>"
 	lose_text = "<span class='notice'>You feel awake again.</span>"
@@ -274,7 +274,7 @@
 	name = "Hypersensitive"
 	desc = "For better or worse, everything seems to affect your mood more than it should."
 	icon = "flushed"
-	value = -2
+	value = -8
 	gain_text = "<span class='danger'>You seem to make a big deal out of everything.</span>"
 	lose_text = "<span class='notice'>You don't seem to make a big deal out of everything anymore.</span>"
 	medical_record_text = "Patient demonstrates a high level of emotional volatility."
@@ -293,7 +293,7 @@
 	name = "Light Drinker"
 	desc = "You just can't handle your drinks and get drunk very quickly."
 	icon = "cocktail"
-	value = -2
+	value = -8
 	mob_trait = TRAIT_LIGHT_DRINKER
 	gain_text = "<span class='notice'>Just the thought of drinking alcohol makes your head spin.</span>"
 	lose_text = "<span class='danger'>You're no longer severely affected by alcohol.</span>"
@@ -305,7 +305,7 @@
 	name = "Nearsighted"
 	desc = "You are nearsighted without prescription glasses, but spawn with a pair."
 	icon = "glasses"
-	value = -4
+	value = -8
 	gain_text = "<span class='danger'>Things far away from you start looking blurry.</span>"
 	lose_text = "<span class='notice'>You start seeing faraway things normally again.</span>"
 	medical_record_text = "Patient requires prescription glasses in order to counteract nearsightedness."
@@ -337,7 +337,7 @@
 	name = "Nyctophobia"
 	desc = "As far as you can remember, you've always been afraid of the dark. While in the dark without a light source, you instinctively act careful, and constantly feel a sense of dread."
 	icon = "lightbulb"
-	value = -3
+	value = -8
 	medical_record_text = "Patient demonstrates a fear of the dark. (Seriously?)"
 	hardcore_value = 5
 	mail_goodies = list(/obj/effect/spawner/random/engineering/flashlight)
@@ -439,7 +439,7 @@
 	name = "Stormtrooper Aim"
 	desc = "You've never hit anything you were aiming for in your life."
 	icon = "bullseye"
-	value = -4
+	value = -8
 	mob_trait = TRAIT_POOR_AIM
 	medical_record_text = "Patient possesses a strong tremor in both hands."
 	hardcore_value = 3
@@ -449,7 +449,7 @@
 	name = "Prosopagnosia"
 	desc = "You have a mental disorder that prevents you from being able to recognize faces at all."
 	icon = "user-secret"
-	value = -4
+	value = -8
 	mob_trait = TRAIT_PROSOPAGNOSIA
 	medical_record_text = "Patient suffers from prosopagnosia and cannot recognize faces."
 	hardcore_value = 5
@@ -459,7 +459,7 @@
 	name = "Prosthetic Limb"
 	desc = "An accident caused you to lose one of your limbs. Because of this, you now have a random prosthetic!"
 	icon = "tg-prosthetic-leg"
-	value = -3
+	value = -8
 	var/slot_string = "limb"
 	medical_record_text = "During physical examination, patient was found to have a prosthetic limb."
 	hardcore_value = 3
@@ -568,7 +568,7 @@
 	name = "Social Anxiety"
 	desc = "Talking to people is very difficult for you, and you often stutter or even lock up."
 	icon = "comment-slash"
-	value = -3
+	value = -8
 	gain_text = "<span class='danger'>You start worrying about what you're saying.</span>"
 	lose_text = "<span class='notice'>You feel easier about talking again.</span>" //if only it were that easy!
 	medical_record_text = "Patient is usually anxious in social encounters and prefers to avoid them."
@@ -899,7 +899,7 @@
 	desc = "You don't like hugs. You'd really prefer if people just left you alone."
 	icon = "tg-bad-touch"
 	mob_trait = TRAIT_BADTOUCH
-	value = -1
+	value = -8
 	gain_text = "<span class='danger'>You just want people to leave you alone.</span>"
 	lose_text = "<span class='notice'>You could use a big hug.</span>"
 	medical_record_text = "Patient has disdain for being touched. Potentially has undiagnosed haphephobia."
@@ -930,7 +930,7 @@
 	name = "Claustrophobia"
 	desc = "You are terrified of small spaces and certain jolly figures. If you are placed inside any container, locker, or machinery, a panic attack sets in and you struggle to breathe."
 	icon = "box-open"
-	value = -4
+	value = -8
 	medical_record_text = "Patient demonstrates a fear of tight spaces."
 	hardcore_value = 5
 	processing_quirk = TRUE

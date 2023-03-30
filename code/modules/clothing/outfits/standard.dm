@@ -287,6 +287,7 @@
 		/obj/item/pen/fountain/centcom = 1,
 		/obj/item/flashlight/seclite = 1,
 		/obj/item/book/granter/martial/cqc = 1,
+		/obj/item/clothing/mask/centcom = 1
 )
 	belt = /obj/item/modular_computer/tablet/pda/heads/centcom
 	ears = /obj/item/radio/headset/headset_cent/commander
@@ -305,7 +306,8 @@
 /datum/outfit/centcom/commander/winter
 	name = "CentCom Commander (Winter)"
 
-	suit = /obj/item/clothing/suit/hooded/wintercoat/centcom
+	head = /obj/item/clothing/head/helmet/space/beret
+	suit = /obj/item/clothing/suit/space/officer
 	neck = /obj/item/clothing/neck/scarf/green
 
 /datum/outfit/centcom/commander/formal

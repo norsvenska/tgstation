@@ -383,6 +383,10 @@ export const JobsPage = () => {
             <Stack.Item mr={1}>
               <PriorityHeaders />
 
+              <Department department="CentCom">
+                <Gap amount={6} />
+              </Department>
+
               <Department department="Captain">
                 <Gap amount={6} />
               </Department>
