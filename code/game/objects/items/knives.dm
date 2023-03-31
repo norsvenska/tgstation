@@ -131,6 +131,22 @@
 	throwforce = 15
 	bayonet = TRUE
 
+/obj/item/knife/combat/centcom
+	name = "\improper CentCom knife"
+	icon_state = "centcomknife"
+	desc = "A military grade survival knife, with extra flair on the handle. It is from CentCom, after all."
+	embedding = list("pain_mult" = 5, "embed_chance" = 85, "fall_chance" = 10, "ignore_throwspeed_threshold" = TRUE)
+	force = 25
+	throwforce = 25
+	bayonet = TRUE
+
+/obj/item/knife/combat/centcom/set_butchering() //it's an all round good knife
+	AddComponent(/datum/component/butchering, \
+	speed = 8 SECONDS - force, \
+	effectiveness = 100, \
+	bonus_modifier = force + 15, \
+	)
+
 /obj/item/knife/combat/bone
 	name = "bone dagger"
 	inhand_icon_state = "bone_dagger"

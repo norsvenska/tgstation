@@ -1,22 +1,66 @@
 /obj/item/clothing/mask/centcom
 	name = "\improper CentCom rebreather"
-	desc = "A dark rebreather, from CentCom. Allows the user to survive in... well... space. Or anywhere there isn't air, I guess."
+	desc = "A dark rebreather, from CentCom. Allows the user to survive in... well... space. Or anywhere there isn't air, I guess. It also comes with a cloaking mode, making it invisible to the naked eye."
 	icon_state = "rebreather_centcom"
 	inhand_icon_state = "sechailer" //placeholder unless it looks good
 	body_parts_covered = NONE
 	w_class = WEIGHT_CLASS_SMALL
 	clothing_traits = list(TRAIT_NOBREATH)
 	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 75, FIRE = 0, ACID = 0)
+	actions_types = list(/datum/action/item_action/togglecloak)
+	flags_inv = HIDEEARS
+	visor_flags_inv = HIDEEARS
+//	clothing_flags = list(INEDIBLE_CLOTHING, VOICEBOX_DISABLED)
+//	visor_flags = list(INEDIBLE_CLOTHING, VOICEBOX_DISABLED)
 	flags_cover = MASKCOVERSMOUTH
+	visor_flags_cover = MASKCOVERSMOUTH
 	resistance_flags = NONE
+	var/cloakingon = FALSE
 
-/obj/item/clothing/mask/nobreath/equipped(mob/living/carbon/human/user, slot)
+/obj/item/clothing/mask/centcom/suicide_act(mob/living/carbon/user)
+	user.visible_message(span_suicide("[user] closes \the [src]'s air valves! It looks like [user.p_theyre()] trying to commit suicide!"))
+	return OXYLOSS
+
+/obj/item/clothing/mask/centcom/equipped(mob/living/carbon/human/user, slot)
 	. = ..()
 	if(slot & ITEM_SLOT_MASK)
 		user.failed_last_breath = FALSE
 		user.clear_alert(ALERT_NOT_ENOUGH_OXYGEN)
 		user.apply_status_effect(/datum/status_effect/rebreathing)
 
-/obj/item/clothing/mask/nobreath/dropped(mob/living/carbon/human/user)
+/obj/item/clothing/mask/centcom/dropped(mob/living/carbon/human/user)
 	..()
 	user.remove_status_effect(/datum/status_effect/rebreathing)
+
+/obj/item/clothing/mask/centcom/attack_self(mob/user)
+	togglecloak(user)
+
+/obj/item/clothing/mask/centcom/AltClick(mob/user)
+	..()
+	if(user.canUseTopic(src, be_close = TRUE, no_dexterity = TRUE, no_tk = FALSE, need_hands = !iscyborg(user)))
+		togglecloak(user)
+
+/obj/item/clothing/mask/centcom/examine(mob/user)
+	. = ..()
+	. += span_notice("Alt-click [src] to toggle cloaking mode.")
+
+/obj/item/clothing/mask/centcom/proc/togglecloak(mob/living/carbon/user)
+	if(user?.incapacitated())
+		return
+	cloakingon = !cloakingon
+	if(!cloakingon)
+		worn_icon_state = "rebreather_centcom"
+		to_chat(user, span_notice("You disable the rebreather's cloaking mode."))
+//		clothing_flags |= visor_flags
+		flags_cover |= visor_flags_cover
+		flags_inv |= visor_flags_inv
+	else
+		worn_icon_state = "rebreather_centcom_up"
+		to_chat(user, span_notice("You turn on the rebreather's cloaking mode."))
+//		clothing_flags &= ~visor_flags
+		flags_cover &= ~visor_flags_cover
+		flags_inv &= ~visor_flags_inv
+	if(!istype(user))
+		return
+	if(user.wear_mask == src)
+		user.wear_mask_update(src, toggle_off = cloakingon)

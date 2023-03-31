@@ -280,7 +280,7 @@
 	id_trim = /datum/id_trim/centcom/commander
 	uniform = /obj/item/clothing/under/rank/centcom/commander
 	suit = /obj/item/clothing/suit/armor/bulletproof
-	suit_store = /obj/item/gun/ballistic/revolver/mateba
+	suit_store = /obj/item/gun/energy/pulse/pistol/m1911
 	back = /obj/item/storage/backpack/satchel/leather
 	backpack_contents = list(
 		/obj/item/stamp/centcom = 1,
@@ -295,8 +295,8 @@
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
 	head = /obj/item/clothing/head/hats/centhat
 	shoes = /obj/item/clothing/shoes/combat/swat
-	l_pocket = /obj/item/ammo_box/a357
-	r_pocket = /obj/item/knife/combat
+	l_pocket = null
+	r_pocket = /obj/item/knife/combat/centcom
 
 /datum/outfit/centcom/commander/armored
 	name = "CentCom Commander (Combat)"
