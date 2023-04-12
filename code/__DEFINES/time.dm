@@ -120,6 +120,9 @@ When using time2text(), please use "DDD" to find the weekday. Refrain from using
 /// Central European Summer Time
 #define TIMEZONE_CEST 2
 
+/// Central European Time
+#define TIMEZONE_CET 1
+
 /// Coordinated Universal Time
 #define TIMEZONE_UTC 0
 

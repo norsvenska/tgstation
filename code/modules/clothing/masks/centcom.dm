@@ -8,8 +8,10 @@
 	clothing_traits = list(TRAIT_NOBREATH)
 	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 75, FIRE = 0, ACID = 0)
 	actions_types = list(/datum/action/item_action/togglecloak)
-	flags_inv = HIDEEARS
-	visor_flags_inv = HIDEEARS
+	flags_inv = null
+	visor_flags_inv = null
+//	flags_inv = HIDEEARS
+//	visor_flags_inv = HIDEEARS
 //	clothing_flags = list(INEDIBLE_CLOTHING, VOICEBOX_DISABLED)
 //	visor_flags = list(INEDIBLE_CLOTHING, VOICEBOX_DISABLED)
 	flags_cover = MASKCOVERSMOUTH
@@ -18,7 +20,7 @@
 	var/cloakingon = FALSE
 
 /obj/item/clothing/mask/centcom/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] closes \the [src]'s air valves! It looks like [user.p_theyre()] trying to commit suicide!"))
+	user.visible_message(span_suicide("[user] places \the [src] on [user.p_their()] face and shuts off the air filtration system! It looks like [user.p_theyre()] trying to commit suicide!"))
 	return OXYLOSS
 
 /obj/item/clothing/mask/centcom/equipped(mob/living/carbon/human/user, slot)
@@ -48,18 +50,21 @@
 	if(user?.incapacitated())
 		return
 	cloakingon = !cloakingon
-	if(!cloakingon)
+	if(!cloakingon) //off
 		worn_icon_state = "rebreather_centcom"
 		to_chat(user, span_notice("You disable the rebreather's cloaking mode."))
 //		clothing_flags |= visor_flags
 		flags_cover |= visor_flags_cover
 		flags_inv |= visor_flags_inv
-	else
+//		slot_flags = initial(slot_flags)
+	else //on
 		worn_icon_state = "rebreather_centcom_up"
 		to_chat(user, span_notice("You turn on the rebreather's cloaking mode."))
 //		clothing_flags &= ~visor_flags
 		flags_cover &= ~visor_flags_cover
 		flags_inv &= ~visor_flags_inv
+//		if(adjusted_flags)
+//			slot_flags = adjusted_flags
 	if(!istype(user))
 		return
 	if(user.wear_mask == src)

@@ -17,7 +17,7 @@
 	exp_granted_type = EXP_TYPE_COMMAND
 	config_tag = "CENTCOM_COMMANDER"
 
-	outfit = /datum/outfit/centcom/commander
+	outfit = /datum/outfit/centcom/commander/formal
 	plasmaman_outfit = /datum/outfit/plasmaman/centcom_commander
 
 	paycheck = PAYCHECK_CENTCOM

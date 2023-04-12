@@ -457,6 +457,9 @@ GLOBAL_LIST_INIT(cloth_recipes, list ( \
 /obj/item/stack/sheet/cloth/five
 	amount = 5
 
+/obj/item/stack/sheet/cloth/fifty
+	amount = 50
+
 GLOBAL_LIST_INIT(durathread_recipes, list ( \
 	new/datum/stack_recipe("durathread jumpsuit", /obj/item/clothing/under/misc/durathread, 4, time = 40),
 	new/datum/stack_recipe("durathread beret", /obj/item/clothing/head/beret/durathread, 2, time = 40), \

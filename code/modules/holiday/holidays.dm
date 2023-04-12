@@ -194,7 +194,7 @@
 	name = APRIL_FOOLS
 	begin_month = APRIL
 	begin_day = 1
-	end_day = 2
+//	end_day = 2
 
 /datum/holiday/april_fools/celebrate()
 	. = ..()
@@ -285,6 +285,19 @@
 	return pick("Bee","Honey","Hive","Africanized","Mead","Buzz")
 
 // JUNE
+
+//Swedish National Day (6. June)
+/datum/holiday/swedenday
+	name = "Sveriges Nationaldag"
+	timezones = list(TIMEZONE_CEST)
+	begin_month = JUNE
+	begin_day = 6
+
+/datum/holiday/swedenday/greet()
+	return "On this day, Swedes celebrate the election of King Gustav Vasa in 1523. This day was considered the foundation of modern Sweden."
+
+/datum/holiday/swedenday/getStationPrefix()
+	return pick("Swedish", "Svenska", "Sweden", "Sverige")
 
 //The Festival of Atrakor's Might (Tizira's Moon) is celebrated on June 15th, the date on which the lizard visual revamp was merged (#9808)
 /datum/holiday/atrakor_festival
@@ -570,7 +583,7 @@
 	begin_month = NOVEMBER
 
 /datum/holiday/hello/greet()
-	return "[pick(list("Aloha", "Bonjour", "Hello", "Hi", "Greetings", "Salutations", "Bienvenidos", "Hola", "Howdy", "Ni hao", "Guten Tag", "Konnichiwa", "G'day cunt"))]! " + ..()
+	return "[pick(list("Aloha", "Bonjour", "Hello", "Hi", "Greetings", "Salutations", "Bienvenidos", "Hola", "Howdy", "Ni hao", "Guten Tag", "Konnichiwa", "G'day cunt", "Hej"))]! " + ..()
 
 //The Festival of Holy Lights is celebrated on Nov 28th, the date on which ethereals were merged (#40995)
 /datum/holiday/holy_lights
