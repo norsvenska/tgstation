@@ -15,7 +15,7 @@
 ///Paygrade for Heads of Staff.
 #define PAYCHECK_COMMAND 100
 //Paygrade for CentCom personnel
-#define PAYCHECK_CENTCOM 500
+#define PAYCHECK_CENTCOM 5000
 //yeah it's high i'll change it later
 
 //How many credits a player is charged if they print something from a departmental lathe they shouldn't have access to.
