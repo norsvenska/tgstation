@@ -1,4 +1,4 @@
-#define REVERSE_BEAR_TRAP_COUNTDOWN 60 SECONDS
+#define REVERSE_BEAR_TRAP_COUNTDOWN (60 SECONDS)
 
 /obj/item/reverse_bear_trap
 	name = "reverse bear trap"
@@ -39,7 +39,7 @@
 	STOP_PROCESSING(SSprocessing, src)
 	return ..()
 
-/obj/item/reverse_bear_trap/process(delta_time)
+/obj/item/reverse_bear_trap/process(seconds_per_tick)
 	if(!ticking)
 		return
 	soundloop2.mid_length = max(0.5, COOLDOWN_TIMELEFT(src, kill_countdown) - 5) //beepbeepbeepbeepbeep
@@ -51,7 +51,7 @@
 	soundloop.stop()
 	soundloop2.stop()
 	to_chat(loc, span_userdanger("*ding*"))
-	addtimer(CALLBACK(src, .proc/snap), 0.2 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(snap)), 0.2 SECONDS)
 	COOLDOWN_RESET(src, kill_countdown) // reset the countdown in case it wasn't finished
 
 /obj/item/reverse_bear_trap/attack_hand(mob/user, list/modifiers)

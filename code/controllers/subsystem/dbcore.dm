@@ -340,9 +340,9 @@ SUBSYSTEM_DEF(dbcore)
 			continue
 
 		if (warn)
-			INVOKE_ASYNC(query, /datum/db_query.proc/warn_execute)
+			INVOKE_ASYNC(query, TYPE_PROC_REF(/datum/db_query, warn_execute))
 		else
-			INVOKE_ASYNC(query, /datum/db_query.proc/Execute)
+			INVOKE_ASYNC(query, TYPE_PROC_REF(/datum/db_query, Execute))
 
 	for (var/datum/db_query/query as anything in queries)
 		query.sync()
@@ -519,7 +519,7 @@ Delayed insert mode was removed in mysql 7 and only works with MyISAM type table
 	while(status < DB_QUERY_FINISHED)
 		stoplag()
 
-/datum/db_query/process(delta_time)
+/datum/db_query/process(seconds_per_tick)
 	if(status >= DB_QUERY_FINISHED)
 		return
 

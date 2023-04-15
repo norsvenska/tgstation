@@ -34,7 +34,7 @@
 /obj/structure/bonfire/Initialize(mapload)
 	. = ..()
 	var/static/list/loc_connections = list(
-		COMSIG_ATOM_ENTERED = .proc/on_entered,
+		COMSIG_ATOM_ENTERED = PROC_REF(on_entered),
 	)
 	AddElement(/datum/element/connect_loc, loc_connections)
 
@@ -135,30 +135,30 @@
 		start_burning()
 		visible_message(span_notice("[entered]'s fire spreads to [src], setting it ablaze!"))
 
-/obj/structure/bonfire/proc/bonfire_burn(delta_time = 2)
+/obj/structure/bonfire/proc/bonfire_burn(seconds_per_tick = 2)
 	var/turf/current_location = get_turf(src)
 	if(!grill)
-		current_location.hotspot_expose(1000, 250 * delta_time, 1)
+		current_location.hotspot_expose(1000, 250 * seconds_per_tick, 1)
 	for(var/burn_target in current_location)
 		if(burn_target == src)
 			continue
 		else if(isliving(burn_target))
 			var/mob/living/burn_victim = burn_target
-			burn_victim.adjust_fire_stacks(BONFIRE_FIRE_STACK_STRENGTH * 0.5 * delta_time)
+			burn_victim.adjust_fire_stacks(BONFIRE_FIRE_STACK_STRENGTH * 0.5 * seconds_per_tick)
 			burn_victim.ignite_mob()
 		else if(isobj(burn_target))
 			var/obj/burned_object = burn_target
 			if(grill && isitem(burned_object))
 				var/obj/item/grilled_item = burned_object
-				SEND_SIGNAL(grilled_item, COMSIG_ITEM_GRILL_PROCESS, src, delta_time) //Not a big fan, maybe make this use fire_act() in the future.
+				SEND_SIGNAL(grilled_item, COMSIG_ITEM_GRILL_PROCESS, src, seconds_per_tick) //Not a big fan, maybe make this use fire_act() in the future.
 				continue
-			burned_object.fire_act(1000, 250 * delta_time)
+			burned_object.fire_act(1000, 250 * seconds_per_tick)
 
-/obj/structure/bonfire/process(delta_time)
+/obj/structure/bonfire/process(seconds_per_tick)
 	if(!check_oxygen())
 		extinguish()
 		return
-	bonfire_burn(delta_time)
+	bonfire_burn(seconds_per_tick)
 
 /obj/structure/bonfire/extinguish()
 	if(burning)
@@ -187,9 +187,11 @@
 	fade = 1 SECONDS
 	grow = -0.01
 	velocity = list(0, 0)
-	position = generator("circle", 0, 16, NORMAL_RAND)
-	drift = generator("vector", list(0, -0.2), list(0, 0.2))
+	position = generator(GEN_CIRCLE, 0, 16, NORMAL_RAND)
+	drift = generator(GEN_VECTOR, list(0, -0.2), list(0, 0.2))
 	gravity = list(0, 0.95)
-	scale = generator("vector", list(0.3, 0.3), list(1,1), NORMAL_RAND)
+	scale = generator(GEN_VECTOR, list(0.3, 0.3), list(1,1), NORMAL_RAND)
 	rotation = 30
-	spin = generator("num", -20, 20)
+	spin = generator(GEN_NUM, -20, 20)
+
+#undef BONFIRE_FIRE_STACK_STRENGTH

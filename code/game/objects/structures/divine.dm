@@ -9,7 +9,7 @@
 
 /obj/structure/sacrificealtar/AltClick(mob/living/user)
 	..()
-	if(!istype(user) || !user.canUseTopic(src, be_close = TRUE))
+	if(!istype(user) || !user.can_perform_action(src))
 		return
 	if(!has_buckled_mobs())
 		return
@@ -42,7 +42,7 @@
 	to_chat(user, span_notice("The water feels warm and soothing as you touch it. The fountain immediately dries up shortly afterwards."))
 	user.reagents.add_reagent(/datum/reagent/medicine/omnizine/godblood,20)
 	update_appearance()
-	addtimer(CALLBACK(src, /atom/.proc/update_appearance), time_between_uses)
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/atom/, update_appearance)), time_between_uses)
 
 
 /obj/structure/healingfountain/update_icon_state()

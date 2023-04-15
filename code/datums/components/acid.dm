@@ -36,19 +36,19 @@
 			return COMPONENT_INCOMPATIBLE
 
 		max_volume = OBJ_ACID_VOLUME_MAX
-		process_effect = CALLBACK(src, .proc/process_obj, parent)
+		process_effect = CALLBACK(src, PROC_REF(process_obj), parent)
 	else if(isliving(parent))
 		max_volume = MOB_ACID_VOLUME_MAX
-		process_effect = CALLBACK(src, .proc/process_mob, parent)
+		process_effect = CALLBACK(src, PROC_REF(process_mob), parent)
 	else if(isturf(parent))
 		max_volume = TURF_ACID_VOLUME_MAX
-		process_effect = CALLBACK(src, .proc/process_turf, parent)
+		process_effect = CALLBACK(src, PROC_REF(process_turf), parent)
 
 	acid_power = _acid_power
 	set_volume(_acid_volume)
 
 	var/atom/parent_atom = parent
-	RegisterSignal(parent, COMSIG_ATOM_UPDATE_OVERLAYS, .proc/on_update_overlays)
+	RegisterSignal(parent, COMSIG_ATOM_UPDATE_OVERLAYS, PROC_REF(on_update_overlays))
 	parent_atom.update_appearance()
 	sizzle = new(parent, TRUE)
 	START_PROCESSING(SSacid, src)
@@ -65,12 +65,12 @@
 	return ..()
 
 /datum/component/acid/RegisterWithParent()
-	RegisterSignal(parent, COMSIG_PARENT_EXAMINE, .proc/on_examine)
-	RegisterSignal(parent, COMSIG_COMPONENT_CLEAN_ACT, .proc/on_clean)
-	RegisterSignal(parent, COMSIG_ATOM_ATTACK_HAND, .proc/on_attack_hand)
-	RegisterSignal(parent, COMSIG_ATOM_EXPOSE_REAGENT, .proc/on_expose_reagent)
+	RegisterSignal(parent, COMSIG_PARENT_EXAMINE, PROC_REF(on_examine))
+	RegisterSignal(parent, COMSIG_COMPONENT_CLEAN_ACT, PROC_REF(on_clean))
+	RegisterSignal(parent, COMSIG_ATOM_ATTACK_HAND, PROC_REF(on_attack_hand))
+	RegisterSignal(parent, COMSIG_ATOM_EXPOSE_REAGENT, PROC_REF(on_expose_reagent))
 	if(isturf(parent))
-		RegisterSignal(parent, COMSIG_ATOM_ENTERED, .proc/on_entered)
+		RegisterSignal(parent, COMSIG_ATOM_ENTERED, PROC_REF(on_entered))
 
 /datum/component/acid/UnregisterFromParent()
 	UnregisterSignal(parent, list(
@@ -95,25 +95,25 @@
 
 
 /// Handles the slow corrosion of the parent [/atom].
-/datum/component/acid/process(delta_time)
-	process_effect?.InvokeAsync(delta_time)
+/datum/component/acid/process(seconds_per_tick)
+	process_effect?.InvokeAsync(seconds_per_tick)
 	if(QDELING(src)) //The process effect deals damage, and on turfs diminishes the acid volume, potentially destroying the component. Let's not destroy it twice.
 		return
-	set_volume(acid_volume - (ACID_DECAY_BASE + (ACID_DECAY_SCALING*round(sqrt(acid_volume)))) * delta_time)
+	set_volume(acid_volume - (ACID_DECAY_BASE + (ACID_DECAY_SCALING*round(sqrt(acid_volume)))) * seconds_per_tick)
 
 /// Handles processing on a [/obj].
-/datum/component/acid/proc/process_obj(obj/target, delta_time)
+/datum/component/acid/proc/process_obj(obj/target, seconds_per_tick)
 	if(target.resistance_flags & ACID_PROOF)
 		return
-	target.take_damage(min(1 + round(sqrt(acid_power * acid_volume)*0.3), OBJ_ACID_DAMAGE_MAX) * delta_time, BURN, ACID, 0)
+	target.take_damage(min(1 + round(sqrt(acid_power * acid_volume)*0.3), OBJ_ACID_DAMAGE_MAX) * seconds_per_tick, BURN, ACID, 0)
 
 /// Handles processing on a [/mob/living].
-/datum/component/acid/proc/process_mob(mob/living/target, delta_time)
-	target.acid_act(acid_power, acid_volume * delta_time)
+/datum/component/acid/proc/process_mob(mob/living/target, seconds_per_tick)
+	target.acid_act(acid_power, acid_volume * seconds_per_tick)
 
 /// Handles processing on a [/turf].
-/datum/component/acid/proc/process_turf(turf/target_turf, delta_time)
-	var/acid_used = min(acid_volume * 0.05, 20) * delta_time
+/datum/component/acid/proc/process_turf(turf/target_turf, seconds_per_tick)
+	var/acid_used = min(acid_volume * 0.05, 20) * seconds_per_tick
 	var/applied_targets = 0
 	for(var/am in target_turf)
 		var/atom/movable/target_movable = am
@@ -127,7 +127,7 @@
 	if(acid_power < ACID_POWER_MELT_TURF)
 		return
 
-	parent_integrity -= delta_time
+	parent_integrity -= seconds_per_tick
 	if(parent_integrity <= 0)
 		target_turf.visible_message(span_warning("[target_turf] collapses under its own weight into a puddle of goop and undigested debris!"))
 		target_turf.acid_melt()

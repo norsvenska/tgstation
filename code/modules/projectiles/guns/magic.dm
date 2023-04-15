@@ -27,7 +27,7 @@
 
 /obj/item/gun/magic/Initialize(mapload)
 	. = ..()
-	RegisterSignal(src, COMSIG_ITEM_MAGICALLY_CHARGED, .proc/on_magic_charge)
+	RegisterSignal(src, COMSIG_ITEM_MAGICALLY_CHARGED, PROC_REF(on_magic_charge))
 
 
 /obj/item/gun/magic/fire_sounds()
@@ -94,7 +94,7 @@
 		chambered = new ammo_type(src)
 	if(can_charge)
 		START_PROCESSING(SSobj, src)
-	RegisterSignal(src, COMSIG_ITEM_RECHARGED, .proc/instant_recharge)
+	RegisterSignal(src, COMSIG_ITEM_RECHARGED, PROC_REF(instant_recharge))
 
 
 /obj/item/gun/magic/Destroy()
@@ -103,11 +103,11 @@
 	return ..()
 
 
-/obj/item/gun/magic/process(delta_time)
+/obj/item/gun/magic/process(seconds_per_tick)
 	if (charges >= max_charges)
 		charge_timer = 0
 		return
-	charge_timer += delta_time
+	charge_timer += seconds_per_tick
 	if(charge_timer < recharge_rate)
 		return 0
 	charge_timer = 0
