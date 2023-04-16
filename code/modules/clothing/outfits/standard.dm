@@ -241,7 +241,7 @@
 		/obj/item/book/granter/martial/cqc = 1,
 		/obj/item/clothing/mask/centcom = 1
 )
-	belt = /obj/item/modular_computer/tablet/pda/heads/centcom
+	belt = /obj/item/modular_computer/pda/heads/captain/centcom
 	ears = /obj/item/radio/headset/headset_cent/commander
 	glasses = /obj/item/clothing/glasses/centcom
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
@@ -273,7 +273,7 @@
 	if(visualsOnly)
 		return
 
-	var/obj/item/modular_computer/tablet/pda/heads/centcom/pda = H.belt
+	var/obj/item/modular_computer/pda/heads/captain/centcom/pda = H.belt
 	pda.saved_identification = H.real_name
 	pda.saved_job = "CentCom Commander"
 
@@ -328,7 +328,7 @@
 	back = /obj/item/mod/control/pre_equipped/corporate
 	internals_slot = ITEM_SLOT_SUITSTORE
 
-/datum/outfit/centcom/medical
+/datum/outfit/centcom/medical //wip
 	name = "CentCom Medic"
 
 	id = /obj/item/card/id/advanced/centcom
@@ -336,17 +336,17 @@
 	uniform = /obj/item/clothing/under/rank/centcom
 	suit = /obj/item/clothing/suit/toggle/labcoat/cmo
 	back = /obj/item/storage/backpack/duffelbag/virology
-	belt = /obj/item/modular_computer/tablet/pda/heads/centcom
+	belt = /obj/item/modular_computer/pda/heads/captain/centcom
 	ears = /obj/item/radio/headset/headset_cent/commander //placeholder
 	glasses = /obj/item/clothing/glasses/centcom
-	gloves = /obj/item/clothing/gloves/color/latex/nitrile
+	gloves = /obj/item/clothing/gloves/latex/nitrile
 	shoes = /obj/item/clothing/shoes/laceup
 
 /datum/outfit/centcom/medical/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	if(visualsOnly)
 		return
 
-	var/obj/item/modular_computer/tablet/pda/heads/centcom/pda = H.belt
+	var/obj/item/modular_computer/pda/heads/captain/centcom/pda = H.belt
 	pda.saved_identification = H.real_name
 	pda.saved_job = "CentCom Commander"
 

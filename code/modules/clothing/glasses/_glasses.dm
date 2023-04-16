@@ -698,9 +698,9 @@
 	icon_state = "sunhudcentcom"
 	inhand_icon_state = "sunhudcentcom"
 	flags_cover = GLASSESCOVERSEYES
-	darkness_view = 8
+//	darkness_view = 8
 	flash_protect = FLASH_PROTECTION_WELDER
-	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
+//	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
 	glass_colour_type = FALSE
 	clothing_traits = list(TRAIT_REAGENT_SCANNER, TRAIT_RESEARCH_SCANNER, TRAIT_BOOZE_SLIDER)
 	var/list/hudlist = list(DATA_HUD_MEDICAL_ADVANCED, DATA_HUD_DIAGNOSTIC_ADVANCED, DATA_HUD_SECURITY_ADVANCED)

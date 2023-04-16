@@ -159,6 +159,9 @@ GLOBAL_LIST_INIT(reinforced_glass_recipes, list ( \
 	matter_amount = 6
 	tableVariant = /obj/structure/table/reinforced/rglass
 
+/obj/item/stack/sheet/rglass/fifty
+	amount = 50
+
 /datum/armor/sheet_rglass
 	fire = 70
 	acid = 100
@@ -225,6 +228,9 @@ GLOBAL_LIST_INIT(prglass_recipes, list ( \
 /obj/item/stack/sheet/plasmarglass/get_main_recipes()
 	. = ..()
 	. += GLOB.prglass_recipes
+
+/obj/item/stack/sheet/plasmarglass/fifty
+	amount = 50
 
 GLOBAL_LIST_INIT(titaniumglass_recipes, list(
 	new/datum/stack_recipe("shuttle window", /obj/structure/window/reinforced/shuttle/unanchored, 2, time = 0, on_solid_ground = TRUE, window_checks = TRUE, category = CAT_WINDOWS), \

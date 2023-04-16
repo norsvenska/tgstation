@@ -8,7 +8,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "CentCom Admirals"
-	selection_color = "#a9fabb"
+//	selection_color = "#a9fabb"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	exp_requirements = 180

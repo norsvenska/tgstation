@@ -137,7 +137,7 @@
 /obj/item/pen/fountain/centcom
 	name = "CentCom fountain pen"
 	desc = "It's an expensive green fountain pen. The nib is quite sharp."
-	icon_state = "pen-fountain-centcom"
+	icon_state = "pen-fountain-cc"
 	force = 6
 	throwforce = 6
 	throw_speed = 5

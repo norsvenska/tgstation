@@ -6,7 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "CentCom Commanders"
-	selection_color = "#b7f8c5"
+//	selection_color = "#b7f8c5"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	exp_requirements = 180
