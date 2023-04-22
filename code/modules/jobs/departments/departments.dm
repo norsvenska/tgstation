@@ -50,7 +50,10 @@
 /datum/job_department/centcom
 	department_name = DEPARTMENT_CENTCOM
 	department_bitflags = DEPARTMENT_BITFLAG_CENTCOM
-	department_head = /datum/job/centcom_commander
+	department_head = /datum/job/admiral
+	display_order = 9
+	label_class = "centcom"
+	ui_color = "#34df8f"
 
 /datum/job_department/command
 	department_name = DEPARTMENT_COMMAND

@@ -311,6 +311,10 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark/start/new_player)
 	name = "CentCom Commander"
 	icon_state = "Commander"
 
+/obj/effect/landmark/start/admiral
+	name = "Admiral"
+	icon_state = "x" //placeholder
+
 //generic maintenance locations
 /obj/effect/landmark/generic_maintenance_landmark
 	name = "generic_maintenance_spawn"

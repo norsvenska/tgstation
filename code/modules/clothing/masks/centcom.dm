@@ -7,7 +7,7 @@
 	w_class = WEIGHT_CLASS_SMALL
 	clothing_traits = list(TRAIT_NOBREATH)
 //	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 75, FIRE = 0, ACID = 0)
-	actions_types = list(/datum/action/item_action/togglecloak)
+	actions_types = list(/datum/action/item_action/adjust)
 	flags_inv = null
 	visor_flags_inv = null
 //	flags_inv = HIDEEARS

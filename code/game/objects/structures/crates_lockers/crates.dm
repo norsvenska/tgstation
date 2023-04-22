@@ -325,3 +325,22 @@
 	new /obj/item/stack/sheet/mineral/silver/fifty(src)
 	new /obj/item/stack/sheet/mineral/gold/fifty(src)
 	new /obj/item/stack/sheet/cloth/fifty(src)
+
+/obj/structure/closet/crate/lathemats
+	name = "material crate"
+	desc = "A crate full of materials, either for construction or to be loaded into the ore silo."
+	icon_state = "constructioncrate"
+
+/obj/structure/closet/crate/lathemats/PopulateContents()
+	. = ..()
+	new /obj/item/stack/sheet/iron/fifty(src)
+	new /obj/item/stack/sheet/glass/fifty(src)
+	new /obj/item/stack/sheet/plastic/fifty(src)
+	new /obj/item/stack/sheet/mineral/titanium/fifty(src)
+	new /obj/item/stack/sheet/mineral/silver/fifty(src)
+	new /obj/item/stack/sheet/mineral/gold/fifty(src)
+	new /obj/item/stack/sheet/mineral/diamond/fifty(src)
+	new /obj/item/stack/sheet/mineral/plasma/fifty(src)
+	new /obj/item/stack/sheet/mineral/bananium/fifty(src)
+	new /obj/item/stack/sheet/mineral/uranium/fifty(src)
+	new /obj/item/stack/sheet/bluespace_crystal/fifty(src)

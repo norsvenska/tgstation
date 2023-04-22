@@ -1121,6 +1121,14 @@
 	assigned_icon_state = "assigned_syndicate"
 	wildcard_slots = WILDCARD_LIMIT_GOLD
 
+/obj/item/card/id/advanced/black/admiral
+	name = "\improper CentCom Executive ID"
+	desc = "An ID straight from Central Command. This one is black, designed for only the highest ranking individuals."
+	icon_state = "card_black_cc"
+	assigned_icon_state = "assigned_centcom_dark"
+	trim = /datum/id_trim/centcom/admiral
+	wildcard_slots = WILDCARD_LIMIT_CENTCOM
+
 /obj/item/card/id/advanced/black/deathsquad
 	name = "\improper Death Squad ID"
 	desc = "A Death Squad ID card."

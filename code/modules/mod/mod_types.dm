@@ -485,6 +485,35 @@
 		/obj/item/mod/module/anomaly_locked/kinesis/plus,
 	)
 
+/obj/item/mod/control/pre_equipped/admiral
+	theme = /datum/mod_theme/admiral
+	applied_core = /obj/item/mod/core/infinite
+	applied_modules = list(
+		/obj/item/mod/module/storage/bluespace/ultra,
+		/obj/item/mod/module/emp_shield/advanced,
+		/obj/item/mod/module/welding,
+		/obj/item/mod/module/stealth/ninja,
+		/obj/item/mod/module/quick_carry/advanced,
+		/obj/item/mod/module/magboot/advanced,
+		/obj/item/mod/module/jetpack/advanced,
+		/obj/item/mod/module/anomaly_locked/kinesis/plus,
+		/obj/item/mod/module/flashlight,
+		/obj/item/mod/module/gps,
+		/obj/item/mod/module/mouthhole,
+		/obj/item/mod/module/thermal_regulator,
+		/obj/item/mod/module/visor/night,
+		/obj/item/mod/module/magnetic_harness,
+		/obj/item/mod/module/emp_shield/advanced,
+		/obj/item/mod/module/thermal_regulator,
+		/obj/item/mod/module/hat_stabilizer,
+	)
+	default_pins = list(
+		/obj/item/mod/module/stealth/ninja,
+		/obj/item/mod/module/magboot/advanced,
+		/obj/item/mod/module/jetpack/advanced,
+		/obj/item/mod/module/anomaly_locked/kinesis/plus,
+	)
+
 //these exist for the prefs menu
 /obj/item/mod/control/pre_equipped/empty
 
