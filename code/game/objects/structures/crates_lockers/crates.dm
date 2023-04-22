@@ -328,7 +328,7 @@
 /obj/structure/closet/crate/build
 	name = "construction crate"
 	desc = "A crate full of construction materials. Perfect for large building projects!"
-	icon_state = "constructioncrate"
+	icon_state = "engi_crate"
 
 /obj/structure/closet/crate/build/PopulateContents()
 	. = ..()
@@ -344,12 +344,12 @@
 	new /obj/item/stack/sheet/mineral/gold/fifty(src)
 	new /obj/item/stack/sheet/cloth/fifty(src)
 
-/obj/structure/closet/crate/lathemats
+/obj/structure/closet/crate/buildmats
 	name = "material crate"
 	desc = "A crate full of materials, either for construction or to be loaded into the ore silo."
-	icon_state = "constructioncrate"
+	icon_state = "engi_crate"
 
-/obj/structure/closet/crate/lathemats/PopulateContents()
+/obj/structure/closet/crate/buildmats/PopulateContents()
 	. = ..()
 	new /obj/item/stack/sheet/iron/fifty(src)
 	new /obj/item/stack/sheet/glass/fifty(src)
