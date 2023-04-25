@@ -53,7 +53,7 @@
 	department_head = /datum/job/admiral
 	display_order = 9
 	label_class = "centcom"
-	ui_color = "#34df8f"
+	ui_color = "#39A032"
 
 /datum/job_department/command
 	department_name = DEPARTMENT_COMMAND

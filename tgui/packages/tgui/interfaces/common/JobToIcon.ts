@@ -1,6 +1,7 @@
 /** Icon map of jobs to their fontawesome5 (free) counterpart. */
 export const JOB2ICON = {
   'AI': 'eye',
+  'Admiral': 'fighter-jet',
   'Assistant': 'toolbox',
   'Atmospheric Technician': 'fan',
   'Bartender': 'cocktail',

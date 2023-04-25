@@ -76,11 +76,15 @@
 /// Trim for Centcom (Soviet) Admirals. All Centcom and Station Access.
 /datum/id_trim/centcom/admiral
 	assignment = JOB_CENTCOM_ADMIRAL
+	trim_state = "trim_admiral"
+	sechud_icon_state = SECHUD_ADMIRAL
+	department_color = COLOR_DARK_MODERATE_LIME_GREEN
+	subdepartment_color = COLOR_DARK_MODERATE_LIME_GREEN
 
 /datum/id_trim/centcom/admiral/New()
 	. = ..()
 
-	access = SSid_access.get_region_access_list(list(REGION_CENTCOM, REGION_ALL_STATION))
+	access = SSid_access.get_region_access_list(list(REGION_ALL_GLOBAL))
 
 /// Trim for Centcom Commanders. All Centcom and Station Access.
 /datum/id_trim/centcom/commander

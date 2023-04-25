@@ -868,3 +868,21 @@ new /datum/stack_recipe("paper frame door", /obj/structure/mineral_door/paperfra
 	amount = 20
 /obj/item/stack/sheet/hauntium/five
 	amount = 5
+
+/obj/item/stack/sheet/debug
+	name = "omnisheet"
+	desc = "The all in one material sheet. Load it into the ore silo to reap the rewards."
+	icon_state = "sheet-metal"
+	mats_per_unit = list(
+		/datum/material/iron=10000000,
+		/datum/material/plastic=10000000,
+		/datum/material/bluespace=10000000,
+		/datum/material/glass=10000000,
+		/datum/material/diamond=10000000,
+		/datum/material/gold=10000000,
+		/datum/material/plasma=10000000,
+		/datum/material/silver=10000000,
+		/datum/material/titanium=10000000,
+		/datum/material/uranium=10000000,
+		/datum/material/bananium=10000000
+)

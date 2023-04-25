@@ -80,9 +80,6 @@
 		return FALSE
 	return ..()
 
-/datum/action/item_action/togglecloak
-	name = "Toggle Cloaking Mode"
-
 /datum/action/item_action/wheelys
 	name = "Toggle Wheels"
 	desc = "Pops out or in your shoes' wheels."

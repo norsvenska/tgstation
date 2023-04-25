@@ -299,3 +299,20 @@
 /obj/item/storage/toolbox/haunted
 	name = "old toolbox"
 	custom_materials = list(/datum/material/hauntium = 500)
+
+/obj/item/storage/toolbox/smes
+	name = "electrical toolbox"
+	icon_state = "yellow"
+	inhand_icon_state = "toolbox_yellow"
+	material_flags = NONE
+
+/obj/item/storage/toolbox/smes/PopulateContents()
+	new /obj/item/wirecutters/caravan(src)
+	new /obj/item/screwdriver/caravan(src)
+	new /obj/item/crowbar/red/caravan(src)
+	new /obj/item/stock_parts/capacitor/quadratic(src)
+	new /obj/item/stock_parts/cell/infinite(src)
+	new /obj/item/stock_parts/cell/infinite(src)
+	new /obj/item/stock_parts/cell/infinite(src)
+	new /obj/item/stock_parts/cell/infinite(src)
+	new /obj/item/stock_parts/cell/infinite(src)

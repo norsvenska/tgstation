@@ -77,6 +77,7 @@
 #define SECHUD_NO_ID "hudno_id"
 #define SECHUD_UNKNOWN "hudunknown"
 #define SECHUD_CENTCOM "hudcentcom"
+#define SECHUD_ADMIRAL "hudadmiral"
 #define SECHUD_SYNDICATE "hudsyndicate"
 
 #define SECHUD_ASSISTANT "hudassistant"
