@@ -596,9 +596,9 @@
 	antag_datum = null
 	restricted_roles = list()
 	required_candidates = 0
-	weight = 3
+	weight = 9
 	cost = 0
-	requirements = list(101,101,101,101,101,101,101,101,101,101)
+	requirements = list(1,1,1,1,1,1,1,1,1,1)
 	flags = LONE_RULESET
 
 /datum/dynamic_ruleset/roundstart/extended/pre_execute()
