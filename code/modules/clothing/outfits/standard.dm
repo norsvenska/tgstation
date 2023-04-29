@@ -474,9 +474,10 @@
  	uniform = /obj/item/clothing/under/rank/centcom/commander
  	suit = /obj/item/clothing/suit/armor/centcom_formal
  	suit_store = /obj/item/gun/energy/pulse/pistol/m1911
- 	back = /obj/item/storage/backpack/satchel/leather
+ 	back = /obj/item/mod/control/pre_equipped/admiral
  	backpack_contents = list(
-		/obj/item/flashlight/seclite = 1,
+		/obj/item/construction/rtd/admin = 1,
+		/obj/item/construction/rcd/combat/admin = 1,
 		/obj/item/book/granter/martial/cqc = 1,
 		/obj/item/clothing/mask/centcom = 1
 )
