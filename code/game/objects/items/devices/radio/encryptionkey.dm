@@ -183,7 +183,7 @@
 	name = "\improper CentCom radio encryption key"
 	icon_state = "cypherkey_centcom"
 	independent = TRUE
-	channels = list(RADIO_CHANNEL_CENTCOM = 1)
+	channels = list(RADIO_CHANNEL_CENTCOM = 1, RADIO_CHANNEL_COMMAND = 1, RADIO_CHANNEL_SECURITY = 1, RADIO_CHANNEL_ENGINEERING = 1, RADIO_CHANNEL_SCIENCE = 1, RADIO_CHANNEL_MEDICAL = 1, RADIO_CHANNEL_SUPPLY = 1, RADIO_CHANNEL_SERVICE = 1, RADIO_CHANNEL_AI_PRIVATE = 1)
 	greyscale_config = /datum/greyscale_config/encryptionkey_centcom
 	greyscale_colors = "#24a157#dca01b"
 
