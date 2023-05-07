@@ -6,7 +6,7 @@
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "CentCom Grand Admiral"
+	supervisors = "the CentCom Grand Admiral"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	exp_requirements = 180
@@ -41,4 +41,4 @@
 	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_BOLD_SELECT_TEXT | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS
 	rpg_title = "Naval Captain"
 
-	voice_of_god_power = 2.3 //Command staff has authority
+	voice_of_god_power = 2.4 //Command staff has authority

@@ -69,6 +69,21 @@
 		)
 	generate_items_inside(items_inside,src)
 
+/obj/item/storage/box/abductortools
+	name = "box of abductor tools"
+	icon_state = "syndiebox" //placeholder
+
+/obj/item/storage/box/abductortools/PopulateContents()
+	var/static/items_inside = list(
+		/obj/item/screwdriver/abductor=1,
+		/obj/item/wrench/abductor=1,
+		/obj/item/weldingtool/abductor=1,
+		/obj/item/crowbar/abductor=1,
+		/obj/item/wirecutters/abductor=1,
+		/obj/item/multitool/abductor=1,
+		)
+	generate_items_inside(items_inside,src)
+
 /obj/item/storage/box/plastic
 	name = "plastic box"
 	desc = "It's a solid, plastic shell box."

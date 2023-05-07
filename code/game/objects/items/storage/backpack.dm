@@ -68,6 +68,12 @@
 	create_storage(max_specific_storage = WEIGHT_CLASS_GIGANTIC, max_total_storage = 35, max_slots = 30, storage_type = /datum/storage/bag_of_holding)
 	atom_storage.allow_big_nesting = TRUE
 
+/obj/item/storage/backpack/holding/satchel
+	name = "leather satchel of holding"
+	desc = "It's a very fancy satchel made with fine leather. This one has a localized pocket of bluespace in it."
+	icon_state = "satchel-leather"
+	inhand_icon_state = "satchel"
+
 /obj/item/storage/backpack/holding/suicide_act(mob/living/user)
 	user.visible_message(span_suicide("[user] is jumping into [src]! It looks like [user.p_theyre()] trying to commit suicide."))
 	user.dropItemToGround(src, TRUE)
