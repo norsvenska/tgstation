@@ -486,7 +486,7 @@
 		/obj/item/clothing/mask/centcom = 1
 )
  	belt = /obj/item/modular_computer/pda/heads/captain/centcom
- 	ears = /obj/item/radio/headset/headset_cent
+ 	ears = /obj/item/radio/headset/headset_cent/commander
  	glasses = /obj/item/clothing/glasses/centcom
  	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
  	head = /obj/item/clothing/head/hats/centcom_cap
