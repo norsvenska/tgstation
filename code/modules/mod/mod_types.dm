@@ -512,7 +512,7 @@
 		/obj/item/mod/module/anomaly_locked/kinesis/plus,
 		/obj/item/mod/module/flashlight,
 		/obj/item/mod/module/gps,
-		/obj/item/mod/module/mouthhole,
+//		/obj/item/mod/module/mouthhole,
 		/obj/item/mod/module/thermal_regulator,
 		/obj/item/mod/module/visor/night,
 		/obj/item/mod/module/magnetic_harness,
