@@ -312,7 +312,7 @@
 	return "On this day, Swedes celebrate the election of King Gustav Vasa in 1523. This day was considered the foundation of modern Sweden."
 
 /datum/holiday/swedenday/getStationPrefix()
-	return pick("Swedish", "Svenska", "Sweden", "Sverige")
+	return pick("Swedish", "Svenska", "IKEA", "Surströmming", "Köttbullar", "Börk", "Mojang", "Paradox", "Rymdstation")
 
 //The Festival of Atrakor's Might (Tizira's Moon) is celebrated on June 15th, the date on which the lizard visual revamp was merged (#9808)
 /datum/holiday/atrakor_festival
