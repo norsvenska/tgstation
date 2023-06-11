@@ -395,6 +395,28 @@
 	target.set_jitter_if_lower(40 SECONDS)
 	target.set_stutter_if_lower(40 SECONDS)
 
+/obj/item/melee/baton/telescopic/centcom
+	name = "CentCom telescopic baton"
+	desc = "A compact, green baton issued to Central Command officials for personal defense."
+	icon = 'icons/obj/weapons/baton.dmi'
+	icon_state = "centbaton"
+	lefthand_file = 'icons/mob/inhands/weapons/melee_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/weapons/melee_righthand.dmi'
+	inhand_icon_state = null
+	attack_verb_continuous = list("hits", "pokes")
+	attack_verb_simple = list("hit", "poke")
+	worn_icon_state = "tele_baton"
+	slot_flags = ITEM_SLOT_BELT
+	w_class = WEIGHT_CLASS_SMALL
+	item_flags = NONE
+	force = 2
+	bare_wound_bonus = 5
+	clumsy_knockdown_time = 20 SECONDS
+
+	on_sound = 'sound/weapons/batonextend.ogg'
+	on_inhand_icon_state = "nullrod"
+	active_force = 20
+
 /obj/item/melee/baton/security
 	name = "stun baton"
 	desc = "A stun baton for incapacitating people with."

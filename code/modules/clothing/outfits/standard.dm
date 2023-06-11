@@ -483,7 +483,8 @@
 		/obj/item/storage/box/abductortools = 1,
 		/obj/item/storage/box/debugtools = 1,
 		/obj/item/book/granter/martial/cqc = 1,
-		/obj/item/clothing/mask/centcom = 1
+		/obj/item/clothing/mask/centcom = 1,
+		/obj/item/melee/baton/telescopic/centcom = 1
 )
  	belt = /obj/item/modular_computer/pda/heads/captain/centcom
  	ears = /obj/item/radio/headset/headset_cent/commander
