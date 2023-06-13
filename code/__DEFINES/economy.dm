@@ -1,5 +1,5 @@
 /// Number of paychecks jobs start with at the creation of a new bank account for a player (So at shift-start or game join, but not a blank new account.)
-#define STARTING_PAYCHECKS 3
+#define STARTING_PAYCHECKS 5
 /// How much mail the Economy SS will create per minute, regardless of firing time.
 #define MAX_MAIL_PER_MINUTE 3
 /// Probability of using letters of envelope sprites on all letters.
@@ -23,7 +23,7 @@
 //How much POWER a borg's cell is taxed if they print something from a departmental lathe.
 #define SILICON_LATHE_TAX 2000
 
-#define STATION_TARGET_BUFFER 25
+#define STATION_TARGET_BUFFER 5000
 
 
 
