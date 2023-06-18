@@ -557,6 +557,9 @@ DEFINE_BITFIELD(turret_flags, list(
 		var/datum/job/apparent_job = SSjob.GetJob(perp.get_assignment())
 		if(apparent_job?.departments_bitflags & DEPARTMENT_BITFLAG_COMMAND)
 			return 0
+		//turrets shouldnt shoot centcom, bruh
+		if(apparent_job?.departments_bitflags & DEPARTMENT_BITFLAG_CENTCOM)
+			return 0
 
 	if(turret_flags & TURRET_FLAG_AUTH_WEAPONS) //check for weapon authorization
 		if(!istype(perp.wear_id?.GetID(), /obj/item/card/id/advanced/chameleon))
