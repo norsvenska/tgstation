@@ -693,7 +693,7 @@
 	inhand_icon_state = null
 
 /obj/item/clothing/glasses/centcom
-	name = "centcom sunglasses"
+	name = "\improper CentCom sunglasses"
 	desc = "The ultimate sunglasses. Provided by Central Command to inspectors."
 	icon_state = "sunhudcentcom"
 	inhand_icon_state = "sunhudcentcom"
@@ -705,6 +705,11 @@
 	clothing_traits = list(TRAIT_REAGENT_SCANNER, TRAIT_RESEARCH_SCANNER, TRAIT_BOOZE_SLIDER)
 	var/list/hudlist = list(DATA_HUD_MEDICAL_ADVANCED, DATA_HUD_DIAGNOSTIC_ADVANCED, DATA_HUD_SECURITY_ADVANCED)
 	var/xray = FALSE
+
+/obj/item/clothing/glasses/centcom/hudpatch
+	name = "\improper CentCom HUDPatch"
+	desc = "The HUD from CentCom's sunglasses, compacted into an eyepatch for maximum style."
+	icon_state = "centpatch"
 
 /obj/item/clothing/glasses/centcom/equipped(mob/user, slot)
 	. = ..()
@@ -737,6 +742,7 @@
 		for(var/hud in hudlist)
 			var/datum/atom_hud/our_hud = GLOB.huds[hud]
 			our_hud.hide_from(user)
+
 /obj/item/clothing/glasses/centcom/AltClick(mob/user)
 	. = ..()
 	if(ishuman(user))

@@ -126,7 +126,7 @@
 
 	/// custom ringtone for this job
 	var/job_tone
-	
+
 	/// Minimal character age for this job
 	var/required_character_age
 
@@ -284,6 +284,8 @@
 
 /datum/outfit/job/pre_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	if(ispath(back, /obj/item/storage/backpack))
+		if(ispath(back, /obj/item/storage/backpack/holding))
+			return
 		switch(H.backpack)
 			if(GBACKPACK)
 				back = /obj/item/storage/backpack //Grey backpack

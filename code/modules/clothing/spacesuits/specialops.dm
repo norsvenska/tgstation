@@ -11,18 +11,18 @@
 	armor_type = /datum/armor/space_beret
 	strip_delay = 130
 	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT
-	resistance_flags = FIRE_PROOF | ACID_PROOF
+	resistance_flags = INDESTRUCTIBLE | FIRE_PROOF | ACID_PROOF
 
 /datum/armor/space_beret
-	melee = 80
-	bullet = 80
-	laser = 50
-	energy = 60
+	melee = 100
+	bullet = 100
+	laser = 100
+	energy = 100
 	bomb = 100
 	bio = 100
 	fire = 100
 	acid = 100
-	wound = 15
+	wound = 100
 
 /obj/item/clothing/suit/space/officer
 	name = "CentCom officer's coat"
@@ -32,6 +32,7 @@
 	worn_icon = 'icons/mob/clothing/suits/jacket.dmi'
 	inhand_icon_state = "centcom"
 	blood_overlay_type = "coat"
+	cell = /obj/item/stock_parts/cell/infinite
 	slowdown = 0
 	flags_inv = 0
 	w_class = WEIGHT_CLASS_NORMAL
@@ -39,15 +40,15 @@
 	armor_type = /datum/armor/space_officer
 	strip_delay = 130
 	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT
-	resistance_flags = FIRE_PROOF | ACID_PROOF
+	resistance_flags = INDESTRUCTIBLE | FIRE_PROOF | ACID_PROOF
 
 /datum/armor/space_officer
-	melee = 80
-	bullet = 80
-	laser = 50
-	energy = 60
+	melee = 100
+	bullet = 100
+	laser = 100
+	energy = 100
 	bomb = 100
 	bio = 100
 	fire = 100
 	acid = 100
-	wound = 15
+	wound = 100

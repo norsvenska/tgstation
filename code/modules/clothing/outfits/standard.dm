@@ -333,7 +333,7 @@
 
 	id = /obj/item/card/id/advanced/centcom
 	id_trim = /datum/id_trim/centcom/medical_officer
-	uniform = /obj/item/clothing/under/rank/centcom/officer //placeholder until i make the sprite
+	uniform = /obj/item/clothing/under/rank/centcom/officer
 	suit = /obj/item/clothing/suit/toggle/labcoat/cmo
 	back = /obj/item/storage/backpack/duffelbag/virology
 	belt = /obj/item/modular_computer/pda/heads/captain/centcom
@@ -465,71 +465,6 @@
 	W.update_label()
 	W.update_icon()
 	..()
-
-/datum/outfit/centcom/admiral
- 	name = "CentCom Admiral" //wip
-
- 	id = /obj/item/card/id/advanced/black/admiral
- 	id_trim = /datum/id_trim/centcom/admiral
- 	uniform = /obj/item/clothing/under/rank/centcom/commander
- 	suit = /obj/item/clothing/suit/armor/centcom_formal
- 	suit_store = /obj/item/gun/energy/pulse/pistol/m1911
- 	back = /obj/item/storage/backpack/holding/satchel
- 	backpack_contents = list(
-		/obj/item/storage/wallet/luxury = 1,
-		/obj/item/flashlight/seclite = 1,
-		/obj/item/language_manual/norse_manual = 1,
-		/obj/item/mod/control/pre_equipped/admiral = 1,
-		/obj/item/storage/box/abductortools = 1,
-		/obj/item/storage/box/debugtools = 1,
-		/obj/item/book/granter/martial/cqc = 1,
-		/obj/item/clothing/mask/centcom = 1,
-		/obj/item/melee/baton/telescopic/centcom = 1
-)
- 	belt = /obj/item/modular_computer/pda/heads/captain/centcom
- 	ears = /obj/item/radio/headset/headset_cent/commander
- 	glasses = /obj/item/clothing/glasses/centcom
- 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
- 	head = /obj/item/clothing/head/hats/centcom_cap
- 	shoes = /obj/item/clothing/shoes/combat/swat
- 	r_pocket = /obj/item/knife/combat/centcom
- 	accessory = /obj/item/clothing/accessory/medal/gold/swedish
-
-/datum/outfit/centcom/admiral/mod
-	name = "CentCom Admiral (MODsuit)"
-	uniform = /obj/item/clothing/under/misc/adminsuit
-	suit = null
-	suit_store = null
-	back = /obj/item/mod/control/pre_equipped/admiral
-	backpack_contents = list(
-		/obj/item/book/granter/martial/cqc = 1,
-		/obj/item/gun/energy/pulse/pistol/m1911 = 1,
-		/obj/item/construction/rcd/combat/admin = 1,
-		/obj/item/construction/rtd/admin = 1
-)
-	mask = /obj/item/clothing/mask/centcom
-
-/datum/outfit/centcom/admiral/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
-	if(visualsOnly)
-		return
-
-	var/obj/item/modular_computer/pda/heads/captain/centcom/pda = H.belt
-	pda.saved_identification = H.real_name
-	pda.saved_job = "CentCom Admiral"
-
-	var/obj/item/card/id/W = H.wear_id
-	W.registered_name = H.real_name
-	W.update_label()
-	W.update_icon()
-	W.registered_age = H.age
-
-	var/datum/bank_account/B = SSeconomy.bank_accounts_by_id["[H.account_id]"]
-	if(B && B.account_id == H.account_id)
-		W.registered_account = B
-		B.bank_cards += W
-	H.sec_hud_set_ID()
-	..()
-
 
 /datum/outfit/mobster
 	name = "Mobster"

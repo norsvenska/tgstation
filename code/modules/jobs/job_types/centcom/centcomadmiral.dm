@@ -15,7 +15,7 @@
 	exp_granted_type = EXP_TYPE_COMMAND
 	config_tag = "ADMIRAL"
 
-	outfit = /datum/outfit/centcom/admiral
+	outfit = /datum/outfit/job/admiral
 	plasmaman_outfit = /datum/outfit/plasmaman/centcom_commander //placeholder
 
 	paycheck = PAYCHECK_CENTCOM
@@ -42,3 +42,48 @@
 	rpg_title = "Naval Captain"
 
 	voice_of_god_power = 2.4 //Command staff has authority
+
+/datum/outfit/job/admiral
+ 	name = "CentCom Admiral"
+
+ 	id = /obj/item/card/id/advanced/black/admiral
+ 	id_trim = /datum/id_trim/centcom/admiral
+ 	uniform = /obj/item/clothing/under/rank/centcom/commander
+ 	suit = /obj/item/clothing/suit/space/officer
+ 	suit_store = /obj/item/gun/energy/pulse/pistol/m1911
+ 	back = /obj/item/storage/backpack/holding/satchel
+ 	backpack_contents = list(
+		/obj/item/storage/wallet/luxury = 1,
+		/obj/item/flashlight/seclite = 1,
+		/obj/item/language_manual/norse_manual = 1,
+		/obj/item/mod/control/pre_equipped/admiral = 1,
+		/obj/item/storage/box/abductortools = 1,
+		/obj/item/storage/box/debugtools = 1,
+		/obj/item/book/granter/martial/cqc = 1,
+		/obj/item/clothing/mask/centcom = 1,
+		/obj/item/melee/baton/telescopic/centcom = 1,
+		/obj/item/clothing/glasses/centcom/hudpatch = 1
+)
+ 	belt = /obj/item/modular_computer/pda/heads/captain/centcom
+ 	ears = /obj/item/radio/headset/headset_cent/commander
+ 	glasses = /obj/item/clothing/glasses/centcom
+ 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+ 	head = /obj/item/clothing/head/hats/centcom_cap
+ 	shoes = /obj/item/clothing/shoes/combat/swat
+ 	r_pocket = /obj/item/knife/combat/centcom
+ 	accessory = /obj/item/clothing/accessory/medal/gold/swedish
+ 	implants = list(/obj/item/implant/mindshield)
+
+/datum/outfit/job/admiral/mod
+	name = "CentCom Admiral (MODsuit)"
+	uniform = /obj/item/clothing/under/misc/adminsuit
+	suit = null
+	suit_store = null
+	back = /obj/item/mod/control/pre_equipped/admiral
+	backpack_contents = list(
+		/obj/item/book/granter/martial/cqc = 1,
+		/obj/item/gun/energy/pulse/pistol/m1911 = 1,
+		/obj/item/construction/rcd/combat/admin = 1,
+		/obj/item/construction/rtd/admin = 1
+)
+	mask = /obj/item/clothing/mask/centcom
