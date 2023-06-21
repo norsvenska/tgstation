@@ -891,18 +891,18 @@ new /datum/stack_recipe("paper frame door", /obj/structure/mineral_door/paperfra
 
 /obj/item/stack/sheet/debug/autolathe
 	name = "lesser omnisheet"
-	desc = "The all in one material sheet. This one is small enough to fit into a maxed autolathe."
+	desc = "The all in one material sheet. This one is small enough to fit into an autolathe."
 	icon_state = "sheet-metal"
 	mats_per_unit = list(
-		/datum/material/iron=100000,
-		/datum/material/plastic=100000,
-		/datum/material/bluespace=50000,
-		/datum/material/glass=100000,
-		/datum/material/diamond=100000,
-		/datum/material/gold=100000,
-		/datum/material/plasma=50000,
-		/datum/material/silver=100000,
-		/datum/material/titanium=100000,
-		/datum/material/uranium=50000,
-		/datum/material/bananium=50000
+		/datum/material/iron=1250,
+		/datum/material/plastic=1250,
+		/datum/material/bluespace=625,
+		/datum/material/glass=1250,
+		/datum/material/diamond=1250,
+		/datum/material/gold=1250,
+		/datum/material/plasma=625,
+		/datum/material/silver=1250,
+		/datum/material/titanium=1250,
+		/datum/material/uranium=625,
+		/datum/material/bananium=625
 )
