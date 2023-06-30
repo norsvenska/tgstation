@@ -42,14 +42,7 @@
 	icon_state = "hgpirate"
 	inhand_icon_state = null
 
-// /obj/item/clothing/suit/costume/pirate/captain/admiral
-// 	name = "\improper CentCom admiral coat"
-// 	desc = "Black and gold? I thought it was blue and white."
-// 	icon_state "admiral"
-// 	inhand_icon_state = "hostrench"
-
-//why is this here twice
-/obj/item/clothing/suit/costume/pirate/armored
+/obj/item/clothing/suit/costume/pirate/captain/armored
 	armor_type = /datum/armor/pirate_armored
 	strip_delay = 40
 	equip_delay_other = 20
