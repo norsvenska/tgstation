@@ -211,7 +211,7 @@
 	name = "Bilingual"
 	desc = "Over the years you've picked up an extra language!"
 	icon = FA_ICON_GLOBE
-	value = 4
+	value = 1
 	gain_text = span_notice("Some of the words of the people around you certainly aren't common. Good thing you studied for this.")
 	lose_text = span_notice("You seem to have forgotten your second language.")
 	medical_record_text = "Patient speaks multiple languages."
@@ -230,6 +230,7 @@
 		/datum/language/sylvan,
 		/datum/language/terrum,
 		/datum/language/voltaic,
+		/datum/language/norse,
 	)
 	var/datum/language/extra_language
 	mail_goodies = list(/obj/item/taperecorder, /obj/item/clothing/head/frenchberet, /obj/item/clothing/mask/fakemoustache/italian)
@@ -260,7 +261,7 @@
 	name = "Poster Boy"
 	desc = "You have some great posters! Hang them up and make everyone have a great time."
 	icon = FA_ICON_TAPE
-	value = 4
+	value = 1
 	mob_trait = TRAIT_POSTERBOY
 	medical_record_text = "Patient reports a desire to cover walls with homemade objects."
 	mail_goodies = list(/obj/item/poster/random_official)
@@ -352,7 +353,7 @@
 	name = "Throwing Arm"
 	desc = "Your arms have a lot of heft to them! Objects that you throw just always seem to fly further than everyone elses, and you never miss a toss."
 	icon = FA_ICON_BASEBALL
-	value = 7
+	value = 1
 	mob_trait = TRAIT_THROWINGARM
 	gain_text = span_notice("Your arms are full of energy!")
 	lose_text = span_danger("Your arms ache a bit.")
