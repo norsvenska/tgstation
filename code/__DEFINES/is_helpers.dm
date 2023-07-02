@@ -268,6 +268,7 @@ GLOBAL_LIST_INIT(book_types, typecacheof(list(
 	/obj/item/book,
 	/obj/item/spellbook,
 	/obj/item/language_manual,
+	/obj/item/infuser_book,
 )))
 
 // Jobs
