@@ -81,3 +81,14 @@
 	max = 200
 	prefix = "super-sharpened"
 	requires_sharpness = FALSE //Super whetstones can sharpen even tooboxes
+
+/**
+ * # Infinite Super Whetstone
+ *
+ * The super whetstone, but without the limitation of one use
+ *
+ * Energy weapons can still not be sharpened
+ */
+/obj/item/sharpener/super/infinite
+	name = "super duper whetstone"
+	uses = -1
