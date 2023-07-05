@@ -135,18 +135,21 @@
 /datum/id_trim/away/waystation/cargo_technician
 	assignment = "Waystation Cargo Hauler"
 	trim_state = "trim_cargotechnician"
+	sechud_icon_state = "hudawaycargo"
 	department_color = COLOR_CARGO_BROWN
 	access = list(ACCESS_AWAY_SUPPLY)
 
 /datum/id_trim/away/waystation/quartermaster
 	assignment = "Waystation Quartermaster"
 	trim_state = "trim_quartermaster"
+	sechud_icon_state = "hudawayqm"
 	department_color = COLOR_CARGO_BROWN
 	access = list(ACCESS_AWAY_SUPPLY, ACCESS_AWAY_COMMAND)
 
 /datum/id_trim/away/waystation/security
 	assignment = "Waystation Security Officer"
 	trim_state = "trim_securityofficer"
+	sechud_icon_state = "hudawaysec"
 	department_color = COLOR_CARGO_BROWN
 	access = list(ACCESS_AWAY_SUPPLY, ACCESS_AWAY_SEC)
 

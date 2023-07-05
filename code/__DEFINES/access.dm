@@ -373,6 +373,7 @@
 	ACCESS_CENT_STORAGE, \
 	ACCESS_CENT_TELEPORTER, \
 	ACCESS_CENT_THUNDER, \
+	ACCESS_CENT_SPECOPS, \
 )
 
 /// Syndicate areas off station. Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_SYNDICATE)
@@ -393,6 +394,8 @@
 	ACCESS_AWAY_MAINTENANCE, \
 	ACCESS_AWAY_MEDICAL, \
 	ACCESS_AWAY_SEC, \
+	ACCESS_AWAY_SUPPLY, \
+	ACCESS_AWAY_SCIENCE, \
 )
 
 /// Weird internal Cult access that prevents non-cult from using their doors.  Do not use direct, access via SSid_access.get_flag_access_list(ACCESS_FLAG_SPECIAL)
@@ -400,10 +403,14 @@
 	ACCESS_BLOODCULT, \
 )
 
+#define HUNTER_ACCESS list( \
+	ACCESS_HUNTER, \
+)
+
 /// Name for the Global region.
 #define REGION_ALL_GLOBAL "All"
 /// Used to seed the accesses_by_region list in SSid_access. A list of every single access in the game.
-#define REGION_ACCESS_ALL_GLOBAL REGION_ACCESS_ALL_STATION + CENTCOM_ACCESS + SYNDICATE_ACCESS + AWAY_ACCESS + CULT_ACCESS
+#define REGION_ACCESS_ALL_GLOBAL REGION_ACCESS_ALL_STATION + CENTCOM_ACCESS + SYNDICATE_ACCESS + AWAY_ACCESS + CULT_ACCESS + HUNTER_ACCESS
 /// Name for the Station All Access region.
 #define REGION_ALL_STATION "Station"
 /// Used to seed the accesses_by_region list in SSid_access. A list of all station accesses.
