@@ -165,7 +165,7 @@
 /obj/machinery/door/airlock/command{
 	name = "Corporate Lounge"
 	},
-/obj/effect/mapping_helpers/airlock/access/any/command,
+/obj/effect/mapping_helpers/airlock/access/any/command/general,
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
 "gb" = (
@@ -253,6 +253,15 @@
 "jt" = (
 /turf/closed/wall/mineral/titanium,
 /area/shuttle/escape)
+"jC" = (
+/obj/effect/turf_decal/trimline/dark_red/filled/corner{
+	dir = 1
+	},
+/obj/structure/chair/office/tactical{
+	dir = 8
+	},
+/turf/open/floor/iron,
+/area/shuttle/escape)
 "jJ" = (
 /obj/structure/table/reinforced,
 /obj/machinery/door/poddoor/shutters/preopen{
@@ -282,6 +291,9 @@
 "kQ" = (
 /obj/effect/turf_decal/trimline/dark_blue/filled/corner{
 	dir = 4
+	},
+/obj/structure/chair/office/tactical{
+	dir = 1
 	},
 /turf/open/floor/iron,
 /area/shuttle/escape)
@@ -411,6 +423,11 @@
 /area/shuttle/escape)
 "oo" = (
 /obj/effect/turf_decal/siding/wood,
+/obj/machinery/door/window/brigdoor/right/directional/north{
+	name = "Captain's Bed";
+	req_access = list("captain")
+	},
+/obj/structure/window/reinforced/spawner/directional/west,
 /turf/open/floor/wood/parquet,
 /area/shuttle/escape)
 "oH" = (
@@ -500,6 +517,9 @@
 /obj/effect/turf_decal/siding/wood{
 	dir = 6
 	},
+/obj/structure/bed,
+/obj/item/bedsheet/nanotrasen,
+/obj/structure/window/reinforced/spawner/directional/north,
 /turf/open/floor/wood/parquet,
 /area/shuttle/escape)
 "rA" = (
@@ -617,7 +637,7 @@
 /obj/machinery/door/airlock/command{
 	name = "Bridge"
 	},
-/obj/effect/mapping_helpers/airlock/access/any/command,
+/obj/effect/mapping_helpers/airlock/access/any/command/general,
 /turf/open/floor/iron/textured_half,
 /area/shuttle/escape)
 "vs" = (
@@ -732,6 +752,15 @@
 /obj/effect/turf_decal/bot_red,
 /turf/open/floor/iron/dark/smooth_large,
 /area/shuttle/escape)
+"xT" = (
+/obj/effect/turf_decal/siding/wood{
+	dir = 8
+	},
+/obj/structure/chair/office/light{
+	dir = 8
+	},
+/turf/open/floor/wood/parquet,
+/area/shuttle/escape)
 "ya" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
@@ -811,7 +840,6 @@
 	name = "dirty dishposal outlet"
 	},
 /obj/structure/window/reinforced/spawner/directional/east,
-/obj/effect/turf_decal/bot_white,
 /turf/open/floor/iron/dark/smooth_large,
 /area/shuttle/escape)
 "AE" = (
@@ -849,13 +877,6 @@
 /obj/structure/window/reinforced/spawner/directional/south,
 /obj/effect/turf_decal/delivery/white,
 /turf/open/floor/iron/dark/smooth_large,
-/area/shuttle/escape)
-"BZ" = (
-/obj/structure/disposalpipe/trunk,
-/obj/machinery/disposal/bin{
-	name = "dirty dishposal"
-	},
-/turf/open/floor/carpet/red,
 /area/shuttle/escape)
 "Cj" = (
 /obj/structure/table/reinforced,
@@ -915,6 +936,28 @@
 /obj/effect/turf_decal/siding/wood{
 	dir = 5
 	},
+/obj/structure/closet/crate{
+	name = "FUN BOX - PROPERTY OF THE CAPTAIN"
+	},
+/obj/item/toy/spinningtoy,
+/obj/item/toy/figure/engineer,
+/obj/item/toy/figure/clown,
+/obj/item/toy/figure/mime,
+/obj/item/toy/figure/ce,
+/obj/item/toy/figure/captain,
+/obj/item/toy/figure/hop,
+/obj/item/toy/figure/bartender,
+/obj/item/toy/figure/chef,
+/obj/item/toy/figure/assistant,
+/obj/item/toy/cards/deck/cas,
+/obj/item/toy/cards/deck/cas/black,
+/obj/item/toy/cards/deck,
+/obj/item/toy/captainsaid/collector,
+/obj/item/toy/ammo/gun,
+/obj/item/toy/gun,
+/obj/item/toy/nuke,
+/obj/item/toy/windup_toolbox,
+/obj/item/toy/eightball/haunted,
 /turf/open/floor/wood/parquet,
 /area/shuttle/escape)
 "DS" = (
@@ -1191,6 +1234,9 @@
 "MI" = (
 /obj/effect/turf_decal/siding/wood{
 	dir = 10
+	},
+/obj/machinery/modular_computer/preset/command{
+	dir = 1
 	},
 /turf/open/floor/wood/parquet,
 /area/shuttle/escape)
@@ -2196,7 +2242,7 @@ jt
 aZ
 aZ
 aZ
-BZ
+MK
 IQ
 IQ
 Ha
@@ -2281,7 +2327,7 @@ sW
 (17,1,1) = {"
 en
 eb
-qw
+jC
 yn
 uX
 Dq
@@ -2378,7 +2424,7 @@ yn
 jt
 zm
 Sp
-kE
+xT
 MI
 jt
 aA
