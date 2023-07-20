@@ -116,6 +116,21 @@
 	name = "medal of exceptional heroism"
 	desc = "An extremely rare golden medal awarded only by CentCom. To receive such a medal is the highest honor and as such, very few exist. This medal is almost never awarded to anybody but commanders."
 
+/obj/item/clothing/accessory/medal/gold/swedish
+	name = "Förtjänstmedalj"
+	desc = "A vintage medal from Sweden awarded to those who have displayed exemplary performance in the military. It was not only given to Swedish soldiers, but foreign troops too."
+	icon_state = "svensk"
+
+/obj/item/clothing/accessory/medal/gold/norwegian
+	name = "Vernedyktighetsmedalje"
+	desc = "An old medal from Norway, awarded to people who have done exceptional service, both in and out of the military. However, it was discontinued, and as such, this is one of the few that are still around."
+	icon_state = "norsk"
+
+/obj/item/clothing/accessory/medal/gold/danish
+	name = "Dannebrogordenens Hæderstegn"
+	desc = "An ancient medal from Denmark, given to those who have provided a noble deed to the country, as well as to the members of the royal family."
+	icon_state = "dansk"
+
 /obj/item/clothing/accessory/medal/plasma
 	name = "plasma medal"
 	desc = "An eccentric medal made of plasma."
