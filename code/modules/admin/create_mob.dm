@@ -12,7 +12,7 @@
 
 /proc/randomize_human(mob/living/carbon/human/human)
 	if(human.dna.species.sexes)
-		human.gender = pick(MALE, FEMALE, PLURAL, NEUTER)
+		human.gender = pick(MALE, FEMALE)
 	else
 		human.gender = PLURAL
 	human.physique = human.gender
