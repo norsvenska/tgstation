@@ -1869,3 +1869,4 @@
 	fire = 100
 	acid = 100
 	wound = 100
+	consume = 100

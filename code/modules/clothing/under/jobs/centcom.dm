@@ -14,6 +14,21 @@
 	icon_state = "official"
 	inhand_icon_state = "dg_suit"
 
+/obj/item/clothing/under/rank/centcom/medic
+	name = "\improper CentCom medical suit"
+	desc = "A jumpsuit worn by CentCom's medical staff."
+	icon_state = "medic"
+	inhand_icon_state = "w_suit"
+
+/obj/item/clothing/under/rank/centcom/medic/skirt
+	name = "\improper CentCom medical skirt"
+	desc = "The CentCom medical suit, but skirt edition!"
+	icon_state = "medic_skirt"
+	inhand_icon_state = "w_suit"
+	female_sprite_flags = FEMALE_UNIFORM_TOP_ONLY
+	body_parts_covered = CHEST|GROIN|ARMS
+	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON
+
 /obj/item/clothing/under/rank/centcom/intern
 	name = "\improper CentCom intern's jumpsuit"
 	desc = "It's a jumpsuit worn by those interning for CentCom. The top is styled after a polo shirt for easy identification."
