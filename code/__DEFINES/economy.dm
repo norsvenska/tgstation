@@ -25,7 +25,8 @@
 
 #define STATION_TARGET_BUFFER 100000
 
-
+///The coefficient for the amount of dosh that's collected everytime some is earned or received.
+#define DEBT_COLLECTION_COEFF 0.75
 
 #define MAX_GRANT_DPT 500
 
