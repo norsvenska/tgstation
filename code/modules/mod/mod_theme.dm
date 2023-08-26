@@ -1820,8 +1820,9 @@
 /datum/mod_theme/admiral
 	name = "admiral"
 	desc = "Stylish and durable."
-	extended_desc = "Oh god, it's a reskinned admin suit? I'd better report this \
-	to the coders so they nerf it. It's not like I'll ever see it ingame, right?"
+	extended_desc = "This is like the Apocryphal suit, except its wearer isn't always out to kill you. \
+	This suit is a modified Nanotrasen responsory suit, with experimental armour plating. \
+	All tests on it have proven it to be completely impenetrable, so don't fuck with someone who is wearing this."
 	default_skin = "admiral"
 	armor_type = /datum/armor/mod_theme_admiral
 	resistance_flags = INDESTRUCTIBLE|LAVA_PROOF|FIRE_PROOF|UNACIDABLE|ACID_PROOF
