@@ -6443,7 +6443,6 @@
 "bBg" = (
 /obj/structure/bed/roller,
 /obj/machinery/iv_drip,
-/obj/effect/decal/cleanable/blood/old,
 /obj/machinery/light/cold/directional/south,
 /turf/open/floor/iron/white,
 /area/station/security/medical)
@@ -6898,8 +6897,6 @@
 /turf/open/floor/iron/white,
 /area/station/science/ordnance/storage)
 "bJj" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/dirt,
 /obj/machinery/light/small/directional/east,
 /turf/open/floor/iron,
 /area/station/security/range)
@@ -16823,7 +16820,6 @@
 "eoL" = (
 /obj/structure/window/reinforced/spawner/directional/north,
 /obj/machinery/airalarm/directional/west,
-/obj/effect/decal/cleanable/blood/old,
 /obj/structure/closet/crate/bin{
 	name = "biowaste bin"
 	},
@@ -24015,6 +24011,12 @@
 	dir = 8
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/door_buttons/access_button{
+	idDoor = "asylum_airlock_exterior";
+	name = "Asylum Exit";
+	pixel_y = -26;
+	req_access = list("psychology")
+	},
 /turf/open/floor/iron/dark,
 /area/station/medical/psychology)
 "gss" = (
@@ -32904,14 +32906,6 @@
 /turf/open/floor/plating,
 /area/station/science/genetics)
 "iJX" = (
-/obj/machinery/door_buttons/airlock_controller{
-	idExterior = "asylum_airlock_exterior";
-	idInterior = "asylum_airlock_interior";
-	name = "Asylum Access Console";
-	pixel_x = 26;
-	pixel_y = 6;
-	req_access = list("psychology")
-	},
 /obj/effect/turf_decal/trimline/white/filled/corner{
 	dir = 4
 	},
@@ -39027,12 +39021,6 @@
 /turf/open/floor/catwalk_floor,
 /area/station/maintenance/floor4/starboard/fore)
 "kqy" = (
-/obj/machinery/door_buttons/access_button{
-	idDoor = "asylum_airlock_interior";
-	name = "Asylum Entry";
-	pixel_y = 26;
-	req_access = list("psychology")
-	},
 /obj/effect/turf_decal/trimline/white/filled/line{
 	dir = 9
 	},
@@ -41061,6 +41049,14 @@
 	},
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
 	dir = 1
+	},
+/obj/machinery/door_buttons/airlock_controller{
+	idExterior = "asylum_airlock_exterior";
+	idInterior = "asylum_airlock_interior";
+	name = "Asylum Access Console";
+	pixel_x = 15;
+	pixel_y = -24;
+	req_access = list("psychology")
 	},
 /turf/open/floor/iron/dark,
 /area/station/medical/psychology)
@@ -48431,14 +48427,6 @@
 	},
 /area/station/hallway/floor2/fore)
 "mJs" = (
-/obj/machinery/door_buttons/airlock_controller{
-	idExterior = "asylum_airlock_exterior";
-	idInterior = "asylum_airlock_interior";
-	name = "Asylum Access Console";
-	pixel_x = -26;
-	pixel_y = 6;
-	req_access = list("psychology")
-	},
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 10
 	},
@@ -52245,12 +52233,6 @@
 /turf/open/floor/pod/dark,
 /area/station/maintenance/floor2/starboard)
 "nFr" = (
-/obj/machinery/door_buttons/access_button{
-	idDoor = "asylum_airlock_exterior";
-	name = "Asylum Exit";
-	pixel_y = -26;
-	req_access = list("psychology")
-	},
 /obj/effect/turf_decal/trimline/blue/filled/line{
 	dir = 6
 	},
@@ -53316,7 +53298,7 @@
 /obj/machinery/elevator_control_panel/directional/east{
 	linked_elevator_id = "aft_vator";
 	pixel_x = 24;
-	preset_destination_names = list("2"="Supply-Engi                Floor","3"="Med-Sci                Floor","4"="Service                Floor")
+	preset_destination_names = list("2"="Supply-Engi                                Floor","3"="Med-Sci                                Floor","4"="Service                                Floor")
 	},
 /turf/open/floor/plating/elevatorshaft,
 /area/station/hallway/floor1/aft)
@@ -58304,9 +58286,7 @@
 /turf/open/floor/iron,
 /area/station/cargo/miningdock)
 "pnw" = (
-/obj/effect/decal/cleanable/dirt,
 /obj/structure/sign/poster/official/random/directional/south,
-/obj/effect/mapping_helpers/broken_floor,
 /turf/open/floor/iron,
 /area/station/security/range)
 "pnF" = (
@@ -59876,7 +59856,6 @@
 /obj/machinery/door/window/brigdoor/right/directional/west{
 	name = "Shooting Range"
 	},
-/obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/dark/side{
 	dir = 8
 	},
@@ -65255,6 +65234,12 @@
 	dir = 4
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/door_buttons/access_button{
+	idDoor = "asylum_airlock_interior";
+	name = "Asylum Entry";
+	pixel_y = 26;
+	req_access = list("psychology")
+	},
 /turf/open/floor/iron/dark,
 /area/station/medical/psychology)
 "rdH" = (
@@ -71922,10 +71907,6 @@
 	},
 /turf/open/floor/plating,
 /area/station/security/lockers)
-"sWo" = (
-/obj/effect/decal/cleanable/dirt,
-/turf/open/floor/iron,
-/area/station/security/range)
 "sWs" = (
 /obj/structure/lattice/catwalk,
 /obj/structure/marker_beacon/burgundy,
@@ -83156,7 +83137,7 @@
 /obj/machinery/elevator_control_panel/directional/west{
 	linked_elevator_id = "fore_vator";
 	pixel_x = -24;
-	preset_destination_names = list("2"="Supply-Engi                Floor","3"="Med-Sci                Floor","4"="Service                Floor")
+	preset_destination_names = list("2"="Supply-Engi                                Floor","3"="Med-Sci                                Floor","4"="Service                                Floor")
 	},
 /obj/machinery/lift_indicator/directional/west{
 	linked_elevator_id = "fore_vator";
@@ -85818,10 +85799,6 @@
 	},
 /turf/open/floor/iron,
 /area/station/commons/fitness/recreation)
-"wyv" = (
-/obj/effect/mapping_helpers/broken_floor,
-/turf/open/floor/iron,
-/area/station/security/range)
 "wyE" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -86194,11 +86171,6 @@
 /obj/machinery/light/directional/north,
 /turf/open/floor/iron/dark,
 /area/station/commons/dorms/room3)
-"wDE" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/mapping_helpers/broken_floor,
-/turf/open/floor/iron,
-/area/station/security/range)
 "wDF" = (
 /obj/structure/table,
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
@@ -319665,8 +319637,8 @@ aEh
 fQA
 gJA
 dnU
-sWo
-sWo
+cWK
+cWK
 pnw
 ycM
 sOU
@@ -319922,9 +319894,9 @@ fQA
 fQA
 sXp
 dnU
-sWo
-wyv
-sWo
+cWK
+cWK
+cWK
 ycM
 sOU
 sOU
@@ -320179,9 +320151,9 @@ xYz
 cfD
 vWw
 vWw
-wDE
 cWK
-sWo
+cWK
+cWK
 ycM
 sOU
 sOU
@@ -320436,9 +320408,9 @@ mqB
 lOp
 rBU
 qjr
-sWo
+cWK
 jJC
-wyv
+cWK
 ycM
 sOU
 sOU
@@ -320693,9 +320665,9 @@ nhm
 qQG
 puQ
 qjr
-sWo
+cWK
 bJj
-wyv
+cWK
 ycM
 nXQ
 nXQ
