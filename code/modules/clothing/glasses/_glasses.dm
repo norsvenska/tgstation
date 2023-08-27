@@ -732,46 +732,27 @@
 	icon_state = "sunhudcentcom"
 	inhand_icon_state = "sunhudcentcom"
 	flags_cover = GLASSESCOVERSEYES
-//	darkness_view = 8
 	flash_protect = FLASH_PROTECTION_WELDER
-//	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
 	glass_colour_type = FALSE
 	clothing_traits = list(TRAIT_REAGENT_SCANNER, TRAIT_RESEARCH_SCANNER, TRAIT_BOOZE_SLIDER)
 	var/list/hudlist = list(DATA_HUD_MEDICAL_ADVANCED, DATA_HUD_DIAGNOSTIC_ADVANCED, DATA_HUD_SECURITY_ADVANCED)
 	var/xray = FALSE
 
-/obj/item/clothing/glasses/centcom/hudpatch
-	name = "\improper CentCom HUDPatch"
-	desc = "The HUD from CentCom's sunglasses, compacted into an eyepatch for maximum style."
-	icon_state = "centpatch"
-
 /obj/item/clothing/glasses/centcom/equipped(mob/user, slot)
 	. = ..()
-	if(slot != ITEM_SLOT_EYES)
+	if(!(slot & ITEM_SLOT_EYES))
 		return
 	if(ishuman(user))
 		for(var/hud in hudlist)
 			var/datum/atom_hud/our_hud = GLOB.huds[hud]
 			our_hud.show_to(user)
-		ADD_TRAIT(user, TRAIT_MEDICAL_HUD, GLASSES_TRAIT)
-		ADD_TRAIT(user, TRAIT_SECURITY_HUD, GLASSES_TRAIT)
-		ADD_TRAIT(user, TRAIT_RESISTCOLD, GLASSES_TRAIT)
-		ADD_TRAIT(user, TRAIT_RESISTLOWPRESSURE, GLASSES_TRAIT)
-		ADD_TRAIT(user, TRAIT_MADNESS_IMMUNE, GLASSES_TRAIT)
-		ADD_TRAIT(user, TRAIT_KNOW_ENGI_WIRES, GLASSES_TRAIT)
-		ADD_TRAIT(user, TRAIT_KNOW_ROBO_WIRES, GLASSES_TRAIT)
-		ADD_TRAIT(user, TRAIT_TRUE_NIGHT_VISION, GLASSES_TRAIT)
+		user.add_traits(list(TRAIT_MEDICAL_HUD, TRAIT_SECURITY_HUD, TRAIT_DIAGNOSTIC_HUD, TRAIT_TRUE_NIGHT_VISION, TRAIT_KNOW_ROBO_WIRES, TRAIT_KNOW_ENGI_WIRES, TRAIT_MADNESS_IMMUNE, TRAIT_RESISTCOLD, TRAIT_RESISTHEAT, TRAIT_RESISTLOWPRESSURE, TRAIT_RESISTHIGHPRESSURE), GLASSES_TRAIT)
+		if(xray)
+			ADD_TRAIT(user, TRAIT_XRAY_VISION, GLASSES_TRAIT)
 
 /obj/item/clothing/glasses/centcom/dropped(mob/user)
 	. = ..()
-	REMOVE_TRAIT(user, TRAIT_MEDICAL_HUD, GLASSES_TRAIT)
-	REMOVE_TRAIT(user, TRAIT_SECURITY_HUD, GLASSES_TRAIT)
-	REMOVE_TRAIT(user, TRAIT_RESISTCOLD, GLASSES_TRAIT)
-	REMOVE_TRAIT(user, TRAIT_RESISTLOWPRESSURE, GLASSES_TRAIT)
-	REMOVE_TRAIT(user, TRAIT_MADNESS_IMMUNE, GLASSES_TRAIT)
-	REMOVE_TRAIT(user, TRAIT_KNOW_ENGI_WIRES, GLASSES_TRAIT)
-	REMOVE_TRAIT(user, TRAIT_KNOW_ROBO_WIRES, GLASSES_TRAIT)
-	REMOVE_TRAIT(user, TRAIT_TRUE_NIGHT_VISION, GLASSES_TRAIT)
+	user.remove_traits(list(TRAIT_MEDICAL_HUD, TRAIT_SECURITY_HUD, TRAIT_DIAGNOSTIC_HUD, TRAIT_XRAY_VISION, TRAIT_TRUE_NIGHT_VISION, TRAIT_KNOW_ROBO_WIRES, TRAIT_KNOW_ENGI_WIRES, TRAIT_MADNESS_IMMUNE, TRAIT_RESISTCOLD, TRAIT_RESISTHEAT, TRAIT_RESISTLOWPRESSURE, TRAIT_RESISTHIGHPRESSURE), GLASSES_TRAIT)
 	if(ishuman(user))
 		for(var/hud in hudlist)
 			var/datum/atom_hud/our_hud = GLOB.huds[hud]
@@ -781,9 +762,11 @@
 	. = ..()
 	if(ishuman(user))
 		if(xray)
-			vision_flags -= SEE_MOBS|SEE_OBJS|SEE_TURFS
+//			vision_flags &= ~SEE_MOBS|SEE_OBJS|SEE_TURFS
+			REMOVE_TRAIT(user, TRAIT_XRAY_VISION, GLASSES_TRAIT)
 		else
-			vision_flags += SEE_MOBS|SEE_OBJS|SEE_TURFS
+//			vision_flags |= SEE_MOBS|SEE_OBJS|SEE_TURFS
+			ADD_TRAIT(user, TRAIT_XRAY_VISION, GLASSES_TRAIT)
 		xray = !xray
-		var/mob/living/carbon/human/H = user
-		H.update_sight()
+		var/mob/living/carbon/human/human_user = user
+		human_user.update_sight()
