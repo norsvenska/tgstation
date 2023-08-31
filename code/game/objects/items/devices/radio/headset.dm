@@ -342,6 +342,9 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 	worn_icon_state = "cent_headset_alt"
 	keyslot2 = null
 
+/obj/item/radio/headset/headset_cent/alt/commander
+	keyslot2 = /obj/item/encryptionkey/heads/captain
+
 /obj/item/radio/headset/headset_cent/alt/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/wearertargeting/earprotection, list(ITEM_SLOT_EARS))
