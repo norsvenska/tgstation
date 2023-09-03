@@ -5,7 +5,7 @@
 	space_chance = 15
 	syllables = list(
 		"jag", "i", "går", "sven", "od", "vi", "sk", "a", "ö", "å", "ä", "ð",
-		"fjord", "ygg", "van", "dår", "á", "ø", "och", "nor", "dan", "på", "han",
+		"fjord", "sak", "van", "dår", "á", "ø", "och", "nor", "dan", "på", "han",
 		"så", "ån", "det", "att", "nå", "gö", "bra", "int", "tyc", "om", "när",
 		"na", "må", "dag", "sjä", "pp", "la", "nd", "er", "käyt", "far", "vä",
 		"hej", "då", "finns", "sla", "mpa", "ja", "nej", "ste", "vad", "dra", "sil", "hög",
