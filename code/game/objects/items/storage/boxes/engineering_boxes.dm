@@ -98,6 +98,24 @@
 		)
 	generate_items_inside(items_inside,src)
 
+/obj/item/storage/box/autosurgeon
+	name = "box of improved organs"
+	icon_state = "syndiebox"
+
+/obj/item/storage/box/autosurgeon/PopulateContents()
+	var/static/items_inside = list(
+		/obj/item/autosurgeon=1,
+		/obj/item/organ/internal/cyberimp/chest/nutriment/plus=1,
+		/obj/item/organ/internal/cyberimp/brain/anti_stun=1,
+		/obj/item/organ/internal/ears/invincible=1,
+		/obj/item/organ/internal/heart/cybernetic/tier3=1,
+		/obj/item/organ/internal/liver/cybernetic/tier3=1,
+		/obj/item/organ/internal/lungs/cybernetic/tier3=1,
+		/obj/item/organ/internal/stomach/cybernetic/tier3=1,
+		)
+	generate_items_inside(items_inside,src)
+
+
 /obj/item/storage/box/plastic
 	name = "plastic box"
 	desc = "It's a solid, plastic shell box."

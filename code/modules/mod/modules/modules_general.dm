@@ -92,11 +92,11 @@
 	name = "MOD bluespace storage module Mk.II"
 	desc = "An advanced storage system developed by Nanotrasen, these compartments employ \
 		miniaturized bluespace pockets for the ultimate in storage technology; regardless of the weight of objects put inside. \
-		This one has double the capacity of the first rendition."
+		This one has significantly more room when compared to the first rendition."
 	icon_state = "storage_large"
 	max_w_class = WEIGHT_CLASS_GIGANTIC
-	max_combined_w_class = 120
-	max_items = 42
+	max_combined_w_class = 240
+	max_items = 120
 
 ///Ion Jetpack - Lets the user fly freely through space using battery charge.
 /obj/item/mod/module/jetpack
