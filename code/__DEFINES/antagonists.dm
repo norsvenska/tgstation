@@ -149,6 +149,7 @@ GLOBAL_LIST_INIT(syndicate_employers, list(
 	"Donk Corporation",
 	"Gorlex Marauders",
 	"MI13",
+	"Nordic Fleet Officer",
 	"Tiger Cooperative Fanatic",
 	"Waffle Corporation Terrorist",
 	"Waffle Corporation",
@@ -181,6 +182,7 @@ GLOBAL_LIST_INIT(normal_employers, list(
 	"Internal Affairs Agent",
 	"Legal Trouble",
 	"MI13",
+	"Nordic Fleet Officer",
 	"Waffle Corporation",
 ))
 
