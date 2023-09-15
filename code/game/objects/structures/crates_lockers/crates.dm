@@ -353,40 +353,5 @@
 	for(var/i in 1 to 4)
 		new /obj/effect/spawner/random/decoration/generic(src)
 
-/obj/structure/closet/crate/build
-	name = "construction crate"
-	desc = "A crate full of construction materials. Perfect for large building projects!"
-	icon_state = "engi_crate"
-
-/obj/structure/closet/crate/build/PopulateContents()
-	. = ..()
-	new /obj/item/stack/sheet/plasteel/fifty(src)
-	new /obj/item/stack/sheet/glass/fifty(src)
-	new /obj/item/stack/sheet/plastic/fifty(src)
-	new /obj/item/stack/sheet/mineral/wood/fifty(src)
-	new /obj/item/stack/sheet/iron/fifty(src)
-	new /obj/item/stack/sheet/rglass/fifty(src)
-	new /obj/item/stack/sheet/mineral/titanium/fifty(src)
-	new /obj/item/stack/sheet/plasteel/fifty(src)
-	new /obj/item/stack/sheet/mineral/silver/fifty(src)
-	new /obj/item/stack/sheet/mineral/gold/fifty(src)
-	new /obj/item/stack/sheet/cloth/fifty(src)
-
-/obj/structure/closet/crate/buildmats
-	name = "material crate"
-	desc = "A crate full of materials, either for construction or to be loaded into the ore silo."
-	icon_state = "engi_crate"
-
-/obj/structure/closet/crate/buildmats/PopulateContents()
-	. = ..()
-	new /obj/item/stack/sheet/iron/fifty(src)
-	new /obj/item/stack/sheet/glass/fifty(src)
-	new /obj/item/stack/sheet/plastic/fifty(src)
-	new /obj/item/stack/sheet/mineral/titanium/fifty(src)
-	new /obj/item/stack/sheet/mineral/silver/fifty(src)
-	new /obj/item/stack/sheet/mineral/gold/fifty(src)
-	new /obj/item/stack/sheet/mineral/diamond/fifty(src)
-	new /obj/item/stack/sheet/mineral/plasma/fifty(src)
-	new /obj/item/stack/sheet/mineral/bananium/fifty(src)
-	new /obj/item/stack/sheet/mineral/uranium/fifty(src)
-	new /obj/item/stack/sheet/bluespace_crystal/fifty(src)
+/obj/structure/closet/crate/add_to_roundstart_list()
+	return
