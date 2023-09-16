@@ -67,6 +67,21 @@
 /obj/effect/spawner/random/maintenance,
 /turf/open/floor/plating,
 /area/mine/maintenance/living/south)
+"aq" = (
+/obj/machinery/camera/autoname/directional/east{
+	network = list("mine")
+	},
+/obj/effect/turf_decal/trimline/brown/filled/line{
+	dir = 5
+	},
+/obj/item/storage/bag/ore,
+/obj/item/pickaxe,
+/obj/structure/rack,
+/obj/item/mining_scanner,
+/obj/item/flashlight,
+/obj/item/clothing/glasses/meson,
+/turf/open/floor/iron/dark,
+/area/mine/storage/public)
 "av" = (
 /obj/machinery/computer/arcade/orion_trail{
 	dir = 4
@@ -567,6 +582,12 @@
 /obj/structure/lattice/catwalk/mining,
 /turf/open/lava/smooth/lava_land_surface,
 /area/lavaland/surface/outdoors)
+"dG" = (
+/obj/structure/cable,
+/obj/machinery/power/smes/magical,
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/plating,
+/area/mine/maintenance/service)
 "dJ" = (
 /obj/structure/lattice/catwalk,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
@@ -5952,6 +5973,11 @@
 	},
 /turf/open/floor/iron/checker,
 /area/mine/cafeteria)
+"KP" = (
+/obj/machinery/power/smes/magical,
+/obj/structure/cable,
+/turf/open/floor/plating,
+/area/mine/maintenance/labor)
 "KV" = (
 /obj/structure/table,
 /obj/machinery/light/directional/east,
@@ -6742,15 +6768,6 @@
 	},
 /turf/open/floor/plating,
 /area/mine/production)
-"PL" = (
-/obj/machinery/recycler,
-/obj/machinery/conveyor{
-	dir = 4;
-	id = "mining_disposals"
-	},
-/obj/effect/turf_decal/sand/plating/volcanic,
-/turf/open/floor/plating/lavaland_atmos,
-/area/mine/maintenance/service/disposals)
 "PR" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /turf/open/floor/carpet/executive,
@@ -7034,11 +7051,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/smooth,
 /area/mine/laborcamp)
-"RI" = (
-/obj/machinery/power/smes/magical,
-/obj/structure/cable,
-/turf/open/floor/plating,
-/area/mine/maintenance/labor)
 "RL" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/lattice/catwalk,
@@ -7547,21 +7559,6 @@
 /obj/structure/fluff/drake_statue/falling,
 /turf/open/misc/asteroid/basalt/lava_land_surface,
 /area/lavaland/surface/outdoors)
-"Vb" = (
-/obj/machinery/camera/autoname/directional/east{
-	network = list("mine")
-	},
-/obj/effect/turf_decal/trimline/brown/filled/line{
-	dir = 5
-	},
-/obj/item/storage/bag/ore,
-/obj/item/pickaxe,
-/obj/structure/rack,
-/obj/item/mining_scanner,
-/obj/item/flashlight,
-/obj/item/clothing/glasses/meson,
-/turf/open/floor/iron/dark,
-/area/mine/storage/public)
 "Vc" = (
 /obj/item/reagent_containers/cup/glass/colocup{
 	pixel_x = -5;
@@ -7737,12 +7734,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/plating,
 /area/mine/storage)
-"Wf" = (
-/obj/structure/cable,
-/obj/machinery/power/smes/magical,
-/obj/effect/decal/cleanable/dirt,
-/turf/open/floor/plating,
-/area/mine/maintenance/service)
 "Wg" = (
 /obj/structure/girder,
 /obj/effect/turf_decal/sand/plating/volcanic,
@@ -8319,6 +8310,17 @@
 /obj/structure/extinguisher_cabinet/directional/west,
 /turf/open/floor/iron/dark,
 /area/mine/laborcamp/security)
+"ZJ" = (
+/obj/machinery/recycler{
+	dir = 8
+	},
+/obj/machinery/conveyor{
+	dir = 4;
+	id = "mining_disposals"
+	},
+/obj/effect/turf_decal/sand/plating/volcanic,
+/turf/open/floor/plating/lavaland_atmos,
+/area/mine/maintenance/service/disposals)
 "ZM" = (
 /obj/structure/railing{
 	dir = 8
@@ -28121,7 +28123,7 @@ Zt
 Zt
 Zt
 Zt
-RI
+KP
 ve
 RD
 RD
@@ -36315,7 +36317,7 @@ pU
 mA
 su
 xG
-PL
+ZJ
 Sd
 pU
 aj
@@ -38368,7 +38370,7 @@ Ue
 AA
 gB
 ON
-Wf
+dG
 gq
 ER
 vc
@@ -40209,7 +40211,7 @@ It
 Xp
 Hw
 cE
-Vb
+aq
 ij
 Ly
 dJ
