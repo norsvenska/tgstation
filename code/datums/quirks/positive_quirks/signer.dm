@@ -2,7 +2,7 @@
 	name = "Signer"
 	desc = "You possess excellent communication skills in sign language."
 	icon = FA_ICON_HANDS
-	value = 4
+	value = 1
 	quirk_flags = QUIRK_HUMAN_ONLY|QUIRK_CHANGES_APPEARANCE
 	mail_goodies = list(/obj/item/clothing/gloves/radio)
 
