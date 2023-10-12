@@ -1167,8 +1167,8 @@
 /obj/item/card/id/advanced/black/admiral
 	name = "\improper CentCom Executive ID"
 	desc = "An ID straight from Central Command. This one is black, designed for only the highest ranking individuals."
-	icon_state = "card_black_cc"
-	assigned_icon_state = "assigned_centcom_dark"
+	icon_state = "card_black"
+	assigned_icon_state = "assigned_gold"
 	trim = /datum/id_trim/centcom/admiral
 	wildcard_slots = WILDCARD_LIMIT_CENTCOM
 
