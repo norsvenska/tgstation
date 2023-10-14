@@ -80,6 +80,7 @@
 	sechud_icon_state = SECHUD_ADMIRAL
 	department_color = COLOR_DARK_MODERATE_LIME_GREEN
 	subdepartment_color = COLOR_DARK_MODERATE_LIME_GREEN
+	department_state = "departmenthead"
 
 /datum/id_trim/centcom/admiral/New()
 	. = ..()
