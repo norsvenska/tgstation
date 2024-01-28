@@ -117,9 +117,10 @@
 /turf/open/floor/iron/kitchen/herringbone,
 /area/shuttle/escape)
 "dp" = (
-/obj/structure/chair/sofa/right/maroon,
-/obj/structure/sign/warning/yes_smoking/circle/directional/north,
-/turf/open/floor/wood/tile,
+/obj/machinery/atmospherics/components/trinary/filter/atmos/flipped/co2{
+	dir = 8
+	},
+/turf/open/floor/iron/white,
 /area/shuttle/escape)
 "du" = (
 /obj/effect/turf_decal/trimline/blue/line{
@@ -148,10 +149,10 @@
 /area/shuttle/escape)
 "dG" = (
 /obj/machinery/door/airlock/shuttle,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisene1
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "cruisene1"
+	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
 "dL" = (
@@ -235,6 +236,9 @@
 /obj/effect/turf_decal/trimline/blue/filled/corner{
 	dir = 1
 	},
+/obj/machinery/atmospherics/pipe/smart/simple/orange/hidden{
+	dir = 4
+	},
 /turf/open/floor/iron/white,
 /area/shuttle/escape)
 "gq" = (
@@ -255,7 +259,7 @@
 /obj/machinery/door/poddoor/shutters/preopen{
 	name = "Captain's Quarters Privacy Shutters";
 	dir = 8;
-	id = cqpriv
+	id = "cqpriv"
 	},
 /obj/structure/window/reinforced/spawner/directional/west,
 /obj/item/paper_bin,
@@ -354,7 +358,7 @@
 "ij" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisene2
+	cycle_id = "cruisene2"
 	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
@@ -386,7 +390,7 @@
 /area/shuttle/escape)
 "je" = (
 /obj/machinery/button/door/directional/west{
-	id = cqpriv;
+	id = "cqpriv";
 	name = "Privacy Shutters Control"
 	},
 /obj/effect/turf_decal/siding/wood/end{
@@ -398,10 +402,10 @@
 /turf/closed/wall/mineral/titanium,
 /area/shuttle/escape)
 "jy" = (
-/obj/structure/chair/sofa/left/maroon{
+/obj/machinery/sleeper{
 	dir = 8
 	},
-/turf/open/floor/wood/tile,
+/turf/open/floor/iron/dark/small,
 /area/shuttle/escape)
 "jz" = (
 /obj/machinery/computer/emergency_shuttle,
@@ -412,10 +416,10 @@
 /area/shuttle/escape)
 "jF" = (
 /obj/machinery/door/airlock/shuttle,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisesw2
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "cruisesw2"
+	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
 "jL" = (
@@ -441,6 +445,15 @@
 	dir = 8
 	},
 /turf/open/floor/iron/dark,
+/area/shuttle/escape)
+"ki" = (
+/obj/machinery/atmospherics/pipe/smart/manifold/cyan/visible{
+	dir = 1
+	},
+/obj/effect/turf_decal/stripes/line{
+	dir = 4
+	},
+/turf/open/floor/iron/white,
 /area/shuttle/escape)
 "kn" = (
 /obj/effect/turf_decal/tile/blue/half/contrasted{
@@ -478,7 +491,7 @@
 /obj/machinery/door/poddoor/shutters/preopen{
 	name = "Captain's Quarters Privacy Shutters";
 	dir = 8;
-	id = cqpriv
+	id = "cqpriv"
 	},
 /obj/machinery/door/window/brigdoor/left/directional/west{
 	name = "Captain's Desk";
@@ -547,14 +560,14 @@
 "lP" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisenw1
+	cycle_id = "cruisenw1"
 	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
 "ma" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisesw2
+	cycle_id = "cruisesw2"
 	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
@@ -564,10 +577,11 @@
 /turf/open/floor/iron/kitchen/herringbone,
 /area/shuttle/escape)
 "mk" = (
-/obj/machinery/door/airlock/shuttle{
-	name = "Starboard Lounge"
+/obj/effect/turf_decal/stripes/line,
+/obj/machinery/atmospherics/pipe/smart/simple/cyan/visible{
+	dir = 4
 	},
-/turf/open/floor/iron/dark/textured_large,
+/turf/open/floor/iron/white,
 /area/shuttle/escape)
 "mr" = (
 /obj/structure/table/reinforced,
@@ -584,6 +598,14 @@
 	dir = 4
 	},
 /turf/open/floor/carpet/executive,
+/area/shuttle/escape)
+"mN" = (
+/obj/machinery/door/airlock/shuttle,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "cruisene1"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/open/floor/noslip,
 /area/shuttle/escape)
 "mR" = (
 /obj/effect/turf_decal/trimline/dark_red/filled/corner{
@@ -721,6 +743,13 @@
 	dir = 8
 	},
 /turf/open/floor/iron/dark,
+/area/shuttle/escape)
+"qm" = (
+/obj/machinery/atmospherics/components/unary/portables_connector/visible{
+	dir = 1
+	},
+/obj/machinery/portable_atmospherics/canister/anesthetic_mix,
+/turf/open/floor/iron/dark/small,
 /area/shuttle/escape)
 "qp" = (
 /obj/effect/turf_decal/trimline/white/line{
@@ -868,7 +897,7 @@
 "tC" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisenw2
+	cycle_id = "cruisenw2"
 	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
@@ -896,9 +925,7 @@
 /turf/open/floor/iron,
 /area/shuttle/escape)
 "tT" = (
-/obj/structure/railing{
-	dir = 2
-	},
+/obj/structure/railing,
 /turf/open/floor/carpet/red,
 /area/shuttle/escape)
 "tZ" = (
@@ -959,7 +986,7 @@
 "uU" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisesw1
+	cycle_id = "cruisesw1"
 	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
@@ -972,16 +999,17 @@
 /turf/open/floor/wood/tile,
 /area/shuttle/escape)
 "vw" = (
-/obj/structure/chair/sofa/corner/maroon,
-/obj/machinery/light/small/directional/north,
-/turf/open/floor/wood/tile,
+/obj/machinery/cryo_cell{
+	dir = 8
+	},
+/turf/open/floor/iron/dark/small,
 /area/shuttle/escape)
 "vy" = (
 /obj/machinery/door/airlock/shuttle{
 	name = "Outdoor Play Area"
 	},
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisefun
+	cycle_id = "cruisefun"
 	},
 /obj/effect/mapping_helpers/airlock/locked,
 /obj/structure/barricade/wooden/crude,
@@ -1005,10 +1033,10 @@
 /area/shuttle/escape)
 "vW" = (
 /obj/machinery/door/airlock/shuttle,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisesw1
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "cruisesw1"
+	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
 "vX" = (
@@ -1037,7 +1065,7 @@
 /area/shuttle/escape)
 "wb" = (
 /obj/machinery/button/door/directional/north{
-	id = cruisekitchen;
+	id = "cruisekitchen";
 	name = "Kitchen Shutter Control"
 	},
 /obj/machinery/vending/dinnerware,
@@ -1112,7 +1140,7 @@
 	name = "Outdoor Play Area"
 	},
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisefun
+	cycle_id = "cruisefun"
 	},
 /obj/effect/mapping_helpers/airlock/locked,
 /obj/structure/barricade/wooden/crude,
@@ -1138,7 +1166,7 @@
 /obj/structure/table/reinforced,
 /obj/machinery/door/poddoor/shutters/preopen{
 	dir = 1;
-	id = cruisekitchen
+	id = "cruisekitchen"
 	},
 /obj/machinery/door/window/brigdoor/right/directional/north{
 	req_access = list("kitchen")
@@ -1148,7 +1176,7 @@
 "zy" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisese2
+	cycle_id = "cruisese2"
 	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
@@ -1194,9 +1222,7 @@
 /turf/open/floor/iron,
 /area/shuttle/escape)
 "Av" = (
-/obj/structure/railing{
-	dir = 2
-	},
+/obj/structure/railing,
 /obj/machinery/light/directional/north,
 /turf/open/floor/iron/stairs{
 	dir = 8
@@ -1204,10 +1230,10 @@
 /area/shuttle/escape)
 "AD" = (
 /obj/machinery/door/airlock/shuttle,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisesw1
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "cruisesw1"
+	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
 "AF" = (
@@ -1222,6 +1248,25 @@
 	dir = 1
 	},
 /turf/open/floor/wood/parquet,
+/area/shuttle/escape)
+"Bb" = (
+/obj/machinery/light/directional/north,
+/obj/machinery/atmospherics/pipe/smart/simple/cyan/visible{
+	dir = 6
+	},
+/obj/structure/table/reinforced,
+/obj/item/wrench/medical{
+	pixel_x = -5
+	},
+/obj/item/reagent_containers/cup/beaker/cryoxadone{
+	pixel_x = 9;
+	pixel_y = 3
+	},
+/obj/item/reagent_containers/cup/beaker/cryoxadone{
+	pixel_x = 6;
+	pixel_y = 10
+	},
+/turf/open/floor/iron/white,
 /area/shuttle/escape)
 "Bd" = (
 /obj/machinery/vending/cigarette,
@@ -1249,7 +1294,7 @@
 /obj/structure/table/reinforced,
 /obj/machinery/door/poddoor/shutters/preopen{
 	dir = 1;
-	id = cruisekitchen
+	id = "cruisekitchen"
 	},
 /obj/machinery/door/window/brigdoor/left/directional/north{
 	req_access = list("kitchen")
@@ -1258,10 +1303,10 @@
 /area/shuttle/escape)
 "By" = (
 /obj/machinery/door/airlock/shuttle,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisene1
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "cruisene1"
+	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
 "Bz" = (
@@ -1275,7 +1320,7 @@
 "BF" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisese1
+	cycle_id = "cruisese1"
 	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
@@ -1325,6 +1370,10 @@
 	},
 /turf/template_noop,
 /area/shuttle/escape)
+"Cr" = (
+/obj/machinery/atmospherics/components/unary/thermomachine/freezer,
+/turf/open/floor/iron/dark/small,
+/area/shuttle/escape)
 "Cu" = (
 /obj/effect/turf_decal/bot_white,
 /turf/open/floor/iron/dark,
@@ -1338,6 +1387,17 @@
 "Dx" = (
 /obj/machinery/light/small/directional/south,
 /turf/open/floor/iron/dark,
+/area/shuttle/escape)
+"DA" = (
+/obj/structure/table/reinforced,
+/obj/effect/turf_decal/siding/wood,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/obj/effect/fun_balloon/sentience/emergency_shuttle{
+	group_name = "bar staff on the NTTS Independence"
+	},
+/turf/open/floor/wood/parquet,
 /area/shuttle/escape)
 "DF" = (
 /obj/machinery/door/airlock/shuttle{
@@ -1375,6 +1435,13 @@
 /obj/effect/turf_decal/trimline/blue/filled/line,
 /obj/structure/window/reinforced/spawner/directional/west,
 /obj/machinery/computer/operating,
+/turf/open/floor/iron/white,
+/area/shuttle/escape)
+"DV" = (
+/obj/effect/turf_decal/stripes/line,
+/obj/machinery/atmospherics/pipe/smart/manifold/cyan/visible{
+	dir = 8
+	},
 /turf/open/floor/iron/white,
 /area/shuttle/escape)
 "En" = (
@@ -1420,10 +1487,10 @@
 /area/shuttle/escape)
 "FA" = (
 /obj/machinery/door/airlock/shuttle,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisesw2
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "cruisesw2"
+	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
 "FD" = (
@@ -1458,7 +1525,7 @@
 "GD" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisene1
+	cycle_id = "cruisene1"
 	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
@@ -1475,7 +1542,7 @@
 /obj/machinery/door/poddoor/shutters/preopen{
 	name = "Captain's Quarters Privacy Shutters";
 	dir = 8;
-	id = cqpriv
+	id = "cqpriv"
 	},
 /obj/structure/window/reinforced/spawner/directional/west,
 /obj/machinery/recharger,
@@ -1490,6 +1557,18 @@
 	dir = 1
 	},
 /turf/open/floor/iron,
+/area/shuttle/escape)
+"HK" = (
+/obj/effect/turf_decal/stripes/line{
+	dir = 4
+	},
+/obj/effect/turf_decal/stripes/corner{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/smart/manifold/cyan/visible{
+	dir = 4
+	},
+/turf/open/floor/iron/white,
 /area/shuttle/escape)
 "HR" = (
 /obj/item/paper{
@@ -1524,6 +1603,16 @@
 	dir = 1
 	},
 /turf/open/floor/iron,
+/area/shuttle/escape)
+"Jc" = (
+/obj/machinery/atmospherics/pipe/smart/manifold/cyan/visible,
+/obj/effect/turf_decal/stripes/line{
+	dir = 8
+	},
+/obj/effect/turf_decal/stripes/line{
+	dir = 4
+	},
+/turf/open/floor/iron/white,
 /area/shuttle/escape)
 "Jj" = (
 /obj/structure/sign/directions/supply/directional/south,
@@ -1565,7 +1654,7 @@
 "JS" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisese1
+	cycle_id = "cruisese1"
 	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
@@ -1663,9 +1752,7 @@
 /obj/effect/turf_decal/siding/thinplating{
 	dir = 6
 	},
-/obj/structure/railing{
-	dir = 2
-	},
+/obj/structure/railing,
 /turf/open/floor/iron,
 /area/shuttle/escape)
 "LD" = (
@@ -1679,7 +1766,7 @@
 "LU" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisenw2
+	cycle_id = "cruisenw2"
 	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
@@ -1719,7 +1806,7 @@
 "MK" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisesw1
+	cycle_id = "cruisesw1"
 	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
@@ -1747,6 +1834,12 @@
 /obj/structure/chair/stool/bar/directional/east,
 /obj/structure/disposalpipe/segment,
 /turf/open/floor/carpet/red,
+/area/shuttle/escape)
+"NF" = (
+/obj/machinery/atmospherics/pipe/smart/simple/orange/hidden{
+	dir = 4
+	},
+/turf/closed/wall/mineral/titanium,
 /area/shuttle/escape)
 "Ok" = (
 /obj/effect/turf_decal/siding/wood{
@@ -1785,7 +1878,7 @@
 "OT" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisese2
+	cycle_id = "cruisese2"
 	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
@@ -1821,7 +1914,7 @@
 "PK" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisesw2
+	cycle_id = "cruisesw2"
 	},
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
@@ -1866,7 +1959,7 @@
 "Rz" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisene2
+	cycle_id = "cruisene2"
 	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
@@ -1876,7 +1969,7 @@
 	},
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisenw1
+	cycle_id = "cruisenw1"
 	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
@@ -1907,6 +2000,16 @@
 /obj/machinery/light/directional/south,
 /turf/open/floor/iron/white,
 /area/shuttle/escape)
+"Sm" = (
+/obj/effect/turf_decal/tile/blue/half/contrasted,
+/obj/effect/turf_decal/trimline/blue/filled/line{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/smart/simple/orange/hidden{
+	dir = 6
+	},
+/turf/open/floor/iron/white,
+/area/shuttle/escape)
 "SW" = (
 /obj/structure/lattice/catwalk,
 /turf/template_noop,
@@ -1916,6 +2019,14 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/dark,
 /area/shuttle/escape)
+"Tb" = (
+/obj/structure/lattice/catwalk,
+/obj/machinery/atmospherics/components/unary/passive_vent{
+	name = "carbon dioxide exhaust";
+	dir = 8
+	},
+/turf/template_noop,
+/area/shuttle/escape)
 "Td" = (
 /obj/machinery/power/shuttle_engine/heater,
 /obj/structure/window/reinforced/spawner/directional/north,
@@ -1924,7 +2035,7 @@
 "Tj" = (
 /obj/machinery/door/airlock/shuttle,
 /obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisenw1
+	cycle_id = "cruisenw1"
 	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
@@ -1961,10 +2072,10 @@
 /area/shuttle/escape)
 "Uj" = (
 /obj/machinery/door/airlock/shuttle,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = cruisene2
-	},
 /obj/effect/decal/cleanable/dirt,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "cruisene2"
+	},
 /turf/open/floor/noslip,
 /area/shuttle/escape)
 "Um" = (
@@ -2099,6 +2210,15 @@
 	dir = 9
 	},
 /turf/open/floor/iron,
+/area/shuttle/escape)
+"WK" = (
+/obj/machinery/door/airlock/medical/glass{
+	name = "Cryogenics"
+	},
+/obj/effect/mapping_helpers/airlock/access/any/medical/general,
+/obj/effect/mapping_helpers/airlock/unres,
+/obj/machinery/atmospherics/pipe/smart/simple/orange/hidden,
+/turf/open/floor/iron/white/textured,
 /area/shuttle/escape)
 "WX" = (
 /obj/machinery/status_display/ai,
@@ -2693,7 +2813,7 @@ GZ
 WX
 hB
 AF
-uu
+Mv
 Tz
 il
 YY
@@ -2740,7 +2860,7 @@ at
 AL
 AF
 AF
-Tz
+DA
 il
 IO
 Ew
@@ -2785,7 +2905,7 @@ La
 QP
 Xu
 AF
-Mv
+uu
 Tz
 il
 YY
@@ -2938,7 +3058,7 @@ kn
 Si
 jt
 jt
-mk
+jt
 jt
 jt
 Tp
@@ -2983,9 +3103,9 @@ du
 ab
 dw
 jt
-Bd
-ZE
-ec
+Bb
+DV
+qm
 jt
 Qa
 qt
@@ -3027,11 +3147,11 @@ jt
 DU
 Mg
 lu
-dw
-jt
+Sm
+WK
 dp
-ZE
-ZE
+mk
+Cr
 jt
 Jq
 Mz
@@ -3075,9 +3195,9 @@ Um
 gq
 gm
 jt
-rd
-ZE
-ZE
+ki
+HK
+Jc
 jt
 BF
 BF
@@ -3119,11 +3239,11 @@ jt
 jt
 jt
 jt
-jt
+NF
 jt
 vw
 jy
-XN
+vw
 jt
 Mt
 oe
@@ -3165,11 +3285,11 @@ jt
 kd
 kd
 kd
-kd
+Tb
 jt
-en
-en
-en
+jt
+jt
+jt
 jt
 ZD
 Vs
@@ -3197,7 +3317,7 @@ en
 en
 en
 jt
-dG
+mN
 dG
 jt
 jt
