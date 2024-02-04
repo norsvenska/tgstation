@@ -340,7 +340,7 @@
 
 	id = /obj/item/card/id/advanced/centcom
 	id_trim = /datum/id_trim/centcom/medical_officer
-	uniform = /obj/item/clothing/under/rank/centcom/officer
+	uniform = /obj/item/clothing/under/rank/centcom/medic
 	suit = /obj/item/clothing/suit/toggle/labcoat/cmo
 	back = /obj/item/storage/backpack/duffelbag/virology
 	belt = /obj/item/modular_computer/pda/heads/captain/centcom
