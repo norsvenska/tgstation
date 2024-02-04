@@ -7,12 +7,12 @@
 		list(
 			"fjord", "sak", "van", "dår", "á", "ø", "och", "nor", "dan", "på", "han",
 			"hej", "då", "finns", "sla", "mpa", "ja", "nej", "ste", "vad", "dra", "sil", "hög",
-			"ich", "und", "mit", "med", "sch", "hab", "müss", "wir", "rymd", "raum", "du", "dir"
+			"ich", "und", "mit", "med", "sch", "hab", "müss", "wir", "rymd", "raum", "du", "dir",
 			"jag", "i", "går", "sven", "od", "vi", "sk", "a", "ö", "å", "ä", "eth",
 			"na", "må", "dag", "sjä", "pp", "la", "nd", "er", "käyt", "far", "vä",
 			"så", "ån", "det", "att", "nå", "gö", "bra", "int", "tyc", "om", "när",
 			"vit", "sva", "sch", "ilj", "sjö", "kvi", "hete", "og", "hamn", "an", "rik", "je",
-		) //not done
+		), //not done
 		list(
 			"ad", "an", "ar", "är", "at", "ch", "de", "en", "er", "et", "fö", "ge",
 			"ha", "ig", "in", "ka", "la", "li", "ll", "me", "na", "nd", "ng", "oc",
@@ -21,7 +21,7 @@
 			"ett", "för", "gen", "han", "ill", "ing", "int", "jag", "kan", "lig",
 			"lla", "lle", "med", "men", "nde", "nge", "nin", "nne", "nte", "och",
 			"sam", "som", "sta", "ste", "ter", "til", "tta", "vad", "var", "ver"
-		) // from https://www.sttmedia.com/syllablefrequency-swedish
+		), // from https://www.sttmedia.com/syllablefrequency-swedish
 		list(
 			"an", "ar", "de", "ed", "eg", "el", "en", "er", "et", "fo", "ge", "ha",
 			"ig", "ik", "il", "in", "je", "ke", "kk", "le", "li", "me", "ne", "ng",
