@@ -18,10 +18,7 @@
 #define PAYCHECK_CENTCOM 5000
 //yeah it's high i'll change it later
 
-//How many credits a player is charged if they print something from a departmental lathe they shouldn't have access to.
-#define LATHE_TAX 10
-//How much POWER a borg's cell is taxed if they print something from a departmental lathe.
-#define SILICON_LATHE_TAX 2000
+
 
 #define STATION_TARGET_BUFFER 100000
 
