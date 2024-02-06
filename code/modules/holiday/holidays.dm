@@ -352,12 +352,16 @@
 
 // JUNE
 
-//Swedish National Day (6. June)
+// Swedish National Day (6. June)
 /datum/holiday/swedenday
 	name = "Sveriges Nationaldag"
 	timezones = list(TIMEZONE_CEST)
 	begin_month = JUNE
 	begin_day = 6
+	holiday_colors = list(
+		COLOR_SWEDEN_BLUE,
+		COLOR_SWEDEN_GOLD,
+	)
 
 /datum/holiday/swedenday/greet()
 	return "On this day, Swedes celebrate the election of King Gustav Vasa in 1523. This day was considered the foundation of modern Sweden."
