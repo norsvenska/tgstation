@@ -949,6 +949,16 @@
 /proc/cmp_timer_data(list/a, list/b)
 	return b["count"] - a["count"]
 
+/client/proc/take_picture(var/atom/A in world)
+	set name = "Save PNG"
+	set category = "Debug"
+	set desc = "Opens a dialog to save a PNG of any object in the game."
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	downloadImage(A)
+
 #ifdef TESTING
 /client/proc/check_missing_sprites()
 	set category = "Debug"

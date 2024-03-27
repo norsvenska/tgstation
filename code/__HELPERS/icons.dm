@@ -1247,3 +1247,9 @@ GLOBAL_LIST_EMPTY(transformation_animation_objects)
 	alert_overlay.transform = alert_overlay.transform.Scale(scale)
 
 	return alert_overlay
+
+/// Saving as PNG
+/proc/downloadImage(atom/A, dir)
+	var/icon/this_icon = getFlatIcon(A,defdir=dir)
+
+	usr << ftp(this_icon,"[A.name].png")

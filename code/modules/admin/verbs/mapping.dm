@@ -57,6 +57,7 @@ GLOBAL_LIST_INIT(admin_verbs_debug_mapping, list(
 	/client/proc/check_for_obstructed_atmospherics,
 	/client/proc/modify_lights,
 	/client/proc/visualize_lights,
+	/client/proc/take_picture,
 ))
 GLOBAL_PROTECT(admin_verbs_debug_mapping)
 
