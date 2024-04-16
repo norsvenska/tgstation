@@ -784,15 +784,8 @@ ADMIN_VERB(reestablish_tts_connection, R_DEBUG, "Re-establish Connection To TTS"
 /proc/cmp_timer_data(list/a, list/b)
 	return b["count"] - a["count"]
 
-/client/proc/take_picture(var/atom/A in world)
-	set name = "Save PNG"
-	set category = "Debug"
-	set desc = "Opens a dialog to save a PNG of any object in the game."
-
-	if(!check_rights(R_DEBUG))
-		return
-
-	downloadImage(A)
+ADMIN_VERB_ONLY_CONTEXT_MENU(take_picture, R_ADMIN, "Save PNG", var/atom/pic in world)
+	downloadImage(pic)
 
 #ifdef TESTING
 ADMIN_VERB_CUSTOM_EXIST_CHECK(check_missing_sprites)
