@@ -99,7 +99,7 @@ GLOBAL_LIST_INIT(sandbag_recipes, list ( \
 	sheettype = "diamond"
 	mats_per_unit = list(/datum/material/diamond=SHEET_MATERIAL_AMOUNT)
 	grind_results = list(/datum/reagent/carbon = 20)
-	point_value = 75
+	gulag_valid = TRUE
 	merge_type = /obj/item/stack/sheet/mineral/diamond
 	material_type = /datum/material/diamond
 	walltype = /turf/closed/wall/mineral/diamond
@@ -127,7 +127,7 @@ GLOBAL_LIST_INIT(diamond_recipes, list ( \
 	sheettype = "uranium"
 	mats_per_unit = list(/datum/material/uranium=SHEET_MATERIAL_AMOUNT)
 	grind_results = list(/datum/reagent/uranium = 20)
-	point_value = 60
+	gulag_valid = TRUE
 	merge_type = /obj/item/stack/sheet/mineral/uranium
 	material_type = /datum/material/uranium
 	walltype = /turf/closed/wall/mineral/uranium
@@ -163,7 +163,7 @@ GLOBAL_LIST_INIT(uranium_recipes, list ( \
 	max_integrity = 100
 	mats_per_unit = list(/datum/material/plasma=SHEET_MATERIAL_AMOUNT)
 	grind_results = list(/datum/reagent/toxin/plasma = 20)
-	point_value = 60
+	gulag_valid = TRUE
 	merge_type = /obj/item/stack/sheet/mineral/plasma
 	material_type = /datum/material/plasma
 	walltype = /turf/closed/wall/mineral/plasma
@@ -201,7 +201,7 @@ GLOBAL_LIST_INIT(plasma_recipes, list ( \
 	sheettype = "gold"
 	mats_per_unit = list(/datum/material/gold=SHEET_MATERIAL_AMOUNT)
 	grind_results = list(/datum/reagent/gold = 20)
-	point_value = 60
+	gulag_valid = TRUE
 	merge_type = /obj/item/stack/sheet/mineral/gold
 	material_type = /datum/material/gold
 	walltype = /turf/closed/wall/mineral/gold
@@ -231,7 +231,7 @@ GLOBAL_LIST_INIT(gold_recipes, list ( \
 	sheettype = "silver"
 	mats_per_unit = list(/datum/material/silver=SHEET_MATERIAL_AMOUNT)
 	grind_results = list(/datum/reagent/silver = 20)
-	point_value = 60
+	gulag_valid = TRUE
 	merge_type = /obj/item/stack/sheet/mineral/silver
 	material_type = /datum/material/silver
 	tableVariant = /obj/structure/table/optable
@@ -260,7 +260,7 @@ GLOBAL_LIST_INIT(silver_recipes, list ( \
 	sheettype = "bananium"
 	mats_per_unit = list(/datum/material/bananium=SHEET_MATERIAL_AMOUNT)
 	grind_results = list(/datum/reagent/consumable/banana = 20)
-	point_value = 150
+	gulag_valid = TRUE
 	merge_type = /obj/item/stack/sheet/mineral/bananium
 	material_type = /datum/material/bananium
 	walltype = /turf/closed/wall/mineral/bananium
@@ -294,7 +294,7 @@ GLOBAL_LIST_INIT(bananium_recipes, list ( \
 	throw_range = 3
 	sheettype = "titanium"
 	mats_per_unit = list(/datum/material/titanium=SHEET_MATERIAL_AMOUNT)
-	point_value = 60
+	gulag_valid = TRUE
 	merge_type = /obj/item/stack/sheet/mineral/titanium
 	material_type = /datum/material/titanium
 	walltype = /turf/closed/wall/mineral/titanium
@@ -326,7 +326,7 @@ GLOBAL_LIST_INIT(titanium_recipes, list ( \
 	throw_range = 3
 	sheettype = "plastitanium"
 	mats_per_unit = list(/datum/material/alloy/plastitanium=SHEET_MATERIAL_AMOUNT)
-	point_value = 135
+	gulag_valid = TRUE
 	material_type = /datum/material/alloy/plastitanium
 	merge_type = /obj/item/stack/sheet/mineral/plastitanium
 	material_flags = NONE
@@ -502,7 +502,7 @@ GLOBAL_LIST_INIT(metalhydrogen_recipes, list(
 	singular_name = "metal hydrogen sheet"
 	w_class = WEIGHT_CLASS_NORMAL
 	resistance_flags = FIRE_PROOF | LAVA_PROOF | ACID_PROOF | INDESTRUCTIBLE
-	point_value = 300
+	gulag_valid = TRUE
 	mats_per_unit = list(/datum/material/metalhydrogen = SHEET_MATERIAL_AMOUNT)
 	material_type = /datum/material/metalhydrogen
 	merge_type = /obj/item/stack/sheet/mineral/metal_hydrogen
@@ -517,7 +517,7 @@ GLOBAL_LIST_INIT(metalhydrogen_recipes, list(
 	inhand_icon_state = "sheet-zaukerite"
 	singular_name = "zaukerite crystal"
 	w_class = WEIGHT_CLASS_NORMAL
-	point_value = 360
+	gulag_valid = TRUE
 	mats_per_unit = list(/datum/material/zaukerite = SHEET_MATERIAL_AMOUNT)
 	merge_type = /obj/item/stack/sheet/mineral/zaukerite
 	material_type = /datum/material/zaukerite
