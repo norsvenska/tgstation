@@ -12,7 +12,6 @@
 	flags_cover = MASKCOVERSMOUTH
 	visor_flags_cover = MASKCOVERSMOUTH
 	resistance_flags = NONE
-	mask_adjusted = FALSE
 	armor_type = /datum/armor/rebreather_centcom
 
 /datum/armor/rebreather_centcom
@@ -35,12 +34,11 @@
 	user.remove_status_effect(/datum/status_effect/rebreathing)
 
 /obj/item/clothing/mask/centcom/attack_self(mob/user)
-	adjustmask(user)
+	adjust_visor(user)
 
-/obj/item/clothing/mask/centcom/AltClick(mob/user)
-	..()
-	if(user.can_perform_action(src, NEED_DEXTERITY))
-		adjustmask(user)
+/obj/item/clothing/mask/centcom/click_alt(mob/user)
+	adjust_visor(user)
+	return CLICK_ACTION_SUCCESS
 
 /obj/item/clothing/mask/centcom/examine(mob/user)
 	. = ..()

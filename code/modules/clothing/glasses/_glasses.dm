@@ -769,15 +769,16 @@
 			var/datum/atom_hud/our_hud = GLOB.huds[hud]
 			our_hud.hide_from(user)
 
-/obj/item/clothing/glasses/centcom/AltClick(mob/user)
-	. = ..()
+/obj/item/clothing/glasses/centcom/click_alt(mob/user)
 	if(ishuman(user))
-		if(xray)
-//			vision_flags &= ~SEE_MOBS|SEE_OBJS|SEE_TURFS
-			REMOVE_TRAIT(user, TRAIT_XRAY_VISION, GLASSES_TRAIT)
-		else
-//			vision_flags |= SEE_MOBS|SEE_OBJS|SEE_TURFS
-			ADD_TRAIT(user, TRAIT_XRAY_VISION, GLASSES_TRAIT)
-		xray = !xray
-		var/mob/living/carbon/human/human_user = user
-		human_user.update_sight()
+		return CLICK_ACTION_BLOCKING
+	if(xray)
+//		vision_flags &= ~SEE_MOBS|SEE_OBJS|SEE_TURFS
+		REMOVE_TRAIT(user, TRAIT_XRAY_VISION, GLASSES_TRAIT)
+	else
+//		vision_flags |= SEE_MOBS|SEE_OBJS|SEE_TURFS
+		ADD_TRAIT(user, TRAIT_XRAY_VISION, GLASSES_TRAIT)
+	xray = !xray
+	var/mob/living/carbon/human/human_user = user
+	human_user.update_sight()
+	return CLICK_ACTION_SUCCESS
