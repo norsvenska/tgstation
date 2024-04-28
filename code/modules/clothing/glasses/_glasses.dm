@@ -774,7 +774,7 @@
 			our_hud.hide_from(user)
 
 /obj/item/clothing/glasses/centcom/click_alt(mob/user)
-	if(ishuman(user))
+	if(!ishuman(user))
 		return CLICK_ACTION_BLOCKING
 	if(xray)
 //		vision_flags &= ~SEE_MOBS|SEE_OBJS|SEE_TURFS
