@@ -2199,7 +2199,7 @@
 	allowed_suit_storage = list(
 		/obj/item/gun
 	)
-	skins = list(
+	variants = list(
 		"admiral" = list(
 			HELMET_FLAGS = list(
 				UNSEALED_LAYER = NECK_LAYER,
