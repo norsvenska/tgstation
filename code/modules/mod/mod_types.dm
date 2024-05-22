@@ -632,6 +632,7 @@
 
 /obj/item/mod/control/pre_equipped/admiral
 	theme = /datum/mod_theme/admiral
+	starting_frequency = MODLINK_FREQ_CENTCOM
 	applied_core = /obj/item/mod/core/infinite
 	applied_modules = list(
 		/obj/item/mod/module/storage/bluespace/ultra,
@@ -640,7 +641,7 @@
 		/obj/item/mod/module/quick_carry/advanced,
 		/obj/item/mod/module/magboot/advanced,
 		/obj/item/mod/module/jetpack/advanced,
-		/obj/item/mod/module/anomaly_locked/kinesis/plus,
+		/obj/item/mod/module/anomaly_locked/kinesis/admin,
 		/obj/item/mod/module/flashlight,
 		/obj/item/mod/module/gps,
 		/obj/item/mod/module/eradication_lock,
@@ -650,12 +651,13 @@
 		/obj/item/mod/module/emp_shield/advanced,
 		/obj/item/mod/module/thermal_regulator,
 		/obj/item/mod/module/hat_stabilizer,
+		/obj/item/mod/module/rad_protection,
 	)
 	default_pins = list(
 		/obj/item/mod/module/stealth/ninja,
 		/obj/item/mod/module/magboot/advanced,
 		/obj/item/mod/module/jetpack/advanced,
-		/obj/item/mod/module/anomaly_locked/kinesis/plus,
+		/obj/item/mod/module/anomaly_locked/kinesis/admin,
 	)
 
 //these exist for the prefs menu
