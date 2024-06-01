@@ -21,6 +21,7 @@
 	paycheck = PAYCHECK_CENTCOM
 	paycheck_department = ACCOUNT_COM
 
+	bounty_types = CIV_JOB_RANDOM
 	display_order = JOB_DISPLAY_ORDER_ADMIRAL
 	department_for_prefs = /datum/job_department/centcom
 	departments_list = list(
@@ -76,6 +77,7 @@
 /datum/outfit/job/admiral/mod
 	name = "CentCom Admiral (MODsuit)"
 	uniform = /obj/item/clothing/under/misc/adminsuit
+	head = null
 	suit = null
 	suit_store = null
 	back = /obj/item/mod/control/pre_equipped/admiral
