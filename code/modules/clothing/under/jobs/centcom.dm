@@ -14,6 +14,7 @@
 	icon_state = "official"
 	inhand_icon_state = "dg_suit"
 
+/** //temporary removal in favor of departmental armbands
 /obj/item/clothing/under/rank/centcom/medic
 	name = "\improper CentCom medical suit"
 	desc = "A jumpsuit worn by CentCom's medical staff."
@@ -28,6 +29,7 @@
 	female_sprite_flags = FEMALE_UNIFORM_TOP_ONLY
 	body_parts_covered = CHEST|GROIN|ARMS
 	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON
+*/
 
 /obj/item/clothing/under/rank/centcom/intern
 	name = "\improper CentCom intern's jumpsuit"

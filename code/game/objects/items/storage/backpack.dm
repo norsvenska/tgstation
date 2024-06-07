@@ -69,12 +69,6 @@
 	fire = 60
 	acid = 50
 
-/obj/item/storage/backpack/holding/satchel
-	name = "leather satchel of holding"
-	desc = "It's a very fancy satchel made with fine leather. This one has a localized pocket of bluespace in it."
-	icon_state = "satchel-leather"
-	inhand_icon_state = "satchel"
-
 /obj/item/storage/backpack/holding/suicide_act(mob/living/user)
 	user.visible_message(span_suicide("[user] is jumping into [src]! It looks like [user.p_theyre()] trying to commit suicide."))
 	user.dropItemToGround(src, TRUE)
@@ -318,6 +312,14 @@
 
 /obj/item/storage/backpack/satchel/fireproof
 	resistance_flags = FIRE_PROOF
+
+/obj/item/storage/backpack/satchel/bluespace
+	name = "leather satchel of holding"
+	desc = "It's a very fancy satchel made with fine leather. This one has a localized pocket of bluespace in it."
+	icon_state = "satchel-leather"
+	inhand_icon_state = "satchel"
+	resistance_flags = FIRE_PROOF
+	storage_type = /datum/storage/bag_of_holding
 
 /obj/item/storage/backpack/satchel/eng
 	name = "industrial satchel"

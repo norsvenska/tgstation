@@ -336,13 +336,13 @@
 	internals_slot = ITEM_SLOT_SUITSTORE
 
 /datum/outfit/centcom/medical //wip
-	name = "CentCom Medic"
+	name = "CentCom Medical Officer"
 
 	id = /obj/item/card/id/advanced/centcom
 	id_trim = /datum/id_trim/centcom/medical_officer
-	uniform = /obj/item/clothing/under/rank/centcom/medic
-	suit = /obj/item/clothing/suit/toggle/labcoat/cmo
-	back = /obj/item/storage/backpack/duffelbag/virology
+	uniform = /obj/item/clothing/under/rank/centcom/officer
+	suit = /obj/item/clothing/suit/toggle/labcoat/centcom
+	back = /obj/item/storage/backpack/duffelbag/syndie/surgery
 	belt = /obj/item/modular_computer/pda/heads/captain/centcom
 	ears = /obj/item/radio/headset/headset_cent/commander //placeholder
 	glasses = /obj/item/clothing/glasses/centcom
@@ -355,7 +355,7 @@
 
 	var/obj/item/modular_computer/pda/heads/captain/centcom/pda = H.belt
 	pda.saved_identification = H.real_name
-	pda.saved_job = "CentCom Medic"
+	pda.saved_job = "CentCom Medical Officer"
 
 	var/obj/item/card/id/W = H.wear_id
 	W.registered_name = H.real_name

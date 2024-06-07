@@ -341,6 +341,7 @@ GLOBAL_LIST_INIT(channel_tokens, list(
 
 /obj/item/radio/headset/headset_cent/alt/commander
 	keyslot2 = /obj/item/encryptionkey/heads/captain
+	command = TRUE
 
 /obj/item/radio/headset/headset_cent/alt/Initialize(mapload)
 	. = ..()

@@ -138,3 +138,12 @@
 	greyscale_config = /datum/greyscale_config/labcoat
 	greyscale_config_worn = /datum/greyscale_config/labcoat/worn
 	greyscale_colors = "#EEEEEE#88242D#88242D#39393F"
+
+
+/obj/item/clothing/suit/toggle/labcoat/centcom
+	name = "\improper CentCom labcoat"
+	desc = "More like an eccentric coat than a labcoat. Comes with golden shoulder pads."
+	icon_state = "labcoat_job"
+	greyscale_config = /datum/greyscale_config/labcoat
+	greyscale_config_worn = /datum/greyscale_config/labcoat/worn
+	greyscale_colors = "#EEEEEE#ffea80#ffea80#46b946"

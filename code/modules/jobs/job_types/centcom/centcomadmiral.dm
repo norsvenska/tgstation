@@ -52,7 +52,7 @@
  	uniform = /obj/item/clothing/under/rank/centcom/commander
  	suit = /obj/item/clothing/suit/space/officer
  	suit_store = /obj/item/gun/energy/pulse/pistol/m1911
- 	back = /obj/item/storage/backpack/holding/satchel
+ 	back = /obj/item/storage/backpack/satchel/bluespace
  	backpack_contents = list(
 		/obj/item/storage/wallet/luxury = 1,
 		/obj/item/flashlight/seclite = 1,
