@@ -33,9 +33,9 @@
 	family_heirlooms = list(/obj/item/clothing/accessory/medal/gold/captain)
 
 	mail_goodies = list(
-		/obj/item/clothing/head/hats/centcom_cap = 15,
-		/obj/item/clothing/head/beret/centcom_formal = 10,
-		/obj/item/clothing/suit/armor/centcom_formal = 10,
+		/obj/item/clothing/head/hats/centcom_cap = 3,
+		/obj/item/clothing/head/beret/centcom_formal = 2,
+		/obj/item/clothing/suit/armor/centcom_formal = 2,
 		/obj/item/mod/control/pre_equipped/admiral = 1,
 	)
 
@@ -52,7 +52,7 @@
  	uniform = /obj/item/clothing/under/rank/centcom/commander
  	suit = /obj/item/clothing/suit/space/officer
  	suit_store = /obj/item/gun/energy/pulse/pistol/m1911
- 	back = /obj/item/storage/backpack/satchel/bluespace
+ 	back = /obj/item/storage/backpack/satchel/leather/bluespace
  	backpack_contents = list(
 		/obj/item/storage/wallet/luxury = 1,
 		/obj/item/flashlight/seclite = 1,

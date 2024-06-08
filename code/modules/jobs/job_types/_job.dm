@@ -334,6 +334,8 @@
 	if(ispath(back, /obj/item/storage/backpack))
 		if(ispath(back, /obj/item/storage/backpack/holding))
 			return
+		if(ispath(back, /obj/item/storage/backpack/satchel/leather/bluespace))
+			return
 		switch(H.backpack)
 			if(GBACKPACK)
 				back = /obj/item/storage/backpack //Grey backpack

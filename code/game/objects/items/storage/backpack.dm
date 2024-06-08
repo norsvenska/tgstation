@@ -310,16 +310,16 @@
 /obj/item/storage/backpack/satchel/leather/withwallet/PopulateContents()
 	new /obj/item/storage/wallet/random(src)
 
-/obj/item/storage/backpack/satchel/fireproof
-	resistance_flags = FIRE_PROOF
-
-/obj/item/storage/backpack/satchel/bluespace
+/obj/item/storage/backpack/satchel/leather/bluespace
 	name = "leather satchel of holding"
 	desc = "It's a very fancy satchel made with fine leather. This one has a localized pocket of bluespace in it."
 	icon_state = "satchel-leather"
 	inhand_icon_state = "satchel"
 	resistance_flags = FIRE_PROOF
-	storage_type = /datum/storage/bag_of_holding
+	storage_type = /datum/storage/backpack/bluespace
+
+/obj/item/storage/backpack/satchel/fireproof
+	resistance_flags = FIRE_PROOF
 
 /obj/item/storage/backpack/satchel/eng
 	name = "industrial satchel"
