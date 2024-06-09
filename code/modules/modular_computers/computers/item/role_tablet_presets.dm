@@ -24,6 +24,7 @@
 	greyscale_config = /datum/greyscale_config/tablet/captain
 	greyscale_colors = "#46B946#FF0000#FFEA80#2D2D33"
 	inserted_item = /obj/item/pen/fountain/centcom
+	long_ranged = TRUE
 
 /obj/item/modular_computer/pda/heads/captain/Initialize(mapload)
 	. = ..()
