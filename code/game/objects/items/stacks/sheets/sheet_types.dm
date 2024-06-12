@@ -933,36 +933,36 @@ new /datum/stack_recipe("paper frame door", /obj/structure/mineral_door/paperfra
 
 /obj/item/stack/sheet/debug
 	name = "omnisheet"
-	desc = "The all in one material sheet. Load it into the ore silo to reap the rewards."
+	desc = "The all in one material sheet. Contains one million sheets of every ore."
 	icon_state = "sheet-metal"
 	mats_per_unit = list(
-		/datum/material/iron=10000000,
-		/datum/material/plastic=10000000,
-		/datum/material/bluespace=10000000,
-		/datum/material/glass=10000000,
-		/datum/material/diamond=10000000,
-		/datum/material/gold=10000000,
-		/datum/material/plasma=10000000,
-		/datum/material/silver=10000000,
-		/datum/material/titanium=10000000,
-		/datum/material/uranium=10000000,
-		/datum/material/bananium=10000000
+		/datum/material/iron=1000000,
+		/datum/material/plastic=1000000,
+		/datum/material/bluespace=1000000,
+		/datum/material/glass=1000000,
+		/datum/material/diamond=1000000,
+		/datum/material/gold=1000000,
+		/datum/material/plasma=1000000,
+		/datum/material/silver=1000000,
+		/datum/material/titanium=1000000,
+		/datum/material/uranium=1000000,
+		/datum/material/bananium=1000000
 )
 
-/obj/item/stack/sheet/debug/autolathe
+/obj/item/stack/sheet/debug/small
 	name = "lesser omnisheet"
-	desc = "The all in one material sheet. This one is small enough to fit into an autolathe."
+	desc = "The all in one material sheet. This one appears to be on a diet."
 	icon_state = "sheet-metal"
 	mats_per_unit = list(
-		/datum/material/iron=1250,
-		/datum/material/plastic=1250,
-		/datum/material/bluespace=625,
-		/datum/material/glass=1250,
-		/datum/material/diamond=1250,
-		/datum/material/gold=1250,
-		/datum/material/plasma=625,
-		/datum/material/silver=1250,
-		/datum/material/titanium=1250,
-		/datum/material/uranium=625,
-		/datum/material/bananium=625
+		/datum/material/iron=1,
+		/datum/material/plastic=1,
+		/datum/material/bluespace=1,
+		/datum/material/glass=1,
+		/datum/material/diamond=1,
+		/datum/material/gold=1,
+		/datum/material/plasma=1,
+		/datum/material/silver=1,
+		/datum/material/titanium=1,
+		/datum/material/uranium=1,
+		/datum/material/bananium=1
 )
