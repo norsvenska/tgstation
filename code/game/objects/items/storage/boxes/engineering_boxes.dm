@@ -114,6 +114,7 @@
 		/obj/item/organ/internal/liver/cybernetic/tier3=1,
 		/obj/item/organ/internal/lungs/cybernetic/tier3=1,
 		/obj/item/organ/internal/stomach/cybernetic/tier3=1,
+		/obj/item/organ/internal/eyes/robotic/shield=1,
 		)
 	generate_items_inside(items_inside,src)
 
