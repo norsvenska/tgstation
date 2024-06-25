@@ -32,7 +32,7 @@
 	worn_icon = 'icons/mob/clothing/suits/jacket.dmi'
 	inhand_icon_state = "centcom"
 	blood_overlay_type = "coat"
-	cell = /obj/item/stock_parts/cell/infinite
+	cell = /obj/item/stock_parts/power_store/cell/infinite
 	slowdown = 0
 	flags_inv = 0
 	w_class = WEIGHT_CLASS_NORMAL
