@@ -1002,23 +1002,6 @@
 	},
 /turf/open/floor/iron,
 /area/mine/lounge)
-"gq" = (
-/obj/structure/cable,
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/rack,
-/obj/item/stock_parts/cell/high{
-	pixel_x = 6;
-	pixel_y = 7
-	},
-/obj/item/stock_parts/cell/high{
-	pixel_x = -3;
-	pixel_y = 5
-	},
-/obj/item/stock_parts/cell/high{
-	pixel_x = 3
-	},
-/turf/open/floor/plating,
-/area/mine/maintenance/service)
 "gs" = (
 /obj/structure/table,
 /obj/item/storage/crayons,
@@ -2843,6 +2826,20 @@
 /obj/structure/stone_tile/center/cracked,
 /turf/open/misc/asteroid/basalt/lava_land_surface,
 /area/lavaland/surface/outdoors)
+"pe" = (
+/obj/structure/table,
+/obj/machinery/cell_charger{
+	pixel_y = 3
+	},
+/obj/item/stock_parts/power_store/cell/high,
+/obj/item/stock_parts/power_store/cell/high{
+	pixel_y = 3
+	},
+/obj/effect/turf_decal/trimline/purple/filled/line{
+	dir = 10
+	},
+/turf/open/floor/iron/dark,
+/area/mine/mechbay)
 "pg" = (
 /obj/effect/spawner/random/trash/hobo_squat,
 /turf/open/floor/plating,
@@ -3726,6 +3723,16 @@
 	},
 /turf/open/floor/iron/dark/smooth_edge,
 /area/mine/laborcamp/security)
+"va" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stock_parts/power_store/cell/crap{
+	desc = "A legendary infinite-capacity power cell. This one looks like a poor quality AA battery with a coat of flaking gold paint.";
+	icon_state = "icell";
+	name = "infinite-capacity power cell"
+	},
+/obj/structure/rack,
+/turf/open/floor/plating,
+/area/mine/maintenance/service)
 "vb" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/effect/turf_decal/trimline/blue/filled/line,
@@ -4388,16 +4395,6 @@
 /obj/effect/mapping_helpers/airlock/access/any/engineering/maintenance,
 /turf/open/floor/plating,
 /area/mine/maintenance/public/south)
-"zd" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/item/stock_parts/cell/crap{
-	desc = "A legendary infinite-capacity power cell. This one looks like a poor quality AA battery with a coat of flaking gold paint.";
-	icon_state = "icell";
-	name = "infinite-capacity power cell"
-	},
-/obj/structure/rack,
-/turf/open/floor/plating,
-/area/mine/maintenance/service)
 "ze" = (
 /obj/effect/spawner/random/lavaland_mob/raptor,
 /turf/open/misc/asteroid/basalt/lava_land_surface,
@@ -5487,6 +5484,16 @@
 	dir = 1
 	},
 /area/mine/lounge)
+"Hz" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/toilet{
+	dir = 4
+	},
+/obj/effect/mob_spawn/corpse/human/skeleton,
+/obj/item/clothing/under/rank/cargo/miner/lavaland,
+/obj/item/storage/backpack/duffelbag/explorer,
+/turf/open/floor/plating,
+/area/mine/living_quarters)
 "HA" = (
 /obj/machinery/airalarm/directional/south,
 /obj/machinery/camera/autoname/directional/west{
@@ -6713,20 +6720,6 @@
 	},
 /turf/open/floor/iron/checker,
 /area/mine/cafeteria)
-"Ok" = (
-/obj/structure/table,
-/obj/machinery/cell_charger{
-	pixel_y = 3
-	},
-/obj/item/stock_parts/cell/high,
-/obj/item/stock_parts/cell/high{
-	pixel_y = 3
-	},
-/obj/effect/turf_decal/trimline/purple/filled/line{
-	dir = 10
-	},
-/turf/open/floor/iron/dark,
-/area/mine/mechbay)
 "Om" = (
 /obj/item/kirbyplants/random,
 /obj/effect/turf_decal/trimline/blue/filled/line{
@@ -7888,16 +7881,6 @@
 	dir = 8
 	},
 /area/mine/production)
-"Vu" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/toilet{
-	dir = 4
-	},
-/obj/effect/mob_spawn/corpse/human/skeleton,
-/obj/item/clothing/under/rank/cargo/miner/lavaland,
-/obj/item/storage/backpack/duffelbag/explorer,
-/turf/open/floor/plating,
-/area/mine/living_quarters)
 "Vw" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
@@ -8246,6 +8229,23 @@
 	dir = 1
 	},
 /area/mine/lounge)
+"XF" = (
+/obj/structure/cable,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/rack,
+/obj/item/stock_parts/power_store/cell/high{
+	pixel_x = 6;
+	pixel_y = 7
+	},
+/obj/item/stock_parts/power_store/cell/high{
+	pixel_x = -3;
+	pixel_y = 5
+	},
+/obj/item/stock_parts/power_store/cell/high{
+	pixel_x = 3
+	},
+/turf/open/floor/plating,
+/area/mine/maintenance/service)
 "XH" = (
 /obj/structure/disposalpipe/segment{
 	dir = 10
@@ -37852,7 +37852,7 @@ ON
 sO
 Rw
 ON
-zd
+va
 ON
 aj
 aj
@@ -38617,7 +38617,7 @@ AA
 gB
 ON
 ps
-gq
+XF
 ER
 vc
 YR
@@ -42239,7 +42239,7 @@ iu
 yH
 KW
 iu
-Vu
+Hz
 iu
 pU
 pU
@@ -45575,7 +45575,7 @@ QX
 sX
 ht
 oJ
-Ok
+pe
 QX
 Vh
 xF
