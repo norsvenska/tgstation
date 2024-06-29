@@ -39,6 +39,10 @@
 	fire = 90
 	acid = 50
 
+/obj/item/clothing/shoes/combat/swat/alt //ditto, but without any slippage nor laces
+	clothing_traits = list(TRAIT_NO_SLIP_ALL)
+	can_be_tied = FALSE
+
 /obj/item/clothing/shoes/jackboots
 	name = "jackboots"
 	desc = "Nanotrasen-issue Security combat boots for combat scenarios or combat situations. All combat, all the time."

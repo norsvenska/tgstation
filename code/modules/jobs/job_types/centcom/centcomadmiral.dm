@@ -54,22 +54,18 @@
  	suit_store = /obj/item/gun/energy/pulse/pistol/m1911
  	back = /obj/item/storage/backpack/satchel/leather/bluespace
  	backpack_contents = list(
-		/obj/item/storage/wallet/luxury = 1,
-		/obj/item/flashlight/seclite = 1,
-		/obj/item/language_manual/norse_manual = 1,
 		/obj/item/mod/control/pre_equipped/admiral = 1,
 		/obj/item/storage/box/abductortools = 1,
 		/obj/item/storage/box/debugtools = 1,
-		/obj/item/book/granter/martial/cqc = 1,
+		/obj/item/storage/box/autosurgeon = 1,
 		/obj/item/clothing/mask/centcom = 1,
-		/obj/item/melee/baton/telescopic/centcom = 1,
 )
  	belt = /obj/item/modular_computer/pda/heads/captain/centcom
  	ears = /obj/item/radio/headset/headset_cent/alt/commander
  	glasses = /obj/item/clothing/glasses/centcom
  	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
- 	head = /obj/item/clothing/head/hats/centcom_cap
- 	shoes = /obj/item/clothing/shoes/combat/swat
+ 	head = /obj/item/clothing/head/helmet/space/beret
+ 	shoes = /obj/item/clothing/shoes/combat/swat/alt
  	r_pocket = /obj/item/knife/combat/centcom
  	accessory = /obj/item/clothing/accessory/medal/gold/swedish
  	implants = list(/obj/item/implant/mindshield)
