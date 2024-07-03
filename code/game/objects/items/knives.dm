@@ -167,7 +167,6 @@
 	embedding = list("pain_mult" = 5, "embed_chance" = 85, "fall_chance" = 10, "ignore_throwspeed_threshold" = TRUE)
 	force = 25
 	throwforce = 25
-	bayonet = TRUE
 
 /obj/item/knife/combat/centcom/set_butchering() //it's an all round good knife
 	AddComponent(/datum/component/butchering, \
