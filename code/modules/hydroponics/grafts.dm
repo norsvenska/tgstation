@@ -54,3 +54,12 @@
 /obj/item/graft/Destroy()
 	QDEL_NULL(stored_trait)
 	return ..()
+
+/obj/item/graft/debug
+	parent_name = "Adminiae Flower"
+	lifespan = 150
+	endurance = 150
+	production = 100
+	weed_rate = 1
+	weed_chance = 0
+	yield = 10

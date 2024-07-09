@@ -970,17 +970,17 @@ new /datum/stack_recipe("paper frame door", /obj/structure/mineral_door/paperfra
 	desc = "The all in one material sheet. Contains one million sheets of every ore."
 	icon_state = "sheet-metal"
 	mats_per_unit = list(
-		/datum/material/iron=1000000,
-		/datum/material/plastic=1000000,
-		/datum/material/bluespace=1000000,
-		/datum/material/glass=1000000,
-		/datum/material/diamond=1000000,
-		/datum/material/gold=1000000,
-		/datum/material/plasma=1000000,
-		/datum/material/silver=1000000,
-		/datum/material/titanium=1000000,
-		/datum/material/uranium=1000000,
-		/datum/material/bananium=1000000
+		/datum/material/iron=100000000,
+		/datum/material/plastic=100000000,
+		/datum/material/bluespace=100000000,
+		/datum/material/glass=100000000,
+		/datum/material/diamond=100000000,
+		/datum/material/gold=100000000,
+		/datum/material/plasma=100000000,
+		/datum/material/silver=100000000,
+		/datum/material/titanium=100000000,
+		/datum/material/uranium=100000000,
+		/datum/material/bananium=100000000
 )
 
 /obj/item/stack/sheet/debug/small
@@ -988,15 +988,15 @@ new /datum/stack_recipe("paper frame door", /obj/structure/mineral_door/paperfra
 	desc = "The all in one material sheet. This one appears to be on a diet."
 	icon_state = "sheet-metal"
 	mats_per_unit = list(
-		/datum/material/iron=1,
-		/datum/material/plastic=1,
-		/datum/material/bluespace=1,
-		/datum/material/glass=1,
-		/datum/material/diamond=1,
-		/datum/material/gold=1,
-		/datum/material/plasma=1,
-		/datum/material/silver=1,
-		/datum/material/titanium=1,
-		/datum/material/uranium=1,
-		/datum/material/bananium=1
+		/datum/material/iron=100,
+		/datum/material/plastic=100,
+		/datum/material/bluespace=100,
+		/datum/material/glass=100,
+		/datum/material/diamond=100,
+		/datum/material/gold=100,
+		/datum/material/plasma=100,
+		/datum/material/silver=100,
+		/datum/material/titanium=100,
+		/datum/material/uranium=100,
+		/datum/material/bananium=100
 )
