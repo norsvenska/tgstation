@@ -137,7 +137,7 @@
 	if(atom_storage)
 		var/found_anything = FALSE
 		for(var/obj/item/T in attacking_item.contents)
-			if(istype(T, /obj/item/book) || istype(T, /obj/item/spellbook))
+			if(istype(T, /obj/item/book) || istype(T, /obj/item/spellbook) || istype(T, /obj/item/language_manual))
 				atom_storage.attempt_remove(T, src)
 				found_anything = TRUE
 
