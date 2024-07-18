@@ -76,7 +76,7 @@
 /obj/item/clothing/gloves/tackler/combat/insulated
 	name = "guerrilla gloves"
 	desc = "Superior quality combative gloves, good for performing tackle takedowns as well as absorbing electrical shocks."
-	icon_state = "guerrilla"
+	icon_state = "black" //norsvenska edit: i like the old sprites better ("guerrilla" -> "black")
 	siemens_coefficient = 0
 	clothing_traits = list(TRAIT_PLANT_SAFE)
 //	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 50, FIRE = 0, ACID = 0)
