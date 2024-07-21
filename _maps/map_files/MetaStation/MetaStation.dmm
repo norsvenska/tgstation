@@ -2630,17 +2630,6 @@
 "aXa" = (
 /turf/closed/wall,
 /area/station/security/prison/mess)
-"aXw" = (
-/obj/effect/turf_decal/tile/brown/half/contrasted,
-/obj/effect/turf_decal/bot,
-/obj/structure/disposalpipe/trunk{
-	dir = 1
-	},
-/obj/machinery/disposal/bin{
-	name = "Jim Norton's Quebecois Coffee disposal unit"
-	},
-/turf/open/floor/iron,
-/area/station/cargo/miningoffice)
 "aXE" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Service Maintenance"
@@ -5921,16 +5910,6 @@
 	},
 /turf/open/floor/iron,
 /area/station/security/prison)
-"ceA" = (
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
-/obj/effect/spawner/random/structure/crate,
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/turf/open/floor/plating,
-/area/station/maintenance/port/fore)
 "ceD" = (
 /obj/structure/table,
 /turf/open/floor/plating,
@@ -7140,6 +7119,16 @@
 /obj/effect/mapping_helpers/broken_floor,
 /turf/open/floor/plating,
 /area/station/maintenance/port/aft)
+"cAf" = (
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/spawner/random/structure/crate,
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/open/floor/plating,
+/area/station/maintenance/port/fore)
 "cAm" = (
 /obj/machinery/meter,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/green/visible,
@@ -9501,6 +9490,12 @@
 	},
 /turf/open/floor/iron,
 /area/station/security/checkpoint/customs)
+"dve" = (
+/obj/structure/cable,
+/obj/effect/spawner/random/maintenance,
+/obj/machinery/recharge_station,
+/turf/open/floor/plating,
+/area/station/maintenance/port/fore)
 "dvn" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2{
 	dir = 4
@@ -9630,6 +9625,16 @@
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/open/floor/plating,
 /area/station/maintenance/starboard/greater)
+"dxo" = (
+/obj/structure/railing{
+	dir = 6
+	},
+/obj/effect/decal/cleanable/dirt/dust,
+/obj/effect/turf_decal/stripes/corner{
+	dir = 4
+	},
+/turf/open/floor/iron,
+/area/station/cargo/miningoffice)
 "dxq" = (
 /obj/structure/chair{
 	dir = 8
@@ -12178,6 +12183,10 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/command/bridge)
+"eoK" = (
+/obj/effect/landmark/start/centcomcommander,
+/turf/open/floor/iron/dark,
+/area/station/command/bridge)
 "eoU" = (
 /obj/structure/grille,
 /turf/closed/wall/r_wall,
@@ -12554,10 +12563,6 @@
 	},
 /turf/open/floor/iron,
 /area/station/commons/dorms)
-"evi" = (
-/obj/effect/landmark/start/centcomcommander,
-/turf/open/floor/iron/dark,
-/area/station/command/bridge)
 "evD" = (
 /obj/effect/turf_decal/stripes/line{
 	dir = 4
@@ -14513,6 +14518,19 @@
 	},
 /turf/open/floor/iron,
 /area/station/hallway/primary/central)
+"fhn" = (
+/obj/effect/decal/cleanable/cobweb,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/oil/slippery,
+/obj/effect/decal/cleanable/blood/gibs/down,
+/mob/living/simple_animal/bot/mulebot{
+	name = "Leaping Rabbit"
+	},
+/obj/structure/disposalpipe/segment,
+/obj/structure/disposalpipe/segment,
+/turf/open/floor/plating,
+/area/station/maintenance/port/fore)
 "fhp" = (
 /obj/effect/turf_decal/stripes/line{
 	dir = 1
@@ -15239,31 +15257,6 @@
 /obj/machinery/light/small/directional/west,
 /turf/open/floor/iron,
 /area/station/engineering/atmos)
-"frH" = (
-/obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/security/glass{
-	id_tag = "outerbrig";
-	name = "Brig"
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
-/obj/machinery/flasher/directional/east{
-	id = "secentranceflasher"
-	},
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = "brig-entrance"
-	},
-/obj/effect/mapping_helpers/airlock/access/all/security/entrance,
-/turf/open/floor/iron,
-/area/station/security/brig)
-"frO" = (
-/obj/structure/cable,
-/obj/effect/spawner/random/maintenance,
-/obj/machinery/recharge_station,
-/turf/open/floor/plating,
-/area/station/maintenance/port/fore)
 "frZ" = (
 /obj/effect/turf_decal/delivery,
 /obj/machinery/atmospherics/components/binary/pump{
@@ -16158,20 +16151,6 @@
 /obj/machinery/power/tracker,
 /turf/open/floor/plating/airless,
 /area/station/solars/starboard/fore)
-"fLS" = (
-/obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/security/glass{
-	id_tag = "outerbrig";
-	name = "Brig"
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/structure/cable,
-/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
-	cycle_id = "brig-entrance"
-	},
-/obj/effect/mapping_helpers/airlock/access/all/security/entrance,
-/turf/open/floor/iron,
-/area/station/security/brig)
 "fMf" = (
 /obj/structure/chair/office{
 	dir = 1
@@ -16259,16 +16238,6 @@
 /obj/structure/sign/poster/contraband/random/directional/east,
 /turf/open/floor/wood,
 /area/station/maintenance/port/aft)
-"fNM" = (
-/obj/machinery/requests_console/directional/south{
-	department = "Mining";
-	name = "Mining Requests Console"
-	},
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/turf/open/floor/iron,
-/area/station/cargo/miningoffice)
 "fNR" = (
 /obj/structure/chair,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
@@ -18801,12 +18770,6 @@
 	},
 /turf/open/floor/iron/kitchen_coldroom/freezerfloor,
 /area/station/service/kitchen/coldroom)
-"gLa" = (
-/obj/structure/cable,
-/obj/effect/spawner/random/engineering/tracking_beacon,
-/obj/effect/landmark/start/admiral,
-/turf/open/floor/iron/dark,
-/area/station/command/bridge)
 "gLb" = (
 /obj/structure/cable,
 /turf/open/floor/iron/dark/corner,
@@ -26411,19 +26374,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/station/science/genetics)
-"jre" = (
-/obj/structure/railing{
-	dir = 4
-	},
-/obj/effect/turf_decal/stripes/line{
-	dir = 4
-	},
-/obj/machinery/conveyor_switch/oneway{
-	id = "mining";
-	dir = 1
-	},
-/turf/open/floor/iron,
-/area/station/cargo/miningoffice)
 "jrk" = (
 /obj/machinery/door/poddoor/shutters/preopen{
 	id = "hopqueue";
@@ -27078,6 +27028,17 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/turf/open/floor/iron,
+/area/station/cargo/miningoffice)
+"jBp" = (
+/obj/effect/turf_decal/tile/brown/half/contrasted,
+/obj/effect/turf_decal/bot,
+/obj/structure/disposalpipe/trunk{
+	dir = 1
+	},
+/obj/machinery/disposal/bin{
+	name = "Jim Norton's Quebecois Coffee disposal unit"
+	},
 /turf/open/floor/iron,
 /area/station/cargo/miningoffice)
 "jBu" = (
@@ -29487,14 +29448,6 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /turf/open/floor/iron/white,
 /area/station/security/prison)
-"krh" = (
-/obj/effect/spawner/random/structure/grille,
-/obj/structure/cable,
-/obj/structure/disposalpipe/segment{
-	dir = 6
-	},
-/turf/open/floor/plating,
-/area/station/maintenance/port/fore)
 "krt" = (
 /obj/effect/turf_decal/stripes/line{
 	dir = 1
@@ -36112,6 +36065,12 @@
 	},
 /turf/open/floor/plating,
 /area/station/maintenance/aft/greater)
+"mPJ" = (
+/obj/structure/cable,
+/obj/effect/spawner/random/engineering/tracking_beacon,
+/obj/effect/landmark/start/admiral,
+/turf/open/floor/iron/dark,
+/area/station/command/bridge)
 "mPK" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
@@ -38299,6 +38258,26 @@
 /obj/effect/landmark/event_spawn,
 /turf/open/floor/iron,
 /area/station/engineering/atmos)
+"nAs" = (
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/security/glass{
+	id_tag = "outerbrig";
+	name = "Brig"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/flasher/directional/east{
+	id = "secentranceflasher"
+	},
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "brig-entrance"
+	},
+/obj/effect/mapping_helpers/airlock/access/all/security/entrance,
+/obj/machinery/scanner_gate/preset_guns,
+/turf/open/floor/iron,
+/area/station/security/brig)
 "nAC" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
@@ -40301,6 +40280,14 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/station/ai_monitored/turret_protected/aisat/foyer)
+"omV" = (
+/obj/effect/spawner/random/structure/grille,
+/obj/structure/cable,
+/obj/structure/disposalpipe/segment{
+	dir = 6
+	},
+/turf/open/floor/plating,
+/area/station/maintenance/port/fore)
 "onf" = (
 /obj/structure/cable,
 /obj/machinery/power/apc/auto_name/directional/south,
@@ -43939,20 +43926,6 @@
 /obj/machinery/light/directional/north,
 /turf/open/floor/iron/dark,
 /area/station/command/bridge)
-"pDb" = (
-/obj/effect/turf_decal/tile/brown/half/contrasted,
-/obj/structure/table,
-/obj/item/storage/box/bandages{
-	pixel_y = 6;
-	pixel_x = 4
-	},
-/obj/effect/spawner/random/entertainment/cigarette_pack{
-	pixel_x = -6;
-	pixel_y = 8
-	},
-/obj/effect/spawner/random/entertainment/deck,
-/turf/open/floor/iron,
-/area/station/cargo/miningoffice)
 "pDe" = (
 /obj/machinery/computer/telecomms/server{
 	dir = 8;
@@ -44996,6 +44969,20 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/station/security/brig)
+"pVV" = (
+/obj/effect/turf_decal/tile/brown/half/contrasted,
+/obj/structure/table,
+/obj/item/storage/box/bandages{
+	pixel_y = 6;
+	pixel_x = 4
+	},
+/obj/effect/spawner/random/entertainment/cigarette_pack{
+	pixel_x = -6;
+	pixel_y = 8
+	},
+/obj/effect/spawner/random/entertainment/deck,
+/turf/open/floor/iron,
+/area/station/cargo/miningoffice)
 "pVZ" = (
 /obj/effect/turf_decal/stripes/corner{
 	dir = 4
@@ -46935,6 +46922,19 @@
 /obj/structure/sign/warning/docking,
 /turf/closed/wall,
 /area/station/hallway/secondary/entry)
+"qHt" = (
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/effect/turf_decal/stripes/line{
+	dir = 4
+	},
+/obj/machinery/conveyor_switch/oneway{
+	id = "mining";
+	dir = 1
+	},
+/turf/open/floor/iron,
+/area/station/cargo/miningoffice)
 "qHK" = (
 /obj/effect/spawner/random/structure/grille,
 /turf/open/floor/plating,
@@ -47454,6 +47454,16 @@
 	},
 /turf/open/floor/iron,
 /area/station/engineering/atmos)
+"qOZ" = (
+/obj/machinery/requests_console/directional/south{
+	department = "Mining";
+	name = "Mining Requests Console"
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/turf/open/floor/iron,
+/area/station/cargo/miningoffice)
 "qPs" = (
 /obj/structure/lattice/catwalk,
 /obj/structure/marker_beacon/indigo,
@@ -49704,19 +49714,6 @@
 	},
 /turf/open/floor/iron,
 /area/station/science/explab)
-"rCT" = (
-/obj/effect/decal/cleanable/cobweb,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/oil/slippery,
-/obj/effect/decal/cleanable/blood/gibs/down,
-/mob/living/simple_animal/bot/mulebot{
-	name = "Leaping Rabbit"
-	},
-/obj/structure/disposalpipe/segment,
-/obj/structure/disposalpipe/segment,
-/turf/open/floor/plating,
-/area/station/maintenance/port/fore)
 "rCW" = (
 /obj/machinery/atmospherics/components/binary/pump{
 	dir = 8;
@@ -49933,16 +49930,6 @@
 "rGC" = (
 /turf/open/floor/iron/dark,
 /area/station/security/courtroom)
-"rGT" = (
-/obj/structure/railing{
-	dir = 6
-	},
-/obj/effect/decal/cleanable/dirt/dust,
-/obj/effect/turf_decal/stripes/corner{
-	dir = 4
-	},
-/turf/open/floor/iron,
-/area/station/cargo/miningoffice)
 "rHh" = (
 /obj/structure/table/reinforced,
 /obj/item/book/manual/wiki/security_space_law{
@@ -58641,6 +58628,21 @@
 /obj/effect/spawner/random/techstorage/ai_all,
 /turf/open/floor/iron/dark,
 /area/station/engineering/storage/tech)
+"uGw" = (
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/security/glass{
+	id_tag = "outerbrig";
+	name = "Brig"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable,
+/obj/effect/mapping_helpers/airlock/cyclelink_helper_multi{
+	cycle_id = "brig-entrance"
+	},
+/obj/effect/mapping_helpers/airlock/access/all/security/entrance,
+/obj/machinery/scanner_gate/preset_guns,
+/turf/open/floor/iron,
+/area/station/security/brig)
 "uGx" = (
 /obj/machinery/light/small/directional/south,
 /turf/open/floor/iron/freezer,
@@ -86410,7 +86412,7 @@ paD
 jpG
 kRe
 nVG
-fNM
+qOZ
 hKg
 hKg
 ouu
@@ -87688,13 +87690,13 @@ twr
 xgB
 hJO
 duG
-krh
-rCT
+omV
+fhn
 cuh
-aXw
+jBp
 wsk
-jre
-rGT
+qHt
+dxo
 hlE
 oor
 aKN
@@ -87945,10 +87947,10 @@ fUr
 fUr
 bkJ
 iIE
-ceA
-frO
+cAf
+dve
 jXu
-pDb
+pVV
 qqr
 iId
 tkf
@@ -96200,7 +96202,7 @@ aaf
 dsQ
 mXj
 dUj
-evi
+eoK
 cwX
 gGy
 nEC
@@ -96457,7 +96459,7 @@ aaf
 dsQ
 sAz
 fMf
-gLa
+mPJ
 dMY
 gIO
 itr
@@ -97204,7 +97206,7 @@ uok
 bzV
 ezg
 uVv
-fLS
+uGw
 pjh
 gpc
 gGo
@@ -97718,7 +97720,7 @@ lsP
 vYF
 eaP
 lTj
-frH
+nAs
 afj
 qGs
 gCD
