@@ -182,12 +182,5 @@
 	name = "luxury wallet"
 	desc = "Just like a normal wallet, but with ten times the style."
 	icon_state = "wallet_lux"
+	overlay_icon_state = "wallet_lux_overlay"
 
-/obj/item/storage/wallet/luxury/update_overlays()
-	. = ..()
-	cached_flat_icon = null
-	if(!front_id)
-		return
-	. += mutable_appearance(front_id.icon, front_id.icon_state)
-	. += front_id.overlays
-	. += mutable_appearance(icon, "wallet_lux_overlay")
