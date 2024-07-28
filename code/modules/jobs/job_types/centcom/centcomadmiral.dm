@@ -63,7 +63,7 @@
  	belt = /obj/item/modular_computer/pda/heads/captain/centcom
  	ears = /obj/item/radio/headset/headset_cent/alt/commander
  	glasses = /obj/item/clothing/glasses/centcom
- 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+ 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated/advanced
  	head = /obj/item/clothing/head/helmet/space/beret
  	shoes = /obj/item/clothing/shoes/combat/swat/alt
  	r_pocket = /obj/item/knife/combat/centcom

@@ -109,7 +109,7 @@
 		/obj/item/autosurgeon=1,
 		/obj/item/organ/internal/cyberimp/chest/nutriment/plus=1,
 		/obj/item/organ/internal/cyberimp/brain/anti_stun=1,
-		/obj/item/organ/internal/ears/invincible=1,
+		/obj/item/organ/internal/ears/cybernetic/upgraded=1,
 		/obj/item/organ/internal/heart/cybernetic/tier3=1,
 		/obj/item/organ/internal/liver/cybernetic/tier3=1,
 		/obj/item/organ/internal/lungs/cybernetic/tier3=1,

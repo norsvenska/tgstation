@@ -76,7 +76,7 @@
 /obj/item/clothing/gloves/tackler/combat/insulated
 	name = "guerrilla gloves"
 	desc = "Superior quality combative gloves, good for performing tackle takedowns as well as absorbing electrical shocks."
-	icon_state = "black" //norsvenska edit: i like the old sprites better ("guerrilla" -> "black")
+	icon_state = "guerrilla"
 	siemens_coefficient = 0
 	clothing_traits = list(TRAIT_PLANT_SAFE)
 //	armor = list(MELEE = 0, BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 50, FIRE = 0, ACID = 0)
@@ -84,6 +84,18 @@
 
 /datum/armor/combat_insulated
 	bio = 50
+
+/obj/item/clothing/gloves/tackler/combat/insulated/advanced
+	name = "superior guerrilla gloves"
+	desc = "Top quality combative gloves, good for performing tackle takedowns, absorbing electrical shocks, and protecting your hands."
+	icon_state = "black"
+	siemens_coefficient = 0
+	clothing_traits = list(TRAIT_PLANT_SAFE, TRAIT_QUICKER_CARRY, TRAIT_QUICK_BUILD)
+	armor_type = /datum/armor/combat_insulated_advanced
+
+/datum/armor/combat_insulated_advanced
+	bio = 100
+	wound = 100
 
 /obj/item/clothing/gloves/tackler/rocket
 	name = "rocket gloves"
