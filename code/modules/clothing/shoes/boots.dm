@@ -41,7 +41,7 @@
 	acid = 50
 
 /obj/item/clothing/shoes/combat/swat/alt //ditto, but without any slippage nor laces
-	clothing_traits = list(TRAIT_NO_SLIP_ALL)
+	clothing_traits = list(TRAIT_NO_SLIP_ALL, TRAIT_SPACEWALK, TRAIT_NEGATES_GRAVITY)
 	can_be_tied = FALSE
 
 /obj/item/clothing/shoes/jackboots
