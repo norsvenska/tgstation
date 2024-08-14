@@ -44,8 +44,6 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/flag/mothic, 32)
 	desc = "The flag of Mars. Originally a revolutionary flag during the Martian Rebellions, it has since been adopted as the official flag of the planet, as a reminder of how Mars fought for representation and democracy."
 	icon_state = "flag_mars"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/flag/mars, 32)
 
 /obj/structure/sign/flag/scandi
@@ -54,9 +52,3 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/flag/mars, 32)
 	icon_state = "flag_scandi"
 
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/flag/scandi, 32)
-=======
-WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/flag/mars)
->>>>>>> 495e24c5c61bedde191db72b786e65c88c7a1784
-=======
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/flag/mars, 32)
->>>>>>> parent of 4b4e9dff1d7 (Wallening [IDB IGNORE] [MDB IGNORE] (#85491))
