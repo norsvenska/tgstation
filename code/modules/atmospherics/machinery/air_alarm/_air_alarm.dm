@@ -17,6 +17,8 @@
 	/// Current alert level of our air alarm.
 	/// [AIR_ALARM_ALERT_NONE], [AIR_ALARM_ALERT_MINOR], [AIR_ALARM_ALERT_SEVERE]
 	var/danger_level = AIR_ALARM_ALERT_NONE
+	/// Current alert level of the area of our air alarm.
+	var/area_danger = FALSE
 
 	/// Currently selected mode of the alarm. An instance of [/datum/air_alarm_mode].
 	var/datum/air_alarm_mode/selected_mode
@@ -232,7 +234,7 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	data["siliconUser"] = HAS_SILICON_ACCESS(user)
 	data["emagged"] = (obj_flags & EMAGGED ? 1 : 0)
 	data["dangerLevel"] = danger_level
-	data["atmosAlarm"] = !!my_area.active_alarms[ALARM_ATMOS]
+	data["atmosAlarm"] = !!area_danger
 	data["fireAlarm"] = my_area.fire
 	data["faultStatus"] = my_area.fault_status
 	data["faultLocation"] = my_area.fault_location
@@ -510,7 +512,7 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	var/color
 	if(danger_level == AIR_ALARM_ALERT_HAZARD)
 		color = "#FF0022" // red
-	else if(danger_level == AIR_ALARM_ALERT_WARNING || my_area.active_alarms[ALARM_ATMOS])
+	else if(danger_level == AIR_ALARM_ALERT_WARNING || area_danger)
 		color = "#FFAA00" // yellow
 	else
 		color = "#00FFCC" // teal
@@ -537,16 +539,15 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	if(panel_open || (machine_stat & (NOPOWER|BROKEN)) || shorted)
 		return
 
-	var/state
-	if(danger_level == AIR_ALARM_ALERT_HAZARD)
-		state = "alarm1"
-	else if(danger_level == AIR_ALARM_ALERT_WARNING || my_area.active_alarms[ALARM_ATMOS])
-		state = "alarm2"
-	else
-		state = "alarm0"
+	if((machine_stat & (NOPOWER|BROKEN)) || shorted)
+		. += mutable_appearance(icon, "light-out", layer, src, plane)
+		return ..()
 
-	. += mutable_appearance(icon, state)
-	. += emissive_appearance(icon, state, src, alpha = src.alpha)
+	var/alert_level = danger_level
+	if(area_danger)
+		alert_level = 2
+	. += mutable_appearance(icon, "light-[alert_level]")
+	. += emissive_appearance(icon, "light-[alert_level]", src, alpha)
 
 /// Check the current air and update our danger level.
 /// [/obj/machinery/airalarm/var/danger_level]
@@ -560,6 +561,8 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 
 	var/old_danger = danger_level
 	danger_level = AIR_ALARM_ALERT_NONE
+	var/old_area_danger = area_danger
+	area_danger = my_area.active_alarms[ALARM_ATMOS]
 
 	var/total_moles = environment.total_moles()
 	var/pressure = environment.return_pressure()
@@ -605,7 +608,7 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 		alarm_manager.clear_alarm(ALARM_ATMOS)
 		warning_message = null
 
-	if(old_danger != danger_level)
+	if(old_danger != danger_level || old_area_danger != area_danger)
 		update_appearance()
 
 	selected_mode.replace(my_area, pressure)
