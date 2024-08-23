@@ -57,6 +57,9 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sink, (-14))
 		. += span_notice("A water recycler is installed. It looks like you could pry it out.")
 	. += span_notice("[reagents.total_volume]/[reagents.maximum_volume] liquids remaining.")
 
+/obj/structure/sink/wall_mount_common_plane(direction)
+	return TRUE
+
 /obj/structure/sink/attack_hand(mob/living/user, list/modifiers)
 	. = ..()
 	if(.)
