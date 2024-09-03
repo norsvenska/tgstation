@@ -53,14 +53,6 @@
 	var/list/update_signals = list(COMSIG_ATOM_BREAK)
 	AddComponent(/datum/component/reflection, reflection_filter = reflection_filter, reflection_matrix = reflection_matrix, can_reflect = can_reflect, update_signals = update_signals)
 
-/obj/structure/mirror/Initialize(mapload)
-	. = ..()
-	var/static/list/reflection_filter = alpha_mask_filter(icon = icon('icons/obj/watercloset.dmi', "mirror_mask"))
-	var/static/matrix/reflection_matrix = matrix(0.75, 0, 0, 0, 0.75, 0)
-	var/datum/callback/can_reflect = CALLBACK(src, PROC_REF(can_reflect))
-	var/list/update_signals = list(COMSIG_ATOM_BREAK)
-	AddComponent(/datum/component/reflection, reflection_filter = reflection_filter, reflection_matrix = reflection_matrix, can_reflect = can_reflect, update_signals = update_signals)
-
 /obj/structure/mirror/proc/can_reflect(atom/movable/target)
 	///I'm doing it this way too, because the signal is sent before the broken variable is set to TRUE.
 	if(atom_integrity <= integrity_failure * max_integrity)
@@ -96,7 +88,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror/broken, 28)
 	return display_radial_menu(user)
 
 /obj/structure/mirror/proc/display_radial_menu(mob/living/carbon/human/user)
-	var/pick = show_radial_menu(user, src, mirror_options, user, radius = 36, require_near = TRUE)
+	var/pick = show_radial_menu(user, src, mirror_options, user, radius = 36, require_near = TRUE, tooltips = TRUE)
 	if(!pick)
 		return TRUE //get out
 
@@ -390,12 +382,36 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror/broken, 28)
 	desc = "Pride cometh before the..."
 	race_flags = MIRROR_PRIDE
 	mirror_options = PRIDE_MIRROR_OPTIONS
+	/// If the last user has altered anything about themselves
+	var/changed = FALSE
+
+/obj/structure/mirror/magic/pride/display_radial_menu(mob/living/carbon/human/user)
+	var/pick = show_radial_menu(user, src, mirror_options, user, radius = 36, require_near = TRUE, tooltips = TRUE)
+	if(!pick)
+		return TRUE //get out
+
+	changed = TRUE
+	switch(pick)
+		if(CHANGE_HAIR)
+			change_hair(user)
+		if(CHANGE_BEARD)
+			change_beard(user)
+		if(CHANGE_RACE)
+			change_race(user)
+		if(CHANGE_SEX) // sex: yes
+			change_sex(user)
+		if(CHANGE_NAME)
+			change_name(user)
+		if(CHANGE_EYES)
+			change_eyes(user)
+
+	return display_radial_menu(user)
 
 /obj/structure/mirror/magic/pride/attack_hand(mob/living/carbon/human/user)
+	changed = FALSE
 	. = ..()
-	if(.)
-		return TRUE
-
+	if (!changed)
+		return
 	user.visible_message(
 		span_bolddanger("The ground splits beneath [user] as [user.p_their()] hand leaves the mirror!"),
 		span_notice("Perfect. Much better! Now <i>nobody</i> will be able to resist yo-"),
