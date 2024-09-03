@@ -1,5 +1,6 @@
 /datum/job/centcom_medic
 	title = JOB_CENTCOM_MEDICAL_DOCTOR
+	description = "Keep everyone alive and healthy."
 	auto_deadmin_role_flags = DEADMIN_POSITION_HEAD|DEADMIN_POSITION_SECURITY
 	department_head = null
 	faction = FACTION_STATION

@@ -1,6 +1,7 @@
 /datum/job/admiral
 	title = JOB_CENTCOM_ADMIRAL
-	description = "The strongest one out there. You are almost unkillable. Have fun."
+	description = "Keep the Captain under scrutiny, shoot those who attack you, \
+		and take control when shit hits the fan."
 	auto_deadmin_role_flags = DEADMIN_POSITION_HEAD|DEADMIN_POSITION_SECURITY
 	department_head = null
 	faction = FACTION_STATION
@@ -39,7 +40,7 @@
 		/obj/item/mod/control/pre_equipped/admiral = 1,
 	)
 
-	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_BOLD_SELECT_TEXT | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS
+	job_flags = STATION_JOB_FLAGS | HEAD_OF_STAFF_JOB_FLAGS
 	rpg_title = "Naval Captain"
 
 	voice_of_god_power = 2.4 //Command staff has authority
