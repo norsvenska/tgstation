@@ -189,3 +189,120 @@
 	. = ..()
 
 	dispensable_reagents = beer_reagents
+
+/obj/machinery/plumbing/synthesizer/hydroponics
+	name = "fertilizer synthesizer"
+	desc = "Produces a single chemical at a given volume. Must be plumbed."
+
+	icon_state = "synthesizer_soda"
+
+	var/static/list/hydro_reagents = list(
+		/datum/reagent/ammonia,
+		/datum/reagent/ash,
+		/datum/reagent/brimdust,
+		/datum/reagent/diethylamine,
+		/datum/reagent/inverse/sal_acid,
+		/datum/reagent/medicine/adminordrazine,
+		/datum/reagent/medicine/c2/multiver,
+		/datum/reagent/medicine/cryoxadone,
+		/datum/reagent/plantnutriment/endurogrow,
+		/datum/reagent/plantnutriment/eznutriment,
+		/datum/reagent/plantnutriment/left4zednutriment,
+		/datum/reagent/plantnutriment/liquidearthquake,
+		/datum/reagent/plantnutriment/robustharvestnutriment,
+		/datum/reagent/saltpetre,
+		/datum/reagent/water,
+	)
+
+/obj/machinery/plumbing/synthesizer/hydroponics/Initialize(mapload, bolt, layer)
+	. = ..()
+
+	dispensable_reagents = hydro_reagents
+
+/obj/machinery/plumbing/synthesizer/medicine
+	name = "medicine synthesizer"
+	desc = "Produces a single chemical at a given volume. Must be plumbed."
+
+	icon_state = "synthesizer"
+
+	var/static/list/medicine_reagents = list(
+		/datum/reagent/healium,
+		/datum/reagent/medicine/adminordrazine,
+		/datum/reagent/medicine/ammoniated_mercury,
+		/datum/reagent/medicine/antihol,
+		/datum/reagent/medicine/atropine,
+		/datum/reagent/medicine/c2/aiuri,
+		/datum/reagent/medicine/c2/convermol,
+		/datum/reagent/medicine/c2/helbital,
+		/datum/reagent/medicine/c2/hercuri,
+		/datum/reagent/medicine/c2/lenturi,
+		/datum/reagent/medicine/c2/libital,
+		/datum/reagent/medicine/c2/multiver,
+		/datum/reagent/medicine/c2/penthrite,
+		/datum/reagent/medicine/c2/probital,
+		/datum/reagent/medicine/c2/seiver,
+		/datum/reagent/medicine/c2/synthflesh,
+		/datum/reagent/medicine/c2/syriniver,
+		/datum/reagent/medicine/c2/tirimol,
+		/datum/reagent/medicine/calomel,
+		/datum/reagent/medicine/coagulant,
+		/datum/reagent/medicine/cryoxadone,
+		/datum/reagent/medicine/ephedrine,
+		/datum/reagent/medicine/epinephrine,
+		/datum/reagent/medicine/higadrite,
+		/datum/reagent/medicine/inacusiate,
+		/datum/reagent/medicine/leporazine,
+		/datum/reagent/medicine/mannitol,
+		/datum/reagent/medicine/neurine,
+		/datum/reagent/medicine/oculine,
+		/datum/reagent/medicine/omnizine,
+		/datum/reagent/medicine/oxandrolone,
+		/datum/reagent/medicine/pen_acid,
+		/datum/reagent/medicine/potass_iodide,
+		/datum/reagent/medicine/psicodine,
+		/datum/reagent/medicine/pyroxadone,
+		/datum/reagent/medicine/rezadone,
+		/datum/reagent/medicine/sal_acid,
+		/datum/reagent/medicine/salbutamol,
+		/datum/reagent/medicine/sansufentanyl,
+		/datum/reagent/medicine/silibinin,
+		/datum/reagent/medicine/spaceacillin,
+		/datum/reagent/medicine/syndicate_nanites,
+	)
+
+/obj/machinery/plumbing/synthesizer/medicine/Initialize(mapload, bolt, layer)
+	. = ..()
+
+	dispensable_reagents = medicine_reagents
+
+/obj/machinery/plumbing/synthesizer/poison
+	name = "poison synthesizer"
+	desc = "Produces a single chemical at a given volume. Must be plumbed."
+
+	icon_state = "synthesizer_soda"
+
+	var/static/list/poison_reagents = list(
+		/datum/reagent/ants,
+		/datum/reagent/ants/fire,
+		/datum/reagent/drug/aranesp,
+		/datum/reagent/toxin/acid/fluacid,
+		/datum/reagent/toxin/acid/nitracid,
+		/datum/reagent/toxin/bonehurtingjuice,
+		/datum/reagent/toxin/carpotoxin,
+		/datum/reagent/toxin/chloralhydrate,
+		/datum/reagent/toxin/coniine,
+		/datum/reagent/toxin/curare,
+		/datum/reagent/toxin/cyanide,
+		/datum/reagent/toxin/fentanyl,
+		/datum/reagent/toxin/ghoulpowder,
+		/datum/reagent/toxin/heparin,
+		/datum/reagent/toxin/initropidril,
+		/datum/reagent/toxin/lexorin,
+		/datum/reagent/toxin/sulfonal,
+		/datum/reagent/toxin/zombiepowder,
+	)
+
+/obj/machinery/plumbing/synthesizer/poison/Initialize(mapload, bolt, layer)
+	. = ..()
+
+	dispensable_reagents = poison_reagents

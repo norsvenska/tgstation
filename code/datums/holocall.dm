@@ -592,3 +592,45 @@
 		DELAY 40
 		SOUND sparks
 	"}
+
+/obj/item/disk/holodisk/arnolds_pizza
+	name = "Answering Machine Recording"
+	desc = "A holodisk containing a recording for those who try to contact the establishment's owner while away."
+	preset_image_type = /datum/preset_holoimage/assistant
+	preset_record_text = {"
+	NAME Arnold
+	SAY Hello, you've reached Arnold's pizza shop. I'm not here now, I'm out killing pepperoni.
+	DELAY 30
+	SAY If you want to reach me, or you want a pizza, I don't care cause I'm not here, can't you realize that idiot?!
+	DELAY 30
+	SAY But, if you need a pizza sometime during the next few days I could have it delivered to you.
+	DELAY 35
+	SAY Or maybe I will staple it to you.
+	DELAY 20
+	SAY I don't care what you want on it, every pizza comes with pepperoni and with 9mm bullets on it.
+	DELAY 30
+	SAY If you don't like it, I don't care cause you'll receive one anyhow.
+	DELAY 40
+	SAY The only difference is, maybe the 9mm bullets will be in the gun or maybe they'll be on your pizza.
+	DELAY 40
+	SAY If you don't fuck around, I'll give you good pizza.
+	DELAY 25
+	SAY If you do fuck around, I'll take a pepperoni and punch it through your head.
+	DELAY 30
+	SAY So, if you want mushrooms, shut up.
+	DELAY 20
+	SAY If you want broccoli, what the hell is broccoli anyway, shut up with the broccoli.
+	DELAY 25
+	SAY If you want something crazy like a pineapple, I'll kill you.
+	DELAY 25
+	SAY If you like pepperoni and bullets, you've come to the right place.
+	DELAY 30
+	SAY If not, you're an idiot and deserve to die.
+	DELAY 30
+	SAY So, leave a name, number, serial number, how tall you are, whether your susceptible to any diseases.
+	DELAY 50
+	SAY And if you are, I'll come over, maybe I'll give you a pizza, maybe I'll break off your arm.
+	DELAY 40
+	SAY So, get back to me, or I'll get back to you, or I'll crush you like the will be piece of shit you are. So, leave it now.
+	DELAY 60
+	"}
