@@ -7,6 +7,22 @@
 /obj/effect/spawner/structure/window/reinforced/plasma/plastitanium,
 /turf/open/floor/plating,
 /area/shuttle/pirate)
+"ab" = (
+/obj/structure/chair/comfy/shuttle{
+	dir = 8
+	},
+/obj/machinery/turretid{
+	icon_state = "control_kill";
+	lethal = 1;
+	locked = 0;
+	pixel_y = -24;
+	req_access = null
+	},
+/obj/effect/turf_decal/tile/dark_blue/anticorner/contrasted{
+	dir = 8
+	},
+/turf/open/floor/iron/dark,
+/area/shuttle/pirate)
 "ad" = (
 /obj/machinery/button/door/directional/south{
 	id = "interdynebridge";
@@ -136,6 +152,14 @@
 	},
 /turf/open/floor/iron/dark,
 /area/shuttle/pirate)
+"aF" = (
+/obj/machinery/computer/camera_advanced/shuttle_docker/syndicate/pirate{
+	dir = 4;
+	x_offset = 0;
+	y_offset = 7
+	},
+/turf/open/floor/iron/dark,
+/area/shuttle/pirate)
 "aG" = (
 /obj/effect/turf_decal/tile/dark_blue/half/contrasted{
 	dir = 8
@@ -249,6 +273,13 @@
 "aR" = (
 /obj/effect/turf_decal/tile/dark_blue/opposingcorners,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/dark/visible,
+/turf/open/floor/iron/dark,
+/area/shuttle/pirate)
+"aS" = (
+/obj/effect/turf_decal/tile/dark_blue/opposingcorners,
+/obj/structure/closet/crate/freezer/blood/interdyne,
+/obj/machinery/light/small/blacklight/directional/south,
+/obj/machinery/iv_drip,
 /turf/open/floor/iron/dark,
 /area/shuttle/pirate)
 "aW" = (
@@ -519,14 +550,7 @@
 /obj/effect/turf_decal/tile/dark_blue/half/contrasted,
 /turf/open/floor/iron/dark,
 /area/shuttle/pirate)
-"ne" = (
-/obj/machinery/door/poddoor/shutters/preopen{
-	id = "interdynebridge"
-	},
-/obj/effect/spawner/structure/window/reinforced/plasma/plastitanium,
-/turf/open/floor/plating,
-/area/shuttle/pirate)
-"pE" = (
+"nc" = (
 /obj/machinery/power/apc/auto_name/directional/north{
 	cell_type = /obj/item/stock_parts/power_store/battery/bluespace
 	},
@@ -539,6 +563,13 @@
 /obj/machinery/power/smes/magical,
 /obj/structure/cable,
 /turf/open/floor/iron/dark,
+/area/shuttle/pirate)
+"ne" = (
+/obj/machinery/door/poddoor/shutters/preopen{
+	id = "interdynebridge"
+	},
+/obj/effect/spawner/structure/window/reinforced/plasma/plastitanium,
+/turf/open/floor/plating,
 /area/shuttle/pirate)
 "qy" = (
 /obj/machinery/power/shuttle_engine/propulsion{
@@ -709,14 +740,6 @@
 /obj/structure/extinguisher_cabinet/directional/south,
 /turf/open/floor/iron/dark,
 /area/shuttle/pirate)
-"HP" = (
-/obj/machinery/computer/camera_advanced/shuttle_docker/syndicate/pirate{
-	dir = 4;
-	x_offset = 0;
-	y_offset = 7
-	},
-/turf/open/floor/iron/dark,
-/area/shuttle/pirate)
 "Iv" = (
 /obj/machinery/power/shuttle_engine/propulsion{
 	dir = 4
@@ -743,16 +766,16 @@
 	},
 /turf/open/floor/plating,
 /area/shuttle/pirate)
+"MQ" = (
+/obj/effect/turf_decal/tile/dark_blue/half/contrasted,
+/obj/machinery/vending/medical/syndicate,
+/turf/open/floor/iron/dark,
+/area/shuttle/pirate)
 "Oe" = (
 /obj/effect/turf_decal/tile/dark_blue{
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
-/turf/open/floor/iron/dark,
-/area/shuttle/pirate)
-"OL" = (
-/obj/effect/turf_decal/tile/dark_blue/half/contrasted,
-/obj/machinery/vending/medical/syndicate_access,
 /turf/open/floor/iron/dark,
 /area/shuttle/pirate)
 "Po" = (
@@ -769,13 +792,6 @@
 	dir = 1
 	},
 /obj/machinery/light/no_nightlight/directional/north,
-/turf/open/floor/iron/dark,
-/area/shuttle/pirate)
-"Sn" = (
-/obj/effect/turf_decal/tile/dark_blue/opposingcorners,
-/obj/structure/closet/crate/freezer/blood/interdyne,
-/obj/machinery/light/small/blacklight/directional/south,
-/obj/machinery/iv_drip,
 /turf/open/floor/iron/dark,
 /area/shuttle/pirate)
 "SD" = (
@@ -825,22 +841,6 @@
 /obj/machinery/light/small/directional/west,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden,
 /obj/structure/mirror/directional/east,
-/turf/open/floor/iron/dark,
-/area/shuttle/pirate)
-"YO" = (
-/obj/structure/chair/comfy/shuttle{
-	dir = 8
-	},
-/obj/machinery/turretid{
-	icon_state = "control_kill";
-	lethal = 1;
-	locked = 0;
-	pixel_y = -24;
-	req_access = null
-	},
-/obj/effect/turf_decal/tile/dark_blue/anticorner/contrasted{
-	dir = 8
-	},
 /turf/open/floor/iron/dark,
 /area/shuttle/pirate)
 
@@ -908,7 +908,7 @@ aj
 aQ
 ay
 Oe
-OL
+MQ
 aj
 af
 af
@@ -956,7 +956,7 @@ af
 aO
 aj
 ey
-HP
+aF
 aj
 aW
 aR
@@ -974,7 +974,7 @@ Tr
 vz
 ae
 an
-YO
+ab
 aj
 aj
 aj
@@ -983,7 +983,7 @@ fY
 bX
 iD
 aj
-pE
+nc
 aG
 ep
 aj
@@ -1049,7 +1049,7 @@ ne
 aj
 aj
 aJ
-Sn
+aS
 aj
 SD
 aj
