@@ -83,7 +83,7 @@
 		app.wiz_team = master_wizard.wiz_team
 		master_wizard.wiz_team.add_member(app_mind)
 	app_mind.add_antag_datum(app)
-	app_mind.set_assigned_role(SSjob.GetJobType(/datum/job/wizard_apprentice))
+	app_mind.set_assigned_role(SSjob.get_job_type(/datum/job/wizard_apprentice))
 	app_mind.special_role = ROLE_WIZARD_APPRENTICE
 	SEND_SOUND(M, sound('sound/effects/magic.ogg'))
 
@@ -274,7 +274,7 @@
 		spawn_antag(chosen_one.client, get_turf(src), initial(demon_type.name), user.mind)
 		to_chat(user, shatter_msg)
 		to_chat(user, veil_msg)
-		playsound(user.loc, 'sound/effects/glassbr1.ogg', 100, TRUE)
+		playsound(user.loc, 'sound/effects/glass/glassbr1.ogg', 100, TRUE)
 		qdel(src)
 	else
 		to_chat(user, span_warning("The bottle's contents usually pop and boil constantly, but right now they're eerily still and calm. Perhaps you should try again later."))
