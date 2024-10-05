@@ -441,7 +441,6 @@
 	bare_wound_bonus = 5
 	clumsy_knockdown_time = 20 SECONDS
 
-	on_sound = 'sound/weapons/batonextend.ogg'
 	on_inhand_icon_state = "nullrod"
 	active_force = 20
 

@@ -42,12 +42,8 @@
 	armor_type = /datum/armor/space_officer
 	strip_delay = 130
 	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT
-<<<<<<< HEAD
 	resistance_flags = INDESTRUCTIBLE | FIRE_PROOF | ACID_PROOF
-=======
-	resistance_flags = FIRE_PROOF | ACID_PROOF
 	fishing_modifier = 0
->>>>>>> 8ffae3fd88d692fdcd75fe71993879be53410efd
 
 /datum/armor/space_officer
 	melee = 100
