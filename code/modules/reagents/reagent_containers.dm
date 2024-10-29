@@ -38,7 +38,7 @@
 	/// The icon file to take fill icon appearances from
 	var/fill_icon = 'icons/obj/medical/reagent_fillings.dmi'
 	///The sound this container makes when picked up, dropped if there is liquid inside.
-	var/reagent_container_liquid_sound = SFX_DEFAULT_LIQUID_SLOSH
+	var/reagent_container_liquid_sound = null
 
 /obj/item/reagent_containers/apply_fantasy_bonuses(bonus)
 	. = ..()
@@ -301,5 +301,5 @@
 
 /obj/item/reagent_containers/equipped(mob/user, slot, initial = FALSE)
 	. = ..()
-	if((slot & ITEM_SLOT_HANDS) && reagent_container_liquid_sound && reagents.total_volume > 0)
+	if(!initial && (slot & ITEM_SLOT_HANDS) && reagent_container_liquid_sound && reagents.total_volume > 0)
 		playsound(src, reagent_container_liquid_sound, LIQUID_SLOSHING_SOUND_VOLUME, vary = TRUE, ignore_walls = FALSE)

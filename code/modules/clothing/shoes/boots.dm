@@ -78,7 +78,7 @@
 
 /obj/item/clothing/shoes/jackboots/floortile/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/adjust_fishing_difficulty, -3) //tacticool
+	AddComponent(/datum/component/adjust_fishing_difficulty, -5) //tacticool
 
 /obj/item/clothing/shoes/winterboots
 	name = "winter boots"
@@ -185,7 +185,7 @@
 
 /obj/item/clothing/shoes/pirate/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/adjust_fishing_difficulty, -2)
+	AddComponent(/datum/component/adjust_fishing_difficulty, -4)
 
 /obj/item/clothing/shoes/pirate/armored
 	armor_type = /datum/armor/shoes_pirate

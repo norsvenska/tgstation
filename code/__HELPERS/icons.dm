@@ -1274,6 +1274,15 @@ GLOBAL_LIST_EMPTY(transformation_animation_objects)
 
 	return alert_overlay
 
+/// Strips all underlays on a different plane from an appearance.
+/// Returns the stripped appearance.
+/proc/strip_appearance_underlays(mutable_appearance/appearance)
+	var/base_plane = PLANE_TO_TRUE(appearance.plane)
+	for(var/mutable_appearance/underlay as anything in appearance.underlays)
+		if(PLANE_TO_TRUE(underlay.plane) != base_plane)
+			appearance.underlays -= underlay
+	return appearance
+
 /// Saving as PNG
 /proc/downloadImage(atom/A, dir)
 	var/icon/this_icon = getFlatIcon(A,defdir=dir)
