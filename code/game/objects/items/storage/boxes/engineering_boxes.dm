@@ -107,14 +107,14 @@
 /obj/item/storage/box/autosurgeon/PopulateContents()
 	var/static/items_inside = list(
 		/obj/item/autosurgeon=1,
-		/obj/item/organ/internal/cyberimp/chest/nutriment/plus=1,
-		/obj/item/organ/internal/cyberimp/brain/anti_stun=1,
-		/obj/item/organ/internal/ears/cybernetic/upgraded=1,
-		/obj/item/organ/internal/heart/cybernetic/tier3=1,
-		/obj/item/organ/internal/liver/cybernetic/tier3=1,
-		/obj/item/organ/internal/lungs/cybernetic/tier3=1,
-		/obj/item/organ/internal/stomach/cybernetic/tier3=1,
-		/obj/item/organ/internal/eyes/robotic/shield=1,
+		/obj/item/organ/cyberimp/chest/nutriment/plus=1,
+		/obj/item/organ/cyberimp/brain/anti_stun=1,
+		/obj/item/organ/ears/cybernetic/upgraded=1,
+		/obj/item/organ/heart/cybernetic/anomalock/prebuilt=1,
+		/obj/item/organ/liver/cybernetic/tier3=1,
+		/obj/item/organ/lungs/cybernetic/tier3=1,
+		/obj/item/organ/stomach/cybernetic/tier3=1,
+		/obj/item/organ/eyes/robotic/shield=1,
 		)
 	generate_items_inside(items_inside,src)
 
