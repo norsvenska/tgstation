@@ -254,11 +254,14 @@
 //Plating with the same gasmix as UO45 sand, used for the power plant and atmospherics
 /turf/open/floor/plating/asteroidplasma
 	initial_gas_mix = "co2=173.4;n2=135.1;plasma=229.8;TEMP=351.9"
-	planetary_atmos = TRUE
+
+//Ditto, but reinforced floor instead of plating. Used for the atmospherics gas tanks that were deconstructed
+/turf/open/floor/engine/asteroidplasma
+	initial_gas_mix = "co2=173.4;n2=135.1;plasma=229.8;TEMP=351.9"
 
 //UO45 papers
 /obj/item/paper/fluff/awaymissions/undergroundoutpost45/quarantine
 	name = "paper - 'Quarantine Notice'"
-	default_raw_text = null //due to how it compiles (or in this case, fails to compile), i have to varedit the text in if i want it to be pretty :(
+	default_raw_text = {"<h1><table bgcolor="royalblue" width="100%"><th><div align="center"><font color="white">QUARANTINE NOTICE</font></div></th></table></h1><p><h3><table bgcolor="royalblue" width="100%"><th><div align="center"><font color="white"><strong>Outpost 45 Official Correspondence</strong></font></div></th></table></h3></p><p>As part of an ongoing investigation by site command, the underground levels of Outpost 45 have been placed under temporary quarantine. The elevator connection to the surface has been shut off. Any attempts to dig, climb, or otherwise reach the surface will be met with termination.</p><p>This notice is effective beginning 2563/12/03.</p><hr /><p><h3><table bgcolor="royalblue" width="100%"><th><div align="center"><font color="white"><strong>Site Command Signatures:</strong></font></div></th></table></h3></p><p>Site Executive Officer:</p><p><i>Matthew Cook</i></p><p>Vice Executive Officer:</p><p><i>Thomas Williamson</i></p><p>Officer of Research and Development:</p><p><i>Charles Davis</i></p><p>Officer of Engineering and Logistics:</p><p><i>Ryan Middleton</i></p><p>Officer of Health and Medicine:</p><p>ㅤ</p><p>Commanding Officer of Site Security:</p><p><i>Joseph Lawrence</i></p>"}
 
 // "<h1><table bgcolor="royalblue" width="100%"><th><div align="center"><font color="white">QUARANTINE NOTICE</font></div></th></table></h1><p><h3><table bgcolor="royalblue" width="100%"><th><div align="center"><font color="white"><strong>Outpost 45 Official Correspondence</strong></font></div></th></table></h3></p><p>As part of an ongoing investigation by site command, the underground levels of Outpost 45 have been placed under temporary quarantine. The elevator connection to the surface has been shut off. Any attempts to dig, climb, or otherwise reach the surface will be met with termination.</p><p>This notice is effective beginning 2563/12/03.</p><hr /><p><h3><table bgcolor="royalblue" width="100%"><th><div align="center"><font color="white"><strong>Site Command Signatures:</strong></font></div></th></table></h3></p><p>Site Executive Officer:</p><p><i>Matthew Cook</i></p><p>Vice Executive Officer:</p><p><i>Thomas Williamson</i></p><p>Officer of Research and Development:</p><p><i>Charles Davis</i></p><p>Officer of Engineering and Logistics:</p><p><i>Ryan Middleton</i></p><p>Officer of Health and Medicine:</p><p>ㅤ</p><p>Commanding Officer of Site Security:</p><p><i>Joseph Lawrence</i></p>"
