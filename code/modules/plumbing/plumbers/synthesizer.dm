@@ -207,6 +207,7 @@
 		/datum/reagent/medicine/cryoxadone,
 		/datum/reagent/plantnutriment/endurogrow,
 		/datum/reagent/plantnutriment/eznutriment,
+		/datum/reagent/plantnutriment/gaiaextract,
 		/datum/reagent/plantnutriment/left4zednutriment,
 		/datum/reagent/plantnutriment/liquidearthquake,
 		/datum/reagent/plantnutriment/robustharvestnutriment,

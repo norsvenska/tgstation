@@ -1857,7 +1857,7 @@
 
 /datum/reagent/plantnutriment/liquidearthquake
 	name = "Liquid Earthquake"
-	description = "A specialized nutriment, which increases the plant's production speed, as well as it's susceptibility to weeds."
+	description = "A specialized nutriment, which increases the plant's production speed, as well as its susceptibility to weeds."
 	color = "#912e00" // RBG: 145, 46, 0
 	tox_prob = 13
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -1869,6 +1869,30 @@
 		myseed.adjust_weed_rate(round(volume * 0.1))
 		myseed.adjust_weed_chance(round(volume * 0.3))
 		myseed.adjust_production(-round(volume * 0.075))
+
+/datum/reagent/plantnutriment/gaiaextract
+	name = "Gaia's Extract"
+	description = "An extremely rare nutriment developed by frontier bioengineers using genetically modified ambrosia."
+	color = "#bbab51"
+	tox_prob = 50
+	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
+
+/datum/reagent/plantnutriment/gaiaextract/on_hydroponics_apply(obj/machinery/hydroponics/mytray, mob/user)
+	mytray.adjust_plant_health(round(volume))
+	mytray.adjust_pestlevel(-round(volume))
+	mytray.adjust_weedlevel(-round(volume))
+	mytray.adjust_toxic(-round(volume))
+	var/obj/item/seeds/myseed = mytray.myseed
+	if(!isnull(myseed))
+		myseed.adjust_potency(round(volume))
+		myseed.adjust_yield(round(volume))
+		myseed.adjust_endurance(round(volume))
+		myseed.adjust_lifespan(round(volume))
+		myseed.adjust_production(-round(volume))
+		myseed.adjust_instability(-round(volume))
+		myseed.adjust_weed_rate(-round(volume))
+		myseed.adjust_weed_chance(-round(volume))
+
 
 // GOON OTHERS
 
