@@ -4,7 +4,9 @@
 /area/space)
 "aab" = (
 /obj/machinery/firealarm/directional/east,
-/obj/item/radio/intercom/directional/north,
+/obj/item/radio/intercom/directional/north{
+	pixel_x = -3
+	},
 /obj/structure/sign/picture_frame/portrait/bar{
 	pixel_y = 32;
 	pixel_x = 32
@@ -12,6 +14,13 @@
 /obj/structure/table/wood,
 /obj/machinery/chem_dispenser/drinks{
 	dir = 8
+	},
+/obj/machinery/button/door/directional/north{
+	id = "shutters-bar";
+	name = "Bar Shutters Control";
+	req_access = list("bar");
+	pixel_y = 27;
+	pixel_x = 13
 	},
 /turf/open/floor/wood/large,
 /area/station/service/bar)
@@ -11407,12 +11416,8 @@
 /area/station/hallway/secondary/entry)
 "aPw" = (
 /obj/machinery/airalarm/directional/west,
-/obj/machinery/button/door/directional/north{
-	id = "shutters-bar";
-	name = "Bar Shutters Control";
-	req_access = list("bar")
-	},
 /obj/machinery/vending/boozeomat,
+/obj/structure/fish_mount/bar/directional/north,
 /turf/open/floor/wood/large,
 /area/station/service/bar)
 "aPx" = (
