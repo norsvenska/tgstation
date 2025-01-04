@@ -241,9 +241,9 @@
 	custom_materials = list(/datum/material/gold = 750)
 	sharpness = SHARP_EDGED
 	resistance_flags = FIRE_PROOF
-	embed_type = /datum/embed_data/pen/centcom
+	embed_type = /datum/embedding/pen/centcom
 
-/datum/embed_data/pen/centcom
+/datum/embedding/pen/centcom
 	embed_chance = 80
 
 /obj/item/pen/fountain/captain/Initialize(mapload)

@@ -205,11 +205,11 @@
 	name = "\improper CentCom knife"
 	icon_state = "centcomknife"
 	desc = "A military grade survival knife, with extra flair on the handle. It is from CentCom, after all."
-	embed_type = /datum/embed_data/combat_knife/centcom
+	embed_type = /datum/embedding/combat_knife/centcom
 	force = 25
 	throwforce = 25
 
-/datum/embed_data/combat_knife/centcom
+/datum/embedding/combat_knife/centcom
 	pain_mult = 5
 	embed_chance = 85
 	fall_chance = 10
