@@ -799,6 +799,7 @@
 	pixel_x = -3;
 	pixel_y = 0
 	},
+/obj/item/pen/red,
 /turf/open/floor/carpet/red,
 /area/station/command/heads_quarters/hos)
 "acS" = (
@@ -2862,15 +2863,6 @@
 /obj/effect/turf_decal/tile/yellow/half/contrasted{
 	dir = 4
 	},
-/obj/structure/table,
-/obj/item/integrated_circuit/loaded/speech_relay{
-	pixel_x = 3;
-	pixel_y = 7
-	},
-/obj/item/integrated_circuit/loaded/hello_world{
-	pixel_x = -4;
-	pixel_y = 0
-	},
 /turf/open/floor/iron,
 /area/station/engineering/main)
 "ajr" = (
@@ -2998,7 +2990,6 @@
 /obj/effect/turf_decal/tile/yellow/half/contrasted{
 	dir = 4
 	},
-/obj/machinery/module_duplicator,
 /turf/open/floor/iron,
 /area/station/engineering/main)
 "ajL" = (
@@ -3008,7 +2999,7 @@
 /obj/effect/turf_decal/tile/yellow/half/contrasted{
 	dir = 4
 	},
-/obj/machinery/component_printer,
+/obj/structure/closet/secure_closet/engineering_personal,
 /turf/open/floor/iron,
 /area/station/engineering/main)
 "ajM" = (
@@ -17772,6 +17763,22 @@
 /obj/effect/turf_decal/stripes/white/line{
 	color = "#D381C9"
 	},
+/obj/structure/closet/crate/medical{
+	name = "stolen medical kit crate";
+	desc = "A crate previously carried by a derelict freighter, before being stolen."
+	},
+/obj/item/storage/medkit/regular{
+	empty = 1;
+	desc = "An empty medkit. Looks like whoever recovered it needed the supplies."
+	},
+/obj/item/storage/medkit/regular{
+	empty = 1;
+	desc = "An empty medkit. Looks like whoever recovered it needed the supplies."
+	},
+/obj/item/storage/medkit/regular{
+	empty = 1;
+	desc = "An empty medkit. Looks like whoever recovered it needed the supplies."
+	},
 /turf/open/floor/iron/white/smooth_edge,
 /area/station/science/robotics/lab)
 "bkq" = (
@@ -18188,8 +18195,14 @@
 "blE" = (
 /obj/structure/table,
 /obj/item/healthanalyzer,
-/obj/item/healthanalyzer,
-/obj/item/healthanalyzer,
+/obj/item/healthanalyzer{
+	pixel_x = -2;
+	pixel_y = -2
+	},
+/obj/item/healthanalyzer{
+	pixel_x = -4;
+	pixel_y = -4
+	},
 /obj/item/radio/intercom/directional/east,
 /turf/open/floor/iron/dark,
 /area/station/science/robotics/lab)
@@ -22818,10 +22831,14 @@
 "bAV" = (
 /obj/effect/turf_decal/delivery,
 /obj/machinery/door/window/left/directional/west{
-	name = "Janitorial Delivery";
+	name = "Janitorial Deliveries";
 	req_access = list("janitor")
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/navbeacon{
+	codes_txt = "delivery;dir=8";
+	location = "Janitor"
+	},
 /turf/open/floor/iron/dark/smooth_large,
 /area/station/maintenance/starboard/greater)
 "bAX" = (
@@ -23248,6 +23265,7 @@
 /obj/effect/turf_decal/tile/neutral{
 	dir = 4
 	},
+/obj/structure/closet/jcloset,
 /turf/open/floor/iron,
 /area/station/hallway/primary/aft)
 "bCs" = (
@@ -23533,8 +23551,8 @@
 	},
 /obj/structure/window/reinforced/spawner/directional/north,
 /obj/item/storage/medkit/brute{
-	pixel_x = 3;
-	pixel_y = 3
+	pixel_x = 2;
+	pixel_y = 1
 	},
 /obj/item/storage/medkit/regular,
 /obj/item/storage/medkit/brute{
@@ -23657,7 +23675,9 @@
 /turf/open/floor/iron/dark/textured_large,
 /area/station/service/janitor)
 "bDr" = (
-/obj/structure/mop_bucket/janitorialcart,
+/obj/structure/mop_bucket/janitorialcart{
+	dir = 8
+	},
 /obj/effect/turf_decal/tile/green/anticorner{
 	dir = 8
 	},
@@ -23667,8 +23687,8 @@
 	},
 /area/station/service/janitor)
 "bDs" = (
-/obj/structure/reagent_dispensers/watertank,
 /obj/effect/turf_decal/tile/green/anticorner,
+/obj/structure/closet/jcloset,
 /turf/open/floor/iron/dark/smooth_corner{
 	dir = 1
 	},
@@ -23802,10 +23822,6 @@
 	},
 /area/station/service/janitor)
 "bDP" = (
-/obj/machinery/navbeacon{
-	codes_txt = "delivery;dir=8";
-	location = "Janitor"
-	},
 /obj/structure/plasticflaps/opaque,
 /obj/effect/turf_decal/bot,
 /turf/open/floor/iron/dark/smooth_large,
@@ -23968,8 +23984,8 @@
 /obj/structure/table/glass,
 /obj/structure/window/reinforced/spawner/directional/west,
 /obj/item/storage/medkit/o2{
-	pixel_x = 3;
-	pixel_y = 3
+	pixel_x = 2;
+	pixel_y = 1
 	},
 /obj/item/storage/medkit/regular,
 /obj/item/storage/medkit/o2{
@@ -24175,6 +24191,7 @@
 	},
 /obj/machinery/light/directional/east,
 /obj/machinery/newscaster/directional/east,
+/obj/structure/reagent_dispensers/watertank,
 /turf/open/floor/iron/dark/smooth_edge{
 	dir = 4
 	},
@@ -26487,11 +26504,17 @@
 	},
 /obj/item/radio/intercom/directional/west,
 /obj/structure/window/reinforced/spawner/directional/south,
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
 /turf/open/floor/iron,
 /area/station/engineering/atmos/storage/gas)
 "bNQ" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
+	},
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
 	},
 /turf/open/floor/iron,
 /area/station/engineering/atmos/storage/gas)
@@ -26509,6 +26532,9 @@
 	},
 /obj/structure/cable,
 /obj/machinery/power/apc/auto_name/directional/east,
+/obj/effect/turf_decal/siding/dark/corner{
+	dir = 1
+	},
 /turf/open/floor/iron/checker,
 /area/station/engineering/atmos/storage/gas)
 "bNT" = (
@@ -31543,7 +31569,7 @@
 	dir = 1
 	},
 /obj/machinery/light/directional/west,
-/obj/structure/closet/secure_closet/engineering_personal,
+/obj/structure/closet/firecloset/full,
 /turf/open/floor/iron,
 /area/station/engineering/main)
 "cmN" = (
@@ -32062,7 +32088,9 @@
 /turf/open/floor/engine,
 /area/station/engineering/supermatter/room)
 "cqm" = (
-/obj/machinery/meter,
+/obj/machinery/meter{
+	name = "Atmospheric Coolant Pipe"
+	},
 /obj/machinery/atmospherics/pipe/smart/simple/orange/visible{
 	dir = 10
 	},
@@ -33514,7 +33542,6 @@
 	name = "Custodial Closet"
 	},
 /obj/structure/disposalpipe/segment,
-/obj/effect/landmark/event_spawn,
 /obj/effect/mapping_helpers/airlock/access/all/service/janitor,
 /obj/effect/turf_decal/tile/purple/half,
 /obj/effect/landmark/navigate_destination/janitor,
@@ -33907,16 +33934,6 @@
 	dir = 1;
 	name = "External Gas to Loop"
 	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/turf_decal/delivery,
-/turf/open/floor/iron/dark/smooth_large,
-/area/station/engineering/supermatter/room)
-"cDF" = (
-/obj/machinery/atmospherics/components/binary/pump{
-	dir = 1;
-	name = "External Gas to Loop"
-	},
-/obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/turf_decal/delivery,
 /turf/open/floor/iron/dark/smooth_large,
@@ -37743,6 +37760,10 @@
 "ekJ" = (
 /obj/structure/cable,
 /obj/effect/turf_decal/stripes/line,
+/obj/machinery/door/window/brigdoor/right/directional/south{
+	req_access = list("atmospherics");
+	name = "Turbine Access"
+	},
 /turf/open/floor/iron/dark,
 /area/station/maintenance/disposal/incinerator)
 "ele" = (
@@ -38482,7 +38503,7 @@
 	},
 /obj/item/storage/box/bandages{
 	pixel_x = 0;
-	pixel_y = 9
+	pixel_y = 10
 	},
 /turf/open/floor/iron/white/smooth_corner{
 	dir = 4
@@ -39992,14 +40013,7 @@
 /turf/open/floor/plating,
 /area/station/maintenance/fore/greater)
 "fwZ" = (
-/obj/structure/table,
-/obj/item/multitool/circuit{
-	pixel_x = -8
-	},
-/obj/item/multitool/circuit,
-/obj/item/multitool/circuit{
-	pixel_x = 8
-	},
+/obj/structure/closet/secure_closet/engineering_personal,
 /turf/open/floor/iron,
 /area/station/engineering/main)
 "fxf" = (
@@ -42968,8 +42982,8 @@
 	req_access = list("medical")
 	},
 /obj/item/storage/medkit/toxin{
-	pixel_x = 3;
-	pixel_y = 3
+	pixel_x = 2;
+	pixel_y = 1
 	},
 /obj/item/storage/medkit/regular,
 /obj/item/storage/medkit/toxin{
@@ -45280,11 +45294,11 @@
 /obj/item/storage/medkit/emergency,
 /obj/item/storage/medkit/emergency{
 	pixel_x = 0;
-	pixel_y = 3
+	pixel_y = 6
 	},
 /obj/item/storage/medkit/emergency{
 	pixel_x = 0;
-	pixel_y = 6
+	pixel_y = 12
 	},
 /obj/effect/turf_decal/tile/blue{
 	dir = 8
@@ -45876,7 +45890,9 @@
 /turf/open/floor/iron/dark/smooth_large,
 /area/station/security/range)
 "jlp" = (
-/obj/machinery/meter,
+/obj/machinery/meter{
+	name = "External Pump Ports"
+	},
 /obj/machinery/atmospherics/pipe/smart/manifold/cyan/visible,
 /turf/closed/wall/r_wall,
 /area/station/engineering/atmos)
@@ -47224,6 +47240,9 @@
 	dir = 4
 	},
 /obj/structure/cable,
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
 /turf/open/floor/iron,
 /area/station/engineering/atmos/storage/gas)
 "jVL" = (
@@ -50682,6 +50701,7 @@
 /area/station/maintenance/disposal/incinerator)
 "mbr" = (
 /obj/structure/table/wood/fancy/red,
+/obj/machinery/recharger,
 /turf/open/floor/iron/dark,
 /area/station/security/office)
 "mbu" = (
@@ -51887,16 +51907,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/plating,
 /area/station/maintenance/disposal)
-"mOB" = (
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/effect/turf_decal/tile/yellow/half/contrasted{
-	dir = 1
-	},
-/obj/structure/closet/secure_closet/engineering_personal,
-/turf/open/floor/iron,
-/area/station/engineering/main)
 "mOV" = (
 /obj/structure/cable,
 /obj/effect/turf_decal/tile/red{
@@ -62710,6 +62720,9 @@
 	dir = 1
 	},
 /area/station/science/research)
+"txz" = (
+/turf/closed/wall/r_wall,
+/area/station/science/robotics/mechbay)
 "txG" = (
 /obj/structure/chair/stool/directional/north,
 /turf/open/floor/eighties/red,
@@ -63029,8 +63042,8 @@
 /obj/structure/table/glass,
 /obj/structure/window/reinforced/spawner/directional/east,
 /obj/item/storage/medkit/fire{
-	pixel_x = 3;
-	pixel_y = 3
+	pixel_x = 2;
+	pixel_y = 1
 	},
 /obj/item/storage/medkit/regular,
 /obj/item/storage/medkit/fire{
@@ -63074,8 +63087,7 @@
 	dir = 4
 	},
 /obj/structure/cable,
-/obj/machinery/atmospherics/pipe/smart/simple/purple/visible,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/atmospherics/pipe/bridge_pipe/purple/visible,
 /obj/machinery/atmospherics/pipe/layer_manifold/supply/hidden{
 	dir = 4
 	},
@@ -63104,7 +63116,9 @@
 /turf/open/floor/plating/airless,
 /area/station/science/ordnance/bomb)
 "tNE" = (
-/obj/machinery/meter,
+/obj/machinery/meter{
+	name = "External Scrubber Ports"
+	},
 /obj/machinery/atmospherics/pipe/smart/simple/scrubbers/visible{
 	dir = 9
 	},
@@ -66541,6 +66555,7 @@
 /obj/structure/closet/bombcloset,
 /obj/effect/turf_decal/delivery,
 /obj/machinery/airalarm/directional/south,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /turf/open/floor/iron/dark,
 /area/station/science/ordnance)
 "vYa" = (
@@ -96890,7 +96905,7 @@ cSN
 nfr
 ckD
 rdP
-mOB
+cmN
 pWb
 pWb
 aPU
@@ -99980,7 +99995,7 @@ aPU
 cFL
 cSK
 mHP
-cDF
+cDE
 cEa
 cEg
 cFj
@@ -109227,12 +109242,12 @@ wry
 oou
 pCs
 siO
+gXs
+eRz
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
+gXs
 aaa
 aoV
 aaa
@@ -109489,9 +109504,9 @@ bzs
 aaa
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+bhT
 aaa
 aaa
 aaa
@@ -109746,9 +109761,9 @@ bzs
 bzs
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -110001,11 +110016,11 @@ bxL
 xjn
 kJq
 bPn
-aaa
-aaa
-aaa
-aaa
-aaa
+gXs
+gXs
+eRz
+gXs
+eRz
 aaa
 aaa
 aaa
@@ -110260,9 +110275,9 @@ vxl
 bPn
 aaa
 aaa
+eRz
 aaa
-aaa
-aoV
+aaT
 aaa
 aaa
 aaa
@@ -110517,9 +110532,9 @@ oSI
 bPn
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -110774,9 +110789,9 @@ nWE
 bzs
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -111031,9 +111046,9 @@ bzs
 bzs
 nXv
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -111288,9 +111303,9 @@ cdE
 cqu
 nXv
 aaa
+gXs
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -111544,10 +111559,10 @@ bzs
 bPn
 bPn
 nXv
+gXs
+bhT
 aaa
-aaa
-aaa
-aaa
+gXs
 aaa
 aaa
 aaa
@@ -111802,9 +111817,9 @@ aaa
 aaa
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -112059,9 +112074,9 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-aaa
+eRz
+gXs
+eRz
 aaa
 aaa
 aaa
@@ -112265,7 +112280,7 @@ biG
 jmP
 blu
 bnb
-aWr
+txz
 bor
 bpS
 bsO
@@ -112316,9 +112331,9 @@ aaa
 aaa
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -112522,7 +112537,7 @@ dDf
 bkh
 gZQ
 cHQ
-aWr
+txz
 boE
 ele
 gqP
@@ -112573,9 +112588,9 @@ aaa
 aaa
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -112779,7 +112794,7 @@ biH
 jwP
 blv
 bls
-aWr
+txz
 boD
 fXm
 bsP
@@ -112830,9 +112845,9 @@ aaa
 aaa
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -113036,7 +113051,7 @@ eRa
 cvK
 fER
 blx
-aWr
+txz
 boL
 jAx
 bsR
@@ -113087,9 +113102,9 @@ aaa
 aaa
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -113293,7 +113308,7 @@ biG
 blw
 bjP
 bnb
-aWr
+txz
 boG
 suU
 cIe
@@ -113344,9 +113359,9 @@ aaa
 aaa
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+bhT
 aaa
 aaa
 aaa
@@ -113549,8 +113564,8 @@ cHK
 blA
 blA
 blA
-box
-box
+biq
+biq
 cHU
 cHZ
 cIf
@@ -113601,9 +113616,9 @@ aaa
 aaa
 aaa
 aaa
+eRz
 aaa
-aaa
-aaa
+eRz
 aaa
 aaa
 aaa
@@ -113858,9 +113873,9 @@ aaa
 aaa
 aaa
 aaa
+gXs
 aaa
-aaa
-aaa
+gXs
 aaa
 aaa
 aaa
