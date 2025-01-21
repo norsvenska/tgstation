@@ -98,6 +98,8 @@
 	department_color = COLOR_DARK_MODERATE_LIME_GREEN
 	subdepartment_color = COLOR_DARK_MODERATE_LIME_GREEN
 	department_state = "departmenthead"
+	honorifics = list("Admiral", "ADM.")
+	honorific_positions = HONORIFIC_POSITION_LAST | HONORIFIC_POSITION_FIRST_FULL | HONORIFIC_POSITION_NONE
 
 /datum/id_trim/centcom/admiral/New()
 	. = ..()
