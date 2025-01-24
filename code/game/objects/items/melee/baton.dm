@@ -495,6 +495,7 @@
 	force = 2
 	bare_wound_bonus = 5
 	clumsy_knockdown_time = 20 SECONDS
+	stun_armour_penetration = 100
 
 	on_inhand_icon_state = "nullrod"
 	active_force = 20
