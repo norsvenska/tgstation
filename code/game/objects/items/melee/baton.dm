@@ -479,7 +479,7 @@
 	target.set_stutter_if_lower(40 SECONDS)
 
 /obj/item/melee/baton/telescopic/centcom
-	name = "CentCom telescopic baton"
+	name = "\improper CentCom telescopic baton"
 	desc = "A compact, green baton issued to Central Command officials for personal defense."
 	icon = 'icons/obj/weapons/baton.dmi'
 	icon_state = "centbaton"
@@ -496,6 +496,9 @@
 	bare_wound_bonus = 5
 	clumsy_knockdown_time = 20 SECONDS
 	stun_armour_penetration = 100
+	stamina_damage = 120
+	affect_cyborg = TRUE
+	cooldown = 1 SECONDS
 
 	on_inhand_icon_state = "nullrod"
 	active_force = 20
