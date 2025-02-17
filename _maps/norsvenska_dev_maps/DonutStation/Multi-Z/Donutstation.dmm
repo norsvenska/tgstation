@@ -9592,10 +9592,6 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/engineering/atmos)
-"aya" = (
-/obj/effect/landmark/generic_maintenance_landmark,
-/turf/open/floor/engine/plasma,
-/area/station/engineering/atmos)
 "ayb" = (
 /turf/closed/wall,
 /area/station/service/library/printer)
@@ -13604,7 +13600,7 @@
 	dir = 1;
 	name = "Connector Port (Air Supply)"
 	},
-/obj/machinery/portable_atmospherics/canister/oxygen,
+/obj/machinery/portable_atmospherics/canister/anesthetic_mix,
 /turf/open/floor/iron,
 /area/station/medical/cryo)
 "aIl" = (
@@ -13832,7 +13828,7 @@
 /turf/open/floor/iron,
 /area/station/hallway/primary/upper)
 "aIQ" = (
-/obj/machinery/portable_atmospherics/canister/oxygen,
+/obj/structure/table/reinforced,
 /turf/open/floor/iron,
 /area/station/medical/cryo)
 "aIR" = (
@@ -18043,6 +18039,9 @@
 "aUd" = (
 /obj/effect/landmark/start/medical_doctor,
 /obj/structure/cable,
+/obj/machinery/atmospherics/components/trinary/filter/atmos/flipped/co2{
+	dir = 8
+	},
 /turf/open/floor/iron,
 /area/station/medical/cryo)
 "aUe" = (
@@ -19785,7 +19784,7 @@
 	dir = 1;
 	name = "Connector Port (Air Supply)"
 	},
-/obj/machinery/portable_atmospherics/canister/oxygen,
+/obj/machinery/portable_atmospherics/canister/anesthetic_mix,
 /obj/machinery/firealarm{
 	dir = 1;
 	pixel_y = -24
@@ -23068,7 +23067,7 @@
 	dir = 4
 	},
 /obj/machinery/airalarm/directional/north,
-/obj/effect/mapping_helpers/airalarm/tlv_cold_room,
+/obj/effect/mapping_helpers/airalarm/tlv_kitchen,
 /turf/open/floor/iron/kitchen_coldroom/freezerfloor,
 /area/station/service/kitchen/coldroom)
 "bgK" = (
@@ -27970,7 +27969,6 @@
 	name = "Tech Storage";
 	req_access_txt = "23"
 	},
-/obj/effect/decal/cleanable/dirt,
 /obj/structure/cable,
 /turf/open/floor/iron,
 /area/station/engineering/storage/tech)
@@ -36731,6 +36729,10 @@
 /obj/item/weldingtool,
 /obj/item/assembly/flash/handheld,
 /obj/item/book/manual/wiki/robotics_cyborgs,
+/obj/item/clothing/head/utility/welding,
+/obj/item/clothing/head/utility/welding,
+/obj/item/stock_parts/power_store/cell/high,
+/obj/item/reagent_containers/cup/bottle/welding_fuel,
 /turf/open/floor/plating,
 /area/station/science/research)
 "bRb" = (
@@ -36901,6 +36903,7 @@
 /obj/item/circuitboard/computer/arcade/battle,
 /obj/item/circuitboard/machine/microwave,
 /obj/item/book/manual/wiki/research_and_development,
+/obj/item/reagent_containers/cup/beaker,
 /turf/open/floor/plating,
 /area/station/science/research)
 "bRD" = (
@@ -36978,6 +36981,9 @@
 /obj/structure/closet/crate{
 	name = "Excess Manuals"
 	},
+/obj/item/book/manual/random,
+/obj/item/book/manual/random,
+/obj/item/book/manual/random,
 /turf/open/floor/plating,
 /area/station/maintenance/fore)
 "bRZ" = (
@@ -37269,6 +37275,7 @@
 	},
 /obj/item/clothing/suit/apron/chef,
 /obj/item/clothing/suit/apron/chef,
+/obj/item/clothing/head/utility/chefhat,
 /obj/item/clothing/suit/toggle/chef,
 /obj/item/book/manual/chef_recipes,
 /turf/open/floor/plating,
@@ -37277,7 +37284,15 @@
 /obj/structure/closet/crate{
 	name = "Excess Culinary Supplies"
 	},
+/obj/item/knife/kitchen{
+	desc = "A general purpose Chef's Knife made by SpaceCook Incorporated. Guaranteed to stay sharp for years to come, or so the salesman said..";
+	name = "dull kitchen knife";
+	force = 7
+	},
+/obj/item/reagent_containers/condiment/enzyme,
+/obj/item/reagent_containers/cup/beaker,
 /obj/item/kitchen/rollingpin,
+/obj/item/reagent_containers/condiment/flour,
 /turf/open/floor/plating,
 /area/station/maintenance/port/aft)
 "bTa" = (
@@ -37289,6 +37304,12 @@
 /obj/structure/closet/crate{
 	name = "Excess Bar Supplies"
 	},
+/obj/item/reagent_containers/cup/glass/shaker,
+/obj/item/reagent_containers/cup/glass/bottle/cognac,
+/obj/item/reagent_containers/cup/glass/bottle/tequila,
+/obj/item/reagent_containers/cup/glass/bottle/gin,
+/obj/item/reagent_containers/cup/glass/drinkingglass/shotglass,
+/obj/item/reagent_containers/cup/glass/drinkingglass/shotglass,
 /turf/open/floor/plating,
 /area/station/maintenance/port/aft)
 "bTf" = (
@@ -37370,6 +37391,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/item/bodybag,
 /obj/item/bodybag,
+/obj/item/clothing/head/costume/nursehat,
 /turf/open/floor/iron/white,
 /area/station/maintenance/port)
 "bTp" = (
@@ -38647,6 +38669,11 @@
 /obj/item/circuitboard/machine/stasis,
 /obj/machinery/light/small/directional/north,
 /obj/effect/decal/cleanable/dirt,
+/obj/item/storage/medkit/regular,
+/obj/item/storage/medkit/regular{
+	empty = 1
+	},
+/obj/item/storage/medkit/toxin,
 /turf/open/floor/iron/white,
 /area/station/maintenance/port)
 "bZY" = (
@@ -38659,8 +38686,13 @@
 	},
 /obj/item/mop,
 /obj/item/mop,
+/obj/item/reagent_containers/cup/bucket,
+/obj/item/reagent_containers/cup/bucket,
 /obj/item/soap/deluxe,
 /obj/item/storage/bag/trash,
+/obj/item/clothing/suit/caution,
+/obj/item/clothing/suit/caution,
+/obj/item/clothing/suit/caution,
 /turf/open/floor/plating,
 /area/station/maintenance/aft)
 "cab" = (
@@ -39332,7 +39364,6 @@
 /obj/effect/turf_decal/tile/neutral{
 	dir = 8
 	},
-/obj/effect/landmark/generic_maintenance_landmark,
 /turf/open/floor/iron/dark,
 /area/station/ai_monitored/command/nuke_storage)
 "cdd" = (
@@ -42530,6 +42561,12 @@
 /obj/structure/cable,
 /turf/open/floor/iron,
 /area/station/engineering/main)
+"gzA" = (
+/obj/machinery/atmospherics/pipe/smart/simple/cyan/visible{
+	dir = 5
+	},
+/turf/open/floor/iron,
+/area/station/medical/cryo)
 "gAu" = (
 /obj/effect/turf_decal/tile/neutral{
 	dir = 1
@@ -45434,6 +45471,13 @@
 	},
 /turf/open/floor/plating,
 /area/station/maintenance/starboard/upper)
+"lxb" = (
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold/cyan/visible{
+	dir = 4
+	},
+/turf/open/floor/iron,
+/area/station/medical/cryo)
 "lyr" = (
 /obj/machinery/door/airlock/maintenance{
 	req_access_txt = "10"
@@ -46410,6 +46454,10 @@
 "neB" = (
 /turf/open/floor/iron/dark,
 /area/station/tcommsat/server/upper)
+"nfG" = (
+/obj/machinery/atmospherics/pipe/layer_manifold/scrubbers/hidden,
+/turf/closed/wall,
+/area/station/medical/cryo)
 "nfZ" = (
 /turf/closed/wall,
 /area/station/science/ordnance/bomb)
@@ -46704,6 +46752,7 @@
 	pixel_y = 23
 	},
 /obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/visible,
 /turf/open/floor/iron,
 /area/station/medical/cryo)
 "nya" = (
@@ -47659,6 +47708,10 @@
 /obj/effect/landmark/event_spawn,
 /turf/open/floor/iron,
 /area/station/service/hydroponics/upper)
+"oYf" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/cyan/visible,
+/turf/open/floor/iron,
+/area/station/medical/cryo)
 "oYD" = (
 /obj/machinery/porta_turret/ai{
 	dir = 4
@@ -49606,6 +49659,12 @@
 	dir = 1
 	},
 /area/station/hallway/primary/central)
+"rXZ" = (
+/obj/machinery/atmospherics/pipe/smart/simple/cyan/visible{
+	dir = 10
+	},
+/turf/open/floor/iron,
+/area/station/medical/cryo)
 "rYt" = (
 /obj/machinery/light/small/directional/north,
 /obj/effect/turf_decal/tile/neutral{
@@ -49712,6 +49771,13 @@
 	},
 /turf/open/floor/iron/cafeteria,
 /area/station/security/prison/shower)
+"sir" = (
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold/cyan/visible{
+	dir = 8
+	},
+/turf/open/floor/iron,
+/area/station/medical/cryo)
 "sju" = (
 /obj/structure/closet,
 /obj/effect/spawner/random/maintenance/two,
@@ -50875,6 +50941,15 @@
 	},
 /turf/open/space/basic,
 /area/space/nearstation)
+"ugz" = (
+/obj/structure/closet/crate{
+	name = "Excess Bar Supplies"
+	},
+/obj/item/clothing/under/rank/civilian/purple_bartender,
+/obj/item/clothing/under/rank/civilian/purple_bartender,
+/obj/item/clothing/head/hats/tophat,
+/turf/open/floor/plating,
+/area/station/maintenance/port/aft)
 "ugT" = (
 /obj/structure/closet/radiation,
 /obj/effect/turf_decal/stripes/line{
@@ -51133,6 +51208,10 @@
 /obj/structure/cable,
 /turf/open/floor/plating,
 /area/station/maintenance/fore/upper)
+"uyx" = (
+/obj/machinery/cryo_cell,
+/turf/open/floor/iron,
+/area/station/medical/cryo)
 "uzk" = (
 /obj/effect/turf_decal/trimline/yellow/filled/line{
 	dir = 6
@@ -51886,6 +51965,12 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/engineering/supermatter/room)
+"vBV" = (
+/obj/machinery/atmospherics/pipe/smart/manifold/cyan/visible{
+	dir = 1
+	},
+/turf/open/floor/iron,
+/area/station/medical/cryo)
 "vCl" = (
 /obj/effect/turf_decal/tile/red{
 	dir = 4
@@ -77061,9 +77146,9 @@ aSb
 bhT
 bwp
 aGR
-aHm
-aNN
-aHm
+uyx
+sir
+gzA
 aIi
 aHp
 aGt
@@ -77317,10 +77402,10 @@ aGK
 aXy
 bhU
 bwq
-aGR
+nfG
 nwZ
 aUd
-aHm
+vBV
 aYd
 aGR
 aGt
@@ -77575,9 +77660,9 @@ bew
 blp
 bws
 aGR
-aHm
-aNN
-aHm
+uyx
+lxb
+oYf
 aIk
 aHp
 aGt
@@ -77834,7 +77919,7 @@ arK
 aGR
 clO
 aNN
-aHm
+rXZ
 aIl
 aHp
 aGt
@@ -82468,7 +82553,7 @@ alS
 anB
 azH
 bCg
-bTb
+ugz
 azH
 akL
 bcZ
@@ -93285,7 +93370,7 @@ acT
 acT
 acT
 bcw
-aya
+axD
 axD
 ayi
 bcw
@@ -96300,7 +96385,7 @@ aod
 aPD
 aPE
 aaZ
-aaZ
+asj
 bsG
 mzy
 buB
@@ -96557,7 +96642,7 @@ aak
 aak
 aak
 aak
-aak
+asj
 biK
 asj
 ahR
@@ -96814,7 +96899,7 @@ aaK
 sPB
 aSy
 abL
-aak
+asj
 bta
 asj
 asj
@@ -97055,7 +97140,7 @@ asj
 asj
 asj
 asj
-bzq
+agh
 bAl
 bAy
 bAl
@@ -97071,7 +97156,7 @@ aaj
 aar
 aTi
 byM
-aak
+asj
 bta
 anb
 asj
@@ -97328,7 +97413,7 @@ aar
 aBu
 aTl
 bzD
-aak
+asj
 bta
 bTX
 asj
@@ -97583,9 +97668,9 @@ aaO
 aaO
 aaO
 aTi
-aak
-aak
-aak
+asj
+asj
+asj
 bta
 bXp
 asj
