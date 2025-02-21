@@ -43,7 +43,7 @@
 
 /obj/item/clothing/shoes/combat/swat/alt //ditto, but without any slippage nor laces
 	clothing_traits = list(TRAIT_NO_SLIP_ALL, TRAIT_SPACEWALK, TRAIT_NEGATES_GRAVITY)
-	can_be_tied = FALSE
+	fastening_type = SHOES_SLIPON
 
 /obj/item/clothing/shoes/jackboots
 	name = "jackboots"
