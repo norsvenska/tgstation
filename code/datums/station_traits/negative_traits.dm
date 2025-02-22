@@ -35,7 +35,7 @@
 		our_event.unavailable_situations -= /datum/shuttle_loan_situation/mail_strike
 	SSeconomy.mail_blocked = !SSeconomy.mail_blocked
 
-/datum/station_trait/mail_blocked/hangover/revert()
+/datum/station_trait/mail_blocked/revert()
 	var/datum/round_event_control/shuttle_loan/our_event = locate() in SSevents.control
 	our_event.unavailable_situations |= /datum/shuttle_loan_situation/mail_strike
 	SSeconomy.mail_blocked = !SSeconomy.mail_blocked
