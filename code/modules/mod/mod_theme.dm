@@ -2202,8 +2202,7 @@
 	complexity_max = 1000
 	charge_drain = DEFAULT_CHARGE_DRAIN * 0
 	siemens_coefficient = 0
-	slowdown_inactive = 0
-	slowdown_active = 0
+	slowdown_deployed = 0
 	activation_step_time = 0.1 SECONDS
 	allowed_suit_storage = list(
 		/obj/item/gun
