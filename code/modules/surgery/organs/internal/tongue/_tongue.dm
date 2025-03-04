@@ -90,6 +90,7 @@
 		/datum/language/shadowtongue,
 		/datum/language/terrum,
 		/datum/language/nekomimetic,
+		/datum/language/norse,
 	)
 
 /obj/item/organ/tongue/proc/handle_speech(datum/source, list/speech_args)
