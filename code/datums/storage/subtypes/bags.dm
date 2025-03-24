@@ -111,6 +111,7 @@
 		/obj/item/book,
 		/obj/item/spellbook,
 		/obj/item/poster,
+		/obj/item/language_manual,
 	))
 
 ///Tray bag

@@ -49,36 +49,39 @@
 /obj/item/storage/box/abductortools
 	name = "box of abductor tools"
 	icon_state = "syndiebox" //placeholder
+	storage_type = /datum/storage/box/debug_tools
 
-/obj/item/storage/box/abductortools/PopulateContents()
-	var/static/items_inside = list(
-		/obj/item/screwdriver/abductor=1,
-		/obj/item/wrench/abductor=1,
-		/obj/item/weldingtool/abductor=1,
-		/obj/item/crowbar/abductor=1,
-		/obj/item/wirecutters/abductor=1,
-		/obj/item/multitool/abductor=1,
-		)
-	generate_items_inside(items_inside,src)
+/obj/item/storage/box/abductortools/PopulateContents(datum/storage_config/config)
+	config.compute_max_values()
+
+	return list(
+		/obj/item/screwdriver/abductor,
+		/obj/item/wrench/abductor,
+		/obj/item/weldingtool/abductor,
+		/obj/item/crowbar/abductor,
+		/obj/item/wirecutters/abductor,
+		/obj/item/multitool/abductor,
+	)
 
 /obj/item/storage/box/autosurgeon
 	name = "box of improved organs"
 	icon_state = "syndiebox"
+	storage_type = /datum/storage/box/debug_tools
 
-/obj/item/storage/box/autosurgeon/PopulateContents()
-	var/static/items_inside = list(
-		/obj/item/autosurgeon=1,
-		/obj/item/organ/cyberimp/chest/nutriment/plus=1,
-		/obj/item/organ/cyberimp/brain/anti_stun=1,
-		/obj/item/organ/ears/cybernetic/upgraded=1,
-		/obj/item/organ/heart/cybernetic/anomalock/prebuilt=1,
-		/obj/item/organ/liver/cybernetic/tier3=1,
-		/obj/item/organ/lungs/cybernetic/tier3=1,
-		/obj/item/organ/stomach/cybernetic/tier3=1,
-		/obj/item/organ/eyes/robotic/shield=1,
-		)
-	generate_items_inside(items_inside,src)
+/obj/item/storage/box/autosurgeon/PopulateContents(datum/storage_config/config)
+	config.compute_max_values()
 
+	return list(
+		/obj/item/autosurgeon,
+		/obj/item/organ/cyberimp/chest/nutriment/plus,
+		/obj/item/organ/cyberimp/brain/anti_stun,
+		/obj/item/organ/ears/cybernetic/upgraded,
+		/obj/item/organ/heart/cybernetic/anomalock/prebuilt,
+		/obj/item/organ/liver/cybernetic/tier3,
+		/obj/item/organ/lungs/cybernetic/tier3,
+		/obj/item/organ/stomach/cybernetic/tier3,
+		/obj/item/organ/eyes/robotic/shield,
+	)
 
 /obj/item/storage/box/plastic
 	name = "plastic box"
