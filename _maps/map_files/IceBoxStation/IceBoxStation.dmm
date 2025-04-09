@@ -22437,6 +22437,17 @@
 	},
 /turf/open/floor/iron/white/side,
 /area/mine/living_quarters)
+"gpt" = (
+/obj/machinery/button/door/directional/east{
+	id = "detShutter";
+	name = "Privacy Shutters"
+	},
+/obj/structure/chair/office{
+	dir = 8
+	},
+/obj/machinery/firealarm/directional/south,
+/turf/open/floor/iron/grimy,
+/area/station/security/detectives_office)
 "gpB" = (
 /obj/structure/cable,
 /turf/open/floor/plating,
@@ -42576,6 +42587,15 @@
 /obj/machinery/power/apc/auto_name/directional/east,
 /turf/open/floor/iron/dark,
 /area/mine/eva/lower)
+"mff" = (
+/obj/machinery/holopad,
+/obj/structure/cable,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/effect/spawner/random/engineering/tracking_beacon,
+/obj/effect/landmark/start/admiral,
+/turf/open/floor/iron,
+/area/station/command/bridge)
 "mfD" = (
 /turf/closed/wall/r_wall,
 /area/station/ai_monitored/turret_protected/aisat/atmos)
@@ -49976,6 +49996,11 @@
 "olf" = (
 /turf/open/floor/carpet,
 /area/station/commons/dorms)
+"olm" = (
+/obj/effect/spawner/random/engineering/tracking_beacon,
+/obj/effect/landmark/event_spawn,
+/turf/open/floor/glass/reinforced,
+/area/station/engineering/storage/tech)
 "olG" = (
 /obj/machinery/firealarm/directional/east,
 /obj/effect/turf_decal/siding/wood{
@@ -54656,15 +54681,6 @@
 /obj/structure/closet/emcloset,
 /turf/open/floor/iron,
 /area/station/hallway/primary/starboard)
-"pxq" = (
-/obj/machinery/holopad,
-/obj/structure/cable,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
-/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/effect/spawner/random/engineering/tracking_beacon,
-/obj/effect/landmark/start/admiral,
-/turf/open/floor/iron,
-/area/station/command/bridge)
 "pxL" = (
 /obj/effect/turf_decal/stripes/line{
 	dir = 1
@@ -56220,16 +56236,6 @@
 	},
 /turf/open/floor/iron/white,
 /area/station/science/genetics)
-"pUL" = (
-/obj/effect/spawner/structure/window/reinforced,
-/obj/machinery/door/poddoor/shutters/preopen{
-	dir = 4;
-	id = "detShutter";
-	name = "Privacy Shutters"
-	},
-/obj/structure/cable,
-/turf/open/floor/plating,
-/area/station/security/detectives_office)
 "pUX" = (
 /obj/effect/decal/cleanable/blood/old,
 /turf/open/floor/engine/xenobio,
@@ -61670,17 +61676,6 @@
 /obj/structure/window/reinforced/spawner/directional/south,
 /turf/open/floor/iron/white/textured,
 /area/station/security/medical)
-"ruj" = (
-/obj/machinery/button/door/directional/east{
-	id = "detShutter";
-	name = "Privacy Shutters"
-	},
-/obj/structure/chair/office{
-	dir = 8
-	},
-/obj/machinery/firealarm/directional/south,
-/turf/open/floor/iron/grimy,
-/area/station/security/detectives_office)
 "ruo" = (
 /obj/machinery/portable_atmospherics/canister/air,
 /obj/effect/turf_decal/bot,
@@ -63179,6 +63174,13 @@
 /obj/machinery/light/cold/directional/west,
 /turf/open/floor/plating/snowed/coldroom,
 /area/station/service/kitchen/coldroom)
+"rRW" = (
+/obj/machinery/holopad/secure,
+/obj/effect/turf_decal/bot,
+/obj/structure/rack,
+/obj/effect/spawner/random/techstorage/custom_shuttle,
+/turf/open/floor/iron/large,
+/area/station/engineering/storage/tech)
 "rSe" = (
 /obj/structure/rack,
 /obj/effect/spawner/random/clothing/costume,
@@ -78899,13 +78901,6 @@
 	},
 /turf/open/floor/plating,
 /area/station/maintenance/aft/greater)
-"wzC" = (
-/obj/machinery/holopad/secure,
-/obj/effect/turf_decal/bot,
-/obj/effect/landmark/event_spawn,
-/obj/effect/spawner/random/engineering/tracking_beacon,
-/turf/open/floor/iron/large,
-/area/station/engineering/storage/tech)
 "wzH" = (
 /obj/structure/minecart_rail{
 	dir = 4
@@ -82455,6 +82450,16 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /turf/open/floor/iron/white,
 /area/station/medical/medbay/aft)
+"xyd" = (
+/obj/effect/spawner/structure/window/reinforced,
+/obj/machinery/door/poddoor/shutters/preopen{
+	dir = 4;
+	id = "detShutter";
+	name = "Privacy Shutters"
+	},
+/obj/structure/cable,
+/turf/open/floor/plating,
+/area/station/security/detectives_office)
 "xyn" = (
 /obj/machinery/door/firedoor,
 /obj/effect/turf_decal/stripes/line{
@@ -173869,7 +173874,7 @@ ucN
 hFW
 nfj
 hzJ
-ruj
+gpt
 ucN
 iDt
 iDt
@@ -174124,7 +174129,7 @@ wUj
 wMt
 ucN
 ucN
-pUL
+xyd
 irp
 ucN
 ucN
@@ -245087,7 +245092,7 @@ tmQ
 lkI
 lvl
 aog
-pxq
+mff
 dEI
 uab
 bzC
@@ -245102,8 +245107,8 @@ umu
 umu
 fyK
 oIr
-oIr
-wzC
+olm
+rRW
 oIr
 oIr
 sZU
