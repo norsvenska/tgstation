@@ -2246,22 +2246,6 @@
 /obj/structure/extinguisher_cabinet/directional/east,
 /turf/open/floor/pod/light,
 /area/shuttle/sbc_starfury)
-"id" = (
-/obj/item/toy/cards/deck/syndicate{
-	pixel_x = -6;
-	pixel_y = 6
-	},
-/obj/item/reagent_containers/cup/glass/bottle/beer{
-	pixel_x = 5;
-	pixel_y = -2
-	},
-/obj/item/reagent_containers/cup/rag,
-/obj/structure/table/reinforced/plastitaniumglass,
-/obj/effect/turf_decal/siding/dark{
-	dir = 1
-	},
-/turf/open/floor/iron/dark,
-/area/shuttle/sbc_starfury)
 "ie" = (
 /obj/structure/table/reinforced/plastitaniumglass,
 /obj/effect/turf_decal/siding/dark{
@@ -4749,6 +4733,17 @@
 /obj/effect/mapping_helpers/airalarm/syndicate_access,
 /turf/open/floor/iron/dark,
 /area/shuttle/sbc_starfury)
+"Gz" = (
+/obj/structure/cable,
+/mob/living/basic/bot/medbot{
+	desc = "A medical bot of syndicate origins. Probably plots about stabbing you full of toxins in its free time.";
+	faction = list("neutral","silicon","turret","Syndicate");
+	name = "Syndicate Medibot";
+	skin = "bezerk";
+	req_one_access = list("syndicate")
+	},
+/turf/open/floor/iron,
+/area/shuttle/sbc_starfury)
 "GF" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
@@ -5226,17 +5221,6 @@
 /obj/effect/mapping_helpers/airalarm/syndicate_access,
 /turf/open/floor/iron/dark,
 /area/shuttle/sbc_starfury)
-"PZ" = (
-/obj/structure/cable,
-/mob/living/basic/bot/medbot{
-	desc = "A medical bot of syndicate origins. Probably plots about stabbing you full of toxins in its free time.";
-	faction = list("neutral","silicon","turret","Syndicate");
-	name = "Syndicate Medibot";
-	skin = "bezerk";
-	req_one_access = list("syndicate")
-	},
-/turf/open/floor/iron,
-/area/shuttle/sbc_starfury)
 "Qf" = (
 /obj/machinery/power/port_gen/pacman/super,
 /obj/effect/turf_decal/delivery,
@@ -5397,6 +5381,22 @@
 "SI" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /turf/open/floor/iron/smooth,
+/area/shuttle/sbc_starfury)
+"SL" = (
+/obj/item/toy/cards/deck/syndicate{
+	pixel_x = -6;
+	pixel_y = 6
+	},
+/obj/item/reagent_containers/cup/glass/bottle/beer{
+	pixel_x = 5;
+	pixel_y = -2
+	},
+/obj/item/rag,
+/obj/structure/table/reinforced/plastitaniumglass,
+/obj/effect/turf_decal/siding/dark{
+	dir = 1
+	},
+/turf/open/floor/iron/dark,
 /area/shuttle/sbc_starfury)
 "ST" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
@@ -6117,7 +6117,7 @@ kx
 ng
 hf
 ei
-id
+SL
 Tr
 ay
 ae
@@ -7041,7 +7041,7 @@ as
 bp
 dI
 Uy
-PZ
+Gz
 xG
 aw
 ec
