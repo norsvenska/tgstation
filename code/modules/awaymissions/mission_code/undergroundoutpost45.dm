@@ -146,7 +146,7 @@
 	ambient_buzz_vol = 20
 
 /area/awaymission/undergroundoutpost45_2/l2/independent
-	name = "Independent Mining Base"
+	name = "Independent Mining Base Living Quarters"
 	icon_state = "awaycontent12"
 
 //Level -3: Engineering, Mining, Biological Research
@@ -199,6 +199,10 @@
 	forced_ambience = TRUE
 	ambient_buzz = 'sound/ambience/maintenance/source_corridor2.ogg'
 	ambient_buzz_vol = 20
+
+/area/awaymission/undergroundoutpost45_2/l3/independent
+	name = "Independent Mining Base Garage"
+	icon_state = "awaycontent12"
 
 //Level -4: Security, Vault/Bunker, Anomaly Research
 /area/awaymission/undergroundoutpost45_2/l4
