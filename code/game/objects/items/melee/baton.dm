@@ -472,7 +472,7 @@
 	w_class = WEIGHT_CLASS_SMALL
 	item_flags = NONE
 	force = 2
-	bare_wound_bonus = 5
+	exposed_wound_bonus = 5
 	clumsy_knockdown_time = 20 SECONDS
 	stun_armour_penetration = 100
 	stamina_damage = 120
